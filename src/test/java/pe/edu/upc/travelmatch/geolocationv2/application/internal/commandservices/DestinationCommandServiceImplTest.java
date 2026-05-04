@@ -62,7 +62,7 @@ class DestinationCommandServiceImplTest {
 
         when(destinationRepository.existsByName(name)).thenReturn(true);
 
-        // Act & Assert
+        // Act + Assert
         assertThrows(IllegalArgumentException.class, () -> destinationCommandService.handle(command), "Destination with name " + name + " already exists");
 
         verify(destinationRepository).existsByName(name);
@@ -79,7 +79,7 @@ class DestinationCommandServiceImplTest {
         when(destinationRepository.existsByName(name)).thenReturn(false);
         when(destinationRepository.save(any(Destination.class))).thenThrow(new RuntimeException("Database error"));
 
-        // Act & Assert
+        // Act + Assert
         assertThrows(IllegalArgumentException.class, () -> destinationCommandService.handle(command), "Error while saving profile: Database error");
 
         verify(destinationRepository).existsByName(name);
@@ -126,7 +126,7 @@ class DestinationCommandServiceImplTest {
 
         when(destinationRepository.existsByNameAndIdIsNot(name, command.destinationId())).thenReturn(true);
 
-        // Act & Assert
+        // Act + Assert
         assertThrows(IllegalArgumentException.class, () -> destinationCommandService.handle(command), "Destination with name " + name + " already exists");
 
         verify(destinationRepository).existsByNameAndIdIsNot(name, command.destinationId());
@@ -143,7 +143,7 @@ class DestinationCommandServiceImplTest {
         when(destinationRepository.existsByNameAndIdIsNot(name, command.destinationId())).thenReturn(false);
         when(destinationRepository.existsById(command.destinationId())).thenReturn(false);
 
-        // Act & Assert
+        // Act + Assert
         assertThrows(IllegalArgumentException.class, () -> destinationCommandService.handle(command), "Destination with id 1 does not exist");
 
         verify(destinationRepository).existsByNameAndIdIsNot(name, command.destinationId());
@@ -178,7 +178,7 @@ class DestinationCommandServiceImplTest {
 
         when(destinationRepository.existsById(command.destinationId())).thenReturn(false);
 
-        // Act & Assert
+        // Act + Assert
         assertThrows(IllegalArgumentException.class, () -> destinationCommandService.handle(command), "Destination with id 1 does not exist");
 
         verify(destinationRepository).existsById(command.destinationId());
@@ -194,7 +194,7 @@ class DestinationCommandServiceImplTest {
         when(destinationRepository.existsById(command.destinationId())).thenReturn(true);
         doThrow(new RuntimeException("Database error")).when(destinationRepository).deleteById(command.destinationId());
 
-        // Act & Assert
+        // Act + Assert
         assertThrows(IllegalArgumentException.class, () -> destinationCommandService.handle(command), "Error while deleting destination: Database error");
 
         verify(destinationRepository).existsById(command.destinationId());
