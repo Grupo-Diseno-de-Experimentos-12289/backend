@@ -86,7 +86,7 @@ class UserCommandServiceImplTest {
         var command = new SignUpCommand("john.doe@example.com", "password123", "John", "Doe", "123456789", new ArrayList<>());
         when(userRepository.existsByEmail(command.email())).thenReturn(true);
 
-        // Act & Assert
+        // Act + Assert
         assertThrows(RuntimeException.class, () -> userCommandService.handle(command), "Email already exists");
 
         verify(userRepository).existsByEmail(command.email());
@@ -102,7 +102,7 @@ class UserCommandServiceImplTest {
         when(userRepository.existsByEmail(command.email())).thenReturn(false);
         when(roleRepository.findByName(Roles.ROLE_ADMIN)).thenReturn(Optional.empty());
 
-        // Act & Assert
+        // Act + Assert
         assertThrows(RuntimeException.class, () -> userCommandService.handle(command), "Role not found");
 
         verify(userRepository).existsByEmail(command.email());
@@ -146,7 +146,7 @@ class UserCommandServiceImplTest {
         
         when(userRepository.findByEmail(command.email())).thenReturn(Optional.empty());
 
-        // Act & Assert
+        // Act + Assert
         assertThrows(RuntimeException.class, () -> userCommandService.handle(command), "User not found");
 
         verify(userRepository).findByEmail(command.email());
@@ -163,7 +163,7 @@ class UserCommandServiceImplTest {
         when(userRepository.findByEmail(command.email())).thenReturn(Optional.of(user));
         when(hashingService.matches(command.password(), "encodedPassword")).thenReturn(false);
 
-        // Act & Assert
+        // Act + Assert
         assertThrows(RuntimeException.class, () -> userCommandService.handle(command), "Invalid password");
 
         verify(userRepository).findByEmail(command.email());

@@ -38,12 +38,10 @@ class RoleCommandServiceImplTest {
         // Arrange
         var command = new SeedRolesCommand();
 
-        // Let's assume there are 3 roles: ROLE_ADMIN, ROLE_TOURIST, ROLE_AGENCY (from common DDD examples).
-        // Mock that the first exists and the others don't, to test both paths.
-        when(roleRepository.existsByName(any())).thenAnswer(invocation -> {
-            Roles role = invocation.getArgument(0);
-            return role.name().equals("ROLE_ADMIN"); // Only ROLE_ADMIN exists
-        });
+        // Mock existing roles to test only missing ones are saved
+        when(roleRepository.existsByName(Roles.ROLE_ADMIN)).thenReturn(true);
+        when(roleRepository.existsByName(Roles.ROLE_AGENCY_STAFF)).thenReturn(false);
+        when(roleRepository.existsByName(Roles.ROLE_TOURIST)).thenReturn(false);
 
         // Act
         roleCommandService.handle(command);
