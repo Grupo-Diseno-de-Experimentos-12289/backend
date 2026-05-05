@@ -1,26 +1,37 @@
 package pe.edu.upc.travelmatch.profiles.domain.model.entities;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import pe.edu.upc.travelmatch.profiles.domain.model.aggregates.Cart;
 import pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.AvailabilityId;
 import pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.Money;
 import pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.Quantity;
-import pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.UserId;
-
-import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+@ExtendWith(MockitoExtension.class)
 class CartItemTest {
+
+    @Mock
+    private AvailabilityId availabilityId;
+
+    @Mock
+    private Quantity quantity;
+
+    @Mock
+    private Quantity newQuantity;
+
+    @Mock
+    private Money price;
+
+    @Mock
+    private Cart newCart;
 
     @Test
     void testCartItemConstructorAndGetters() {
-        // Arrange
-        AvailabilityId availabilityId = new AvailabilityId(10L);
-        Quantity quantity = new Quantity(2);
-        Money price = new Money(new BigDecimal("50.0"), "USD");
-
         // Act
         CartItem cartItem = new CartItem(availabilityId, quantity, price);
 
@@ -35,9 +46,7 @@ class CartItemTest {
     @Test
     void testCartItemSetters() {
         // Arrange
-        CartItem cartItem = new CartItem(new AvailabilityId(10L), new Quantity(2), new Money(new BigDecimal("50.0"), "USD"));
-        Quantity newQuantity = new Quantity(5);
-        Cart newCart = new Cart(new UserId(1L));
+        CartItem cartItem = new CartItem(availabilityId, quantity, price);
 
         // Act
         cartItem.setQuantity(newQuantity);

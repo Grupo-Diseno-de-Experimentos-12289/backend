@@ -1,20 +1,33 @@
 package pe.edu.upc.travelmatch.profiles.domain.model.aggregates;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.ExperienceId;
 import pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.Rating;
 import pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.UserId;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(MockitoExtension.class)
 class ReviewTest {
+
+    @Mock
+    private UserId userId;
+
+    @Mock
+    private ExperienceId experienceId;
+
+    @Mock
+    private Rating rating;
+
+    @Mock
+    private Rating newRating;
 
     @Test
     void testReviewConstructorAndGetters() {
         // Arrange
-        UserId userId = new UserId(1L);
-        ExperienceId experienceId = new ExperienceId(10L);
-        Rating rating = new Rating(5);
         String comment = "Great experience!";
 
         // Act
@@ -30,8 +43,7 @@ class ReviewTest {
     @Test
     void testUpdateRating_Successfully() {
         // Arrange
-        Review review = new Review(new UserId(1L), new ExperienceId(10L), new Rating(4), "Good");
-        Rating newRating = new Rating(5);
+        Review review = new Review(userId, experienceId, rating, "Good");
 
         // Act
         review.updateRating(newRating);
@@ -43,7 +55,7 @@ class ReviewTest {
     @Test
     void testUpdateRating_ThrowsExceptionWhenNull() {
         // Arrange
-        Review review = new Review(new UserId(1L), new ExperienceId(10L), new Rating(4), "Good");
+        Review review = new Review(userId, experienceId, rating, "Good");
 
         // Act & Assert
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> review.updateRating(null));
@@ -53,7 +65,7 @@ class ReviewTest {
     @Test
     void testUpdateComment_Successfully() {
         // Arrange
-        Review review = new Review(new UserId(1L), new ExperienceId(10L), new Rating(4), "Good");
+        Review review = new Review(userId, experienceId, rating, "Good");
         String newComment = "Excellent!";
 
         // Act
@@ -66,7 +78,7 @@ class ReviewTest {
     @Test
     void testUpdateComment_ThrowsExceptionWhenNull() {
         // Arrange
-        Review review = new Review(new UserId(1L), new ExperienceId(10L), new Rating(4), "Good");
+        Review review = new Review(userId, experienceId, rating, "Good");
 
         // Act & Assert
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> review.updateComment(null));
@@ -76,7 +88,7 @@ class ReviewTest {
     @Test
     void testUpdateComment_ThrowsExceptionWhenEmpty() {
         // Arrange
-        Review review = new Review(new UserId(1L), new ExperienceId(10L), new Rating(4), "Good");
+        Review review = new Review(userId, experienceId, rating, "Good");
 
         // Act & Assert
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> review.updateComment("   "));

@@ -1,6 +1,9 @@
 package pe.edu.upc.travelmatch.profiles.interfaces.rest.transform;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import pe.edu.upc.travelmatch.profiles.domain.model.aggregates.Cart;
 import pe.edu.upc.travelmatch.profiles.domain.model.entities.CartItem;
 import pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.AvailabilityId;
@@ -13,19 +16,23 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class CartResourceFromEntityAssemblerTest {
+
+    @Mock
+    private Cart entity;
+
+    @Mock
+    private CartItem cartItem;
 
     @Test
     void toResourceFromEntityMapsEntityToResourceIncludingItems() {
         var price = BigDecimal.valueOf(49.99);
-        var cartItem = new CartItem(
-                new AvailabilityId(101L),
-                new Quantity(2),
-                new Money(price, "PEN"));
-        var entity = mock(Cart.class);
+        when(cartItem.getAvailabilityId()).thenReturn(new AvailabilityId(101L));
+        when(cartItem.getQuantity()).thenReturn(new Quantity(2));
+        when(cartItem.getPrice()).thenReturn(new Money(price, "PEN"));
         when(entity.getId()).thenReturn(10L);
         when(entity.getUserId()).thenReturn(new UserId(1L));
         when(entity.getItems()).thenReturn(List.of(cartItem));

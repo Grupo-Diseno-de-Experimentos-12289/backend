@@ -1,15 +1,23 @@
 package pe.edu.upc.travelmatch.profiles.interfaces.rest.transform;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import pe.edu.upc.travelmatch.profiles.interfaces.rest.resources.RemoveCartItemResource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class RemoveCartItemCommandFromResourceAssemblerTest {
+
+    @Mock
+    private RemoveCartItemResource resource;
 
     @Test
     void toCommandFromResourceMapsResourceToCommand() {
-        var resource = new RemoveCartItemResource(101L);
+        when(resource.availabilityId()).thenReturn(101L);
 
         var command = RemoveCartItemCommandFromResourceAssembler.toCommandFromResource(1L, resource);
 

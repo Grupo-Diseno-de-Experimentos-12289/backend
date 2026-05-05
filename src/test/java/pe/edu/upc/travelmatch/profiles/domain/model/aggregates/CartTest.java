@@ -1,17 +1,25 @@
 package pe.edu.upc.travelmatch.profiles.domain.model.aggregates;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import pe.edu.upc.travelmatch.profiles.domain.model.entities.CartItem;
 import pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.AvailabilityId;
-import pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.Money;
-import pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.Quantity;
 import pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.UserId;
 
-import java.math.BigDecimal;
-
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class CartTest {
+
+    @Mock
+    private CartItem cartItem;
+
+    @Mock
+    private CartItem anotherCartItem;
 
     @Test
     void testCartConstructorAndGetters() {
@@ -30,8 +38,6 @@ class CartTest {
     void testAddItem_Successfully() {
         // Arrange
         Cart cart = new Cart(new UserId(1L));
-        AvailabilityId availabilityId = new AvailabilityId(10L);
-        CartItem cartItem = new CartItem(availabilityId, new Quantity(2), new Money(new BigDecimal("50.0"), "USD"));
 
         // Act
         cart.addItem(cartItem);
@@ -39,7 +45,7 @@ class CartTest {
         // Assert
         assertEquals(1, cart.getItems().size());
         assertEquals(cartItem, cart.getItems().get(0));
-        assertEquals(cart, cartItem.getCart()); // verify relation is set
+        verify(cartItem).setCart(cart);
     }
 
     @Test
@@ -47,12 +53,12 @@ class CartTest {
         // Arrange
         Cart cart = new Cart(new UserId(1L));
         AvailabilityId availabilityId = new AvailabilityId(10L);
-        CartItem cartItem1 = new CartItem(availabilityId, new Quantity(2), new Money(new BigDecimal("50.0"), "USD"));
-        CartItem cartItem2 = new CartItem(availabilityId, new Quantity(3), new Money(new BigDecimal("60.0"), "USD"));
-        cart.addItem(cartItem1);
+        when(cartItem.getAvailabilityId()).thenReturn(availabilityId);
+        when(anotherCartItem.getAvailabilityId()).thenReturn(availabilityId);
+        cart.addItem(cartItem);
 
         // Act & Assert
-        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> cart.addItem(cartItem2));
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> cart.addItem(anotherCartItem));
         assertTrue(exception.getMessage().contains("already in the cart"));
         assertEquals(1, cart.getItems().size());
     }
@@ -62,7 +68,7 @@ class CartTest {
         // Arrange
         Cart cart = new Cart(new UserId(1L));
         AvailabilityId availabilityId = new AvailabilityId(10L);
-        CartItem cartItem = new CartItem(availabilityId, new Quantity(2), new Money(new BigDecimal("50.0"), "USD"));
+        when(cartItem.getAvailabilityId()).thenReturn(availabilityId);
         cart.addItem(cartItem);
 
         // Act
@@ -70,7 +76,7 @@ class CartTest {
 
         // Assert
         assertTrue(cart.getItems().isEmpty());
-        assertNull(cartItem.getCart()); // relation should be nullified
+        verify(cartItem).setCart(null);
     }
 
     @Test
@@ -79,7 +85,7 @@ class CartTest {
         Cart cart = new Cart(new UserId(1L));
         AvailabilityId availabilityIdInCart = new AvailabilityId(10L);
         AvailabilityId availabilityIdToRemove = new AvailabilityId(20L);
-        CartItem cartItem = new CartItem(availabilityIdInCart, new Quantity(2), new Money(new BigDecimal("50.0"), "USD"));
+        when(cartItem.getAvailabilityId()).thenReturn(availabilityIdInCart);
         cart.addItem(cartItem);
 
         // Act & Assert
