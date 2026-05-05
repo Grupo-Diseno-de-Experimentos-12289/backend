@@ -64,7 +64,7 @@ class AvailabilityCommandServiceImplTest {
         // Act
         Long availabilityId = availabilityCommandService.handle(command);
 
-        // Assert
+        // Assertt
         verify(experienceRepository, times(1)).findById(any());
         verify(availabilityRepository, times(1)).save(any(Availability.class));
         assertNull(availabilityId); // Depende del estado autogenerado del Id, en pruebas simples es nulo si no se setea a mano

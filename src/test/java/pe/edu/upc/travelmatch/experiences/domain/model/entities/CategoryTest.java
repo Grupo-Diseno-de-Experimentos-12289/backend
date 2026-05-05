@@ -60,7 +60,7 @@ class CategoryTest {
         // Arrange
         List<Category> providedList = List.of(new Category(Categories.GASTRONOMIA));
 
-        // Act
+        // Actt
         List<Category> categoryList = Category.validateCategorySet(providedList);
 
         // Assert
