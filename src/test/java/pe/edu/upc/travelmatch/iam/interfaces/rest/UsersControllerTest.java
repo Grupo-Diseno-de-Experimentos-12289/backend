@@ -23,19 +23,16 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * Implementation of the tests for UsersController REST endpoints.
+ * Unit tests for {@link UsersController}.
  *
- * <p>This controller provides endpoints to retrieve user information by delegating
- * queries to the UserQueryService.</p>
+ * This class validates the users endpoint, including fetching all users or a specific
+ * user by ID, ensuring correct resource mapping.
  */
 @ExtendWith(MockitoExtension.class)
 class UsersControllerTest {
 
-    @Mock
-    private UserQueryService userQueryService;
-
-    @InjectMocks
-    private UsersController usersController;
+    @Mock private UserQueryService userQueryService;
+    @InjectMocks private UsersController usersController;
 
     @Test
     @DisplayName("getAllUsers should return 200 OK and list of UserResource")

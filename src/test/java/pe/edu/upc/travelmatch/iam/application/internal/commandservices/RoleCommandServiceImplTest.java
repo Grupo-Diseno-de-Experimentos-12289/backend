@@ -15,19 +15,16 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * Implementation of the tests for RoleCommandService interface handling role-related commands.
+ * Unit tests for {@link RoleCommandServiceImpl}.
  *
- * <p>This service provides methods to handle command executions like seeding initial
- * roles into the repository securely.</p>
+ * This class validates the behavior of the RoleCommandServiceImpl, specifically the
+ * seeding of initial roles into the repository.
  */
 @ExtendWith(MockitoExtension.class)
 class RoleCommandServiceImplTest {
 
-    @Mock
-    private RoleRepository roleRepository;
-
-    @InjectMocks
-    private RoleCommandServiceImpl roleCommandService;
+    @Mock private RoleRepository roleRepository;
+    @InjectMocks private RoleCommandServiceImpl roleCommandService;
 
     @Test
     @DisplayName("handle(SeedRolesCommand) should save all missing roles")

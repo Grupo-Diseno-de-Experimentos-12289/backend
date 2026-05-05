@@ -25,29 +25,19 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Test class for {@link UserCommandServiceImpl}.
+ * Unit tests for {@link UserCommandServiceImpl}.
  *
- * <p>This class provides tests for user command handling, ensuring that user creation
- * (SignUp) and user authentication (SignIn) function correctly, verifying both
- * successful executions and error scenarios.</p>
+ * This class validates the behavior of the UserCommandServiceImpl, including
+ * user registration (SignUp) and authentication (SignIn) flows.
  */
 @ExtendWith(MockitoExtension.class)
 class UserCommandServiceImplTest {
 
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private HashingService hashingService;
-
-    @Mock
-    private TokenService tokenService;
-
-    @Mock
-    private RoleRepository roleRepository;
-
-    @InjectMocks
-    private UserCommandServiceImpl userCommandService;
+    @Mock private UserRepository userRepository;
+    @Mock private HashingService hashingService;
+    @Mock private TokenService tokenService;
+    @Mock private RoleRepository roleRepository;
+    @InjectMocks private UserCommandServiceImpl userCommandService;
 
     @Test
     @DisplayName("handle(SignUpCommand) should return User when creation is successful")

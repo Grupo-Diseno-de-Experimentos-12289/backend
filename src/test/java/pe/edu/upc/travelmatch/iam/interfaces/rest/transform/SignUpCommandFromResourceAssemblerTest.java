@@ -11,10 +11,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Implementation of the tests for SignUpCommandFromResourceAssembler.
+ * Unit tests for {@link SignUpCommandFromResourceAssembler}.
  *
- * <p>This class validates the proper mapping from a SignUpResource to a SignUpCommand,
- * including correct handling of the user roles.</p>
+ * This class validates the proper mapping from a SignUpResource to a SignUpCommand,
+ * including correct handling of the user roles.
  */
 class SignUpCommandFromResourceAssemblerTest {
 

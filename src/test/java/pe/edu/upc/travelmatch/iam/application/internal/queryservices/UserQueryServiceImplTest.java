@@ -19,19 +19,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Implementation of the tests for UserQueryService interface handling user-related queries.
+ * Unit tests for {@link UserQueryServiceImpl}.
  *
- * <p>This service provides methods to retrieve users from the repository by ID, email,
- * or fetch all of them securely.</p>
+ * This class validates the behavior of the UserQueryServiceImpl, including
+ * fetching users by ID, email, or all users.
  */
 @ExtendWith(MockitoExtension.class)
 class UserQueryServiceImplTest {
 
-    @Mock
-    private UserRepository userRepository;
-
-    @InjectMocks
-    private UserQueryServiceImpl userQueryService;
+    @Mock private UserRepository userRepository;
+    @InjectMocks private UserQueryServiceImpl userQueryService;
 
     @Test
     @DisplayName("handle(GetAllUsersQuery) should return a list of users")

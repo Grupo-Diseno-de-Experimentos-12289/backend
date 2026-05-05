@@ -15,25 +15,18 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * Implementation of the tests for ApplicationReadyEventHandler.
+ * Unit tests for {@link ApplicationReadyEventHandler}.
  *
- * <p>This event handler triggers necessary seeding operations, like roles, when the
- * application signals it is fully ready to receive requests.</p>
+ * This class validates that the roles seeding command is triggered when the
+ * application ready event is received.
  */
 @ExtendWith(MockitoExtension.class)
 class ApplicationReadyEventHandlerTest {
 
-    @Mock
-    private RoleCommandService roleCommandService;
-
-    @Mock
-    private ApplicationReadyEvent applicationReadyEvent;
-
-    @Mock
-    private ConfigurableApplicationContext applicationContext;
-
-    @InjectMocks
-    private ApplicationReadyEventHandler applicationReadyEventHandler;
+    @Mock private RoleCommandService roleCommandService;
+    @Mock private ApplicationReadyEvent applicationReadyEvent;
+    @Mock private ConfigurableApplicationContext applicationContext;
+    @InjectMocks private ApplicationReadyEventHandler applicationReadyEventHandler;
 
     @Test
     @DisplayName("on should execute SeedRolesCommand")

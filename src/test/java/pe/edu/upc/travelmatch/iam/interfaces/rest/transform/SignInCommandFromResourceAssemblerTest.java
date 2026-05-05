@@ -8,9 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * Implementation of the tests for SignInCommandFromResourceAssembler.
+ * Unit tests for {@link SignInCommandFromResourceAssembler}.
  *
- * <p>This class validates the proper mapping from a SignInResource to a SignInCommand.</p>
+ * This class validates the proper mapping from a SignInResource to a SignInCommand.
  */
 class SignInCommandFromResourceAssemblerTest {
 

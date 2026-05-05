@@ -13,9 +13,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * Implementation of the tests for UserResourceFromEntityAssembler.
+ * Unit tests for {@link UserResourceFromEntityAssembler}.
  *
- * <p>This class validates the proper mapping from a User entity to a UserResource.</p>
+ * This class validates the proper mapping from a User entity to a UserResource.
  */
 class UserResourceFromEntityAssemblerTest {
 

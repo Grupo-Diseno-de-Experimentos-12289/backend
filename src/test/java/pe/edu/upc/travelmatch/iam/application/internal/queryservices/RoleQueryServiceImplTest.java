@@ -18,19 +18,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Implementation of the tests for RoleQueryService interface handling role-related queries.
+ * Unit tests for {@link RoleQueryServiceImpl}.
  *
- * <p>This service provides methods to fetch all roles or fetch a role by its ID from
- * the repository.</p>
+ * This class validates the behavior of the RoleQueryServiceImpl, including
+ * fetching all roles or a specific role by ID.
  */
 @ExtendWith(MockitoExtension.class)
 class RoleQueryServiceImplTest {
 
-    @Mock
-    private RoleRepository roleRepository;
-
-    @InjectMocks
-    private RoleQueryServiceImpl roleQueryService;
+    @Mock private RoleRepository roleRepository;
+    @InjectMocks private RoleQueryServiceImpl roleQueryService;
 
     @Test
     @DisplayName("handle(GetAllRolesQuery) should return a list of roles")

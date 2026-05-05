@@ -26,20 +26,16 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * Implementation of the tests for AuthenticationController REST endpoints.
+ * Unit tests for {@link AuthenticationController}.
  *
- * <p>This controller provides methods to handle user authentication, such as
- * signing in and signing up. It delegates business logic to the underlying
- * UserCommandService and maps HTTP requests and responses appropriately.</p>
+ * This class validates the authentication endpoints, including sign-in and sign-up,
+ * ensuring correct HTTP responses and resource mapping.
  */
 @ExtendWith(MockitoExtension.class)
 class AuthenticationControllerTest {
 
-    @Mock
-    private UserCommandService userCommandService;
-
-    @InjectMocks
-    private AuthenticationController authenticationController;
+    @Mock private UserCommandService userCommandService;
+    @InjectMocks private AuthenticationController authenticationController;
 
     @Test
     @DisplayName("signIn should return 200 OK and AuthenticatedUserResource")

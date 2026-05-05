@@ -14,10 +14,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * Implementation of the tests for AuthenticatedUserResourceFromEntityAssembler.
+ * Unit tests for {@link AuthenticatedUserResourceFromEntityAssembler}.
  *
- * <p>This class validates the proper mapping from a User entity and a token to an
- * AuthenticatedUserResource.</p>
+ * This class validates the proper mapping from a User entity and a token to an
+ * AuthenticatedUserResource.
  */
 class AuthenticatedUserResourceFromEntityAssemblerTest {
 

@@ -11,9 +11,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * Implementation of the tests for RoleResourceFromEntityAssembler.
+ * Unit tests for {@link RoleResourceFromEntityAssembler}.
  *
- * <p>This class validates the proper mapping from a Role entity to a RoleResource.</p>
+ * This class validates the proper mapping from a Role entity to a RoleResource.
  */
 class RoleResourceFromEntityAssemblerTest {
 

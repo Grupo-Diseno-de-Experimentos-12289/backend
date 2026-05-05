@@ -21,19 +21,16 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * Implementation of the tests for RolesController REST endpoints.
+ * Unit tests for {@link RolesController}.
  *
- * <p>This controller provides endpoints to retrieve information regarding roles,
- * relying on RoleQueryService for its internal operations.</p>
+ * This class validates the roles endpoint, ensuring it returns all available roles
+ * correctly mapped to resources.
  */
 @ExtendWith(MockitoExtension.class)
 class RolesControllerTest {
 
-    @Mock
-    private RoleQueryService roleQueryService;
-
-    @InjectMocks
-    private RolesController rolesController;
+    @Mock private RoleQueryService roleQueryService;
+    @InjectMocks private RolesController rolesController;
 
     @Test
     @DisplayName("getAllRoles should return 200 OK and list of RoleResource")
