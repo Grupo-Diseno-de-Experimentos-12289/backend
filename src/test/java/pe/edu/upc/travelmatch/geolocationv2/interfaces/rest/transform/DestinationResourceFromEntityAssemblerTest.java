@@ -11,10 +11,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * Implementation of the tests for DestinationResourceFromEntityAssembler.
+ * Unit tests for {@link DestinationResourceFromEntityAssembler}.
  *
- * <p>This class validates the proper mapping from a Destination entity to a
- * DestinationResource.</p>
+ * This class validates the proper mapping from a Destination entity to a
+ * DestinationResource.
  */
 class DestinationResourceFromEntityAssemblerTest {
 
@@ -26,10 +26,10 @@ class DestinationResourceFromEntityAssemblerTest {
         when(destination.getId()).thenReturn(1L);
         when(destination.getName()).thenReturn(new DestinationName("Paris"));
         when(destination.getAddress()).thenReturn(new DestinationAddress("123 Street"));
-        when(destination.getDistrict()).thenReturn(new DestinationDistrict("District 1"));
-        when(destination.getCity()).thenReturn(new DestinationCity("Paris"));
-        when(destination.getState()).thenReturn(new DestinationState("Ile-de-France"));
-        when(destination.getCountry()).thenReturn(new DestinationCountry("France"));
+        when(destination.getDistrict()).thenReturn(new District("District 1"));
+        when(destination.getCity()).thenReturn(new City("Paris"));
+        when(destination.getState()).thenReturn(new State("Ile-de-France"));
+        when(destination.getCountry()).thenReturn(new Country("France"));
 
         // Act
         var resource = DestinationResourceFromEntityAssembler.toResourceFromEntity(destination);

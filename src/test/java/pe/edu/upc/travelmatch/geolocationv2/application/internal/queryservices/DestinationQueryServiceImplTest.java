@@ -20,23 +20,17 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Implementation of the tests for DestinationQueryService interface handling destination-related queries.
+ * Unit tests for {@link DestinationQueryServiceImpl}.
  *
- * <p>This service provides methods to retrieve destinations from the repository
- * using criteria such as ID, name, or fetching all existing destinations.</p>
+ * This class validates the behavior of the DestinationQueryServiceImpl, including
+ * fetching destinations by ID, name, or all destinations.
  */
 @ExtendWith(MockitoExtension.class)
 class DestinationQueryServiceImplTest {
 
-    @Mock
-    private DestinationRepository destinationRepository;
+    @Mock private DestinationRepository destinationRepository;
+    @InjectMocks private DestinationQueryServiceImpl destinationQueryService;
 
-    @InjectMocks
-    private DestinationQueryServiceImpl destinationQueryService;
-
-    /**
-     * Tests the handle method for GetAllDestinationsQuery.
-     */
     @Test
     @DisplayName("handle(GetAllDestinationsQuery) should return list of destinations")
     void handle_GetAllDestinationsQuery_ShouldReturnListOfDestinations() {
@@ -59,9 +53,6 @@ class DestinationQueryServiceImplTest {
         verifyNoMoreInteractions(destinationRepository);
     }
 
-    /**
-     * Tests the handle method for GetDestinationByDestinationNameQuery.
-     */
     @Test
     @DisplayName("handle(GetDestinationByDestinationNameQuery) should return destination when found")
     void handle_GetDestinationByDestinationNameQuery_ShouldReturnDestination_WhenFound() {
@@ -83,9 +74,6 @@ class DestinationQueryServiceImplTest {
         verifyNoMoreInteractions(destinationRepository);
     }
 
-    /**
-     * Tests the handle method for GetDestinationByIdQuery.
-     */
     @Test
     @DisplayName("handle(GetDestinationByIdQuery) should return destination when found")
     void handle_GetDestinationByIdQuery_ShouldReturnDestination_WhenFound() {

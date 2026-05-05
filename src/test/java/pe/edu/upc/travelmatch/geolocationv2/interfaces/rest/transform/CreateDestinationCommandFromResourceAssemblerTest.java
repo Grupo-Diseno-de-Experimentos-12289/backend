@@ -8,10 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * Implementation of the tests for CreateDestinationCommandFromResourceAssembler.
+ * Unit tests for {@link CreateDestinationCommandFromResourceAssembler}.
  *
- * <p>This class validates the proper mapping from a CreateDestinationResource to
- * a CreateDestinationCommand.</p>
+ * This class validates the proper mapping from a CreateDestinationResource to
+ * a CreateDestinationCommand.
  */
 class CreateDestinationCommandFromResourceAssemblerTest {
 

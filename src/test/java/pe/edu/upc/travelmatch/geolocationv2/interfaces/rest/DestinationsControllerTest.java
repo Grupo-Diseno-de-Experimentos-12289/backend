@@ -26,26 +26,18 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Implementation of the tests for DestinationsController REST endpoints.
+ * Unit tests for {@link DestinationsController}.
  *
- * <p>This controller handles REST API calls for destinations, delegating operations
- * to the DestinationCommandService and DestinationQueryService for CRUD functionality.</p>
+ * This class validates the destinations REST endpoints, ensuring correct
+ * CRUD operations and HTTP response mappings.
  */
 @ExtendWith(MockitoExtension.class)
 class DestinationsControllerTest {
 
-    @Mock
-    private DestinationQueryService destinationQueryService;
+    @Mock private DestinationQueryService destinationQueryService;
+    @Mock private DestinationCommandService destinationCommandService;
+    @InjectMocks private DestinationsController destinationsController;
 
-    @Mock
-    private DestinationCommandService destinationCommandService;
-
-    @InjectMocks
-    private DestinationsController destinationsController;
-
-    /**
-     * Tests the POST /api/v1/destinations endpoint.
-     */
     @Test
     @DisplayName("createDestination should return 201 Created and DestinationResource when successful")
     void createDestination_ShouldReturnCreatedAndResource_WhenSuccessful() {
@@ -71,9 +63,6 @@ class DestinationsControllerTest {
         verifyNoMoreInteractions(destinationCommandService, destinationQueryService);
     }
 
-    /**
-     * Tests the POST /api/v1/destinations endpoint when creation fails (returns 0L).
-     */
     @Test
     @DisplayName("createDestination should return 400 Bad Request when creation fails")
     void createDestination_ShouldReturnBadRequest_WhenCreationFailed() {
@@ -93,9 +82,6 @@ class DestinationsControllerTest {
         verifyNoMoreInteractions(destinationCommandService, destinationQueryService);
     }
 
-    /**
-     * Tests the GET /api/v1/destinations endpoint.
-     */
     @Test
     @DisplayName("getAllDestinations should return 200 OK and list of DestinationResources")
     void getAllDestinations_ShouldReturnOkAndList() {
@@ -118,9 +104,6 @@ class DestinationsControllerTest {
         verifyNoMoreInteractions(destinationCommandService, destinationQueryService);
     }
 
-    /**
-     * Tests the GET /api/v1/destinations/{destinationId} endpoint.
-     */
     @Test
     @DisplayName("getDestinationById should return 200 OK and DestinationResource when found")
     void getDestinationById_ShouldReturnOkAndResource_WhenFound() {
@@ -143,9 +126,6 @@ class DestinationsControllerTest {
         verifyNoMoreInteractions(destinationCommandService, destinationQueryService);
     }
 
-    /**
-     * Tests the GET /api/v1/destinations/{destinationId} endpoint when not found.
-     */
     @Test
     @DisplayName("getDestinationById should return 400 Bad Request when not found")
     void getDestinationById_ShouldReturnBadRequest_WhenNotFound() {
@@ -165,9 +145,6 @@ class DestinationsControllerTest {
         verifyNoMoreInteractions(destinationCommandService, destinationQueryService);
     }
 
-    /**
-     * Tests the PUT /api/v1/destinations/{destinationId} endpoint.
-     */
     @Test
     @DisplayName("updateDestination should return 200 OK and updated DestinationResource")
     void updateDestination_ShouldReturnOkAndUpdatedResource() {
@@ -191,9 +168,6 @@ class DestinationsControllerTest {
         verifyNoMoreInteractions(destinationCommandService, destinationQueryService);
     }
 
-    /**
-     * Tests the DELETE /api/v1/destinations/{destinationId} endpoint.
-     */
     @Test
     @DisplayName("deleteDestination should return 204 No Content")
     void deleteDestination_ShouldReturnNoContent() {

@@ -19,21 +19,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Implementation of the DestinationCommandService interface for handling destination-related commands.
+ * Unit tests for {@link DestinationCommandServiceImpl}.
  *
- * <p>This service provides methods to create, update, and delete destination entities, interacting
- * with the DestinationRepository.</p>
+ * This service handles command executions for creating, updating, and deleting 
+ * destination entities in the geolocation context.
  */
 @ExtendWith(MockitoExtension.class)
 class DestinationCommandServiceImplTest {
 
-    @Mock
-    private DestinationRepository destinationRepository;
-
-    @InjectMocks
-    private DestinationCommandServiceImpl destinationCommandService;
-
-    // ----- CreateDestinationCommand Tests -----
+    @Mock private DestinationRepository destinationRepository;
+    @InjectMocks private DestinationCommandServiceImpl destinationCommandService;
 
     @Test
     @DisplayName("handle(CreateDestinationCommand) should return destination ID when created successfully")
@@ -86,8 +81,6 @@ class DestinationCommandServiceImplTest {
         verify(destinationRepository).save(any(Destination.class));
         verifyNoMoreInteractions(destinationRepository);
     }
-
-    // ----- UpdateDestinationCommand Tests -----
 
     @Test
     @DisplayName("handle(UpdateDestinationCommand) should return updated destination when successful")
@@ -150,8 +143,6 @@ class DestinationCommandServiceImplTest {
         verify(destinationRepository).existsById(command.destinationId());
         verifyNoMoreInteractions(destinationRepository);
     }
-
-    // ----- DeleteDestinationCommand Tests -----
 
     @Test
     @DisplayName("handle(DeleteDestinationCommand) should delete destination when successful")
