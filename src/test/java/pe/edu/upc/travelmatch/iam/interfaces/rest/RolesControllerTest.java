@@ -35,9 +35,6 @@ class RolesControllerTest {
     @InjectMocks
     private RolesController rolesController;
 
-    /**
-     * Tests the GET /api/v1/roles endpoint.
-     */
     @Test
     @DisplayName("getAllRoles should return 200 OK and list of RoleResource")
     void getAllRoles_ShouldReturnOkAndListOfRoleResource() {

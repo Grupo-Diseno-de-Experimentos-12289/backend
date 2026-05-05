@@ -4,9 +4,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import pe.edu.upc.travelmatch.iam.domain.model.aggregates.User;
 import pe.edu.upc.travelmatch.iam.domain.model.entities.Role;
-import pe.edu.upc.travelmatch.iam.interfaces.rest.resources.UserResource;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -32,7 +31,7 @@ class UserResourceFromEntityAssemblerTest {
         when(user.getFirstName()).thenReturn("John");
         when(user.getLastName()).thenReturn("Doe");
         when(user.getPhone()).thenReturn("123");
-        when(user.getRoles()).thenReturn(List.of(role));
+        when(user.getRoles()).thenReturn(Set.of(role));
         when(role.getStringName()).thenReturn("ROLE_TOURIST");
 
         // Act

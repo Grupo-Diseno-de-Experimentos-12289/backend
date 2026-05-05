@@ -29,16 +29,12 @@ class RoleCommandServiceImplTest {
     @InjectMocks
     private RoleCommandServiceImpl roleCommandService;
 
-    /**
-     * Tests the handle method for SeedRolesCommand.
-     */
     @Test
     @DisplayName("handle(SeedRolesCommand) should save all missing roles")
     void handle_SeedRolesCommand_ShouldSaveMissingRoles() {
         // Arrange
         var command = new SeedRolesCommand();
 
-        // Mock existing roles to test only missing ones are saved
         when(roleRepository.existsByName(Roles.ROLE_ADMIN)).thenReturn(true);
         when(roleRepository.existsByName(Roles.ROLE_AGENCY_STAFF)).thenReturn(false);
         when(roleRepository.existsByName(Roles.ROLE_TOURIST)).thenReturn(false);
@@ -48,7 +44,6 @@ class RoleCommandServiceImplTest {
 
         // Assert
         verify(roleRepository, atLeastOnce()).existsByName(any());
-        // verify it saves roles that do not exist
         verify(roleRepository, atLeastOnce()).save(any(Role.class));
     }
 }

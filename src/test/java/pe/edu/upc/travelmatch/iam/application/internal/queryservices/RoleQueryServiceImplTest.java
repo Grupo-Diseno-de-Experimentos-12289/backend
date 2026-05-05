@@ -32,9 +32,6 @@ class RoleQueryServiceImplTest {
     @InjectMocks
     private RoleQueryServiceImpl roleQueryService;
 
-    /**
-     * Tests the handle method for GetAllRolesQuery.
-     */
     @Test
     @DisplayName("handle(GetAllRolesQuery) should return a list of roles")
     void handle_GetAllRolesQuery_ShouldReturnListOfRoles() {
@@ -57,9 +54,6 @@ class RoleQueryServiceImplTest {
         verifyNoMoreInteractions(roleRepository);
     }
 
-    /**
-     * Tests the handle method for GetRoleByIdQuery.
-     */
     @Test
     @DisplayName("handle(GetRoleByIdQuery) should return an Optional of role when found")
     void handle_GetRoleByIdQuery_ShouldReturnOptionalRole() {

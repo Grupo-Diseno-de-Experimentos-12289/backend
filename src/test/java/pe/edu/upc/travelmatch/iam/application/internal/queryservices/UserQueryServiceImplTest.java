@@ -33,9 +33,6 @@ class UserQueryServiceImplTest {
     @InjectMocks
     private UserQueryServiceImpl userQueryService;
 
-    /**
-     * Tests the handle method for GetAllUsersQuery.
-     */
     @Test
     @DisplayName("handle(GetAllUsersQuery) should return a list of users")
     void handle_GetAllUsersQuery_ShouldReturnListOfUsers() {
@@ -58,9 +55,6 @@ class UserQueryServiceImplTest {
         verifyNoMoreInteractions(userRepository);
     }
 
-    /**
-     * Tests the handle method for GetUserByIdQuery.
-     */
     @Test
     @DisplayName("handle(GetUserByIdQuery) should return an Optional of user when found")
     void handle_GetUserByIdQuery_ShouldReturnOptionalUser() {
@@ -81,9 +75,6 @@ class UserQueryServiceImplTest {
         verifyNoMoreInteractions(userRepository);
     }
 
-    /**
-     * Tests the handle method for GetUserByEmailQuery.
-     */
     @Test
     @DisplayName("handle(GetUserByEmailQuery) should return an Optional of user when found")
     void handle_GetUserByEmailQuery_ShouldReturnOptionalUser() {

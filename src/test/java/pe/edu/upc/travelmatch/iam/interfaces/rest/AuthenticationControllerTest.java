@@ -41,9 +41,6 @@ class AuthenticationControllerTest {
     @InjectMocks
     private AuthenticationController authenticationController;
 
-    /**
-     * Tests the POST /api/v1/authentication/sign-in endpoint for success.
-     */
     @Test
     @DisplayName("signIn should return 200 OK and AuthenticatedUserResource")
     void signIn_ShouldReturnOkAndResource_WhenSuccessful() {
@@ -68,9 +65,6 @@ class AuthenticationControllerTest {
         verifyNoMoreInteractions(userCommandService);
     }
 
-    /**
-     * Tests the POST /api/v1/authentication/sign-in endpoint for not found.
-     */
     @Test
     @DisplayName("signIn should return 404 Not Found when user does not exist or invalid")
     void signIn_ShouldReturnNotFound_WhenFailed() {
@@ -90,9 +84,6 @@ class AuthenticationControllerTest {
         verifyNoMoreInteractions(userCommandService);
     }
 
-    /**
-     * Tests the POST /api/v1/authentication/sign-up endpoint for success.
-     */
     @Test
     @DisplayName("signUp should return 201 Created and UserResource")
     void signUp_ShouldReturnCreatedAndResource_WhenSuccessful() {
@@ -115,9 +106,6 @@ class AuthenticationControllerTest {
         verifyNoMoreInteractions(userCommandService);
     }
 
-    /**
-     * Tests the POST /api/v1/authentication/sign-up endpoint for bad request.
-     */
     @Test
     @DisplayName("signUp should return 400 Bad Request when failed")
     void signUp_ShouldReturnBadRequest_WhenFailed() {

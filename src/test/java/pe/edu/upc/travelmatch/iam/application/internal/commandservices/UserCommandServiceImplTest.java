@@ -49,8 +49,6 @@ class UserCommandServiceImplTest {
     @InjectMocks
     private UserCommandServiceImpl userCommandService;
 
-    // ----- SignUpCommand Tests -----
-
     @Test
     @DisplayName("handle(SignUpCommand) should return User when creation is successful")
     void handle_SignUpCommand_ShouldReturnUser_WhenCreationIsSuccessful() {
@@ -109,8 +107,6 @@ class UserCommandServiceImplTest {
         verify(roleRepository).findByName(Roles.ROLE_ADMIN);
         verifyNoMoreInteractions(userRepository, roleRepository, hashingService, tokenService);
     }
-
-    // ----- SignInCommand Tests -----
 
     @Test
     @DisplayName("handle(SignInCommand) should return User and Token when sign in is successful")

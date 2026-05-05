@@ -16,6 +16,7 @@ import pe.edu.upc.travelmatch.iam.domain.services.UserQueryService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -32,8 +33,6 @@ class IamContextFacadeTest {
     @Mock private UserQueryService userQueryService;
 
     @InjectMocks private IamContextFacade iamContextFacade;
-
-    // ----- createUser (with roleNames) Tests -----
 
     @Test
     @DisplayName("createUser should return 0L when command service returns empty")
@@ -67,8 +66,6 @@ class IamContextFacadeTest {
         verifyNoMoreInteractions(userCommandService, userQueryService);
     }
 
-    // ----- fetchUserById Tests -----
-
     @Test
     @DisplayName("fetchUserById should return empty when user is not found")
     void fetchUserById_ShouldReturnEmpty_WhenNotFound() {
@@ -94,7 +91,7 @@ class IamContextFacadeTest {
         when(user.getFirstName()).thenReturn("John");
         when(user.getLastName()).thenReturn("Doe");
         when(user.getPhone()).thenReturn("999");
-        when(user.getRoles()).thenReturn(List.of());
+        when(user.getRoles()).thenReturn(Set.of());
         when(userQueryService.handle(new GetUserByIdQuery(1L))).thenReturn(Optional.of(user));
 
         // Act
@@ -107,8 +104,6 @@ class IamContextFacadeTest {
         verify(userQueryService).handle(new GetUserByIdQuery(1L));
         verifyNoMoreInteractions(userQueryService, userCommandService);
     }
-
-    // ----- fetchUserIdByEmail Tests -----
 
     @Test
     @DisplayName("fetchUserIdByEmail should return 0L when user is not found")
@@ -141,8 +136,6 @@ class IamContextFacadeTest {
         verify(userQueryService).handle(new GetUserByEmailQuery("found@test.com"));
         verifyNoMoreInteractions(userQueryService, userCommandService);
     }
-
-    // ----- existsUserByEmailAndIdIsNot Tests -----
 
     @Test
     @DisplayName("existsUserByEmailAndIdIsNot should return false when no user found with email")
@@ -193,8 +186,6 @@ class IamContextFacadeTest {
         verifyNoMoreInteractions(userQueryService, userCommandService);
     }
 
-    // ----- existsUserById Tests -----
-
     @Test
     @DisplayName("existsUserById should return true when user is found")
     void existsUserById_ShouldReturnTrue_WhenFound() {
@@ -210,8 +201,6 @@ class IamContextFacadeTest {
         verify(userQueryService).handle(new GetUserByIdQuery(1L));
         verifyNoMoreInteractions(userQueryService, userCommandService);
     }
-
-    // ----- fetchEmailByUserId Tests -----
 
     @Test
     @DisplayName("fetchEmailByUserId should return empty string when user is not found")
@@ -245,8 +234,6 @@ class IamContextFacadeTest {
         verifyNoMoreInteractions(userQueryService, userCommandService);
     }
 
-    // ----- existsUserByRole Tests -----
-
     @Test
     @DisplayName("existsUserByRole should return true when user has the specified role")
     void existsUserByRole_ShouldReturnTrue_WhenRoleMatches() {
@@ -254,7 +241,7 @@ class IamContextFacadeTest {
         var role = mock(Role.class);
         var user = mock(User.class);
         when(role.getStringName()).thenReturn("ROLE_TOURIST");
-        when(user.getRoles()).thenReturn(List.of(role));
+        when(user.getRoles()).thenReturn(Set.of(role));
         when(userQueryService.handle(new GetUserByIdQuery(1L))).thenReturn(Optional.of(user));
 
         // Act
@@ -273,7 +260,7 @@ class IamContextFacadeTest {
         var role = mock(Role.class);
         var user = mock(User.class);
         when(role.getStringName()).thenReturn("ROLE_ADMIN");
-        when(user.getRoles()).thenReturn(List.of(role));
+        when(user.getRoles()).thenReturn(Set.of(role));
         when(userQueryService.handle(new GetUserByIdQuery(1L))).thenReturn(Optional.of(user));
 
         // Act

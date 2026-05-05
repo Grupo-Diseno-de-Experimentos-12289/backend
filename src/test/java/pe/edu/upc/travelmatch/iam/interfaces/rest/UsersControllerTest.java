@@ -16,6 +16,7 @@ import pe.edu.upc.travelmatch.iam.interfaces.rest.resources.UserResource;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -36,15 +37,13 @@ class UsersControllerTest {
     @InjectMocks
     private UsersController usersController;
 
-    /**
-     * Tests the GET /api/v1/users endpoint.
-     */
     @Test
     @DisplayName("getAllUsers should return 200 OK and list of UserResource")
     void getAllUsers_ShouldReturnOkAndListOfUserResource() {
         // Arrange
         var userSpy = spy(new User("john.doe@example.com", "encoded", "John", "Doe", "123"));
         when(userSpy.getId()).thenReturn(1L);
+        when(userSpy.getRoles()).thenReturn(Set.of());
 
         when(userQueryService.handle(any(GetAllUsersQuery.class))).thenReturn(List.of(userSpy));
 
@@ -60,9 +59,6 @@ class UsersControllerTest {
         verifyNoMoreInteractions(userQueryService);
     }
 
-    /**
-     * Tests the GET /api/v1/users/{userId} endpoint for success.
-     */
     @Test
     @DisplayName("getUserById should return 200 OK and UserResource when found")
     void getUserById_ShouldReturnOkAndUserResource_WhenFound() {
@@ -70,6 +66,7 @@ class UsersControllerTest {
         var expectedId = 1L;
         var userSpy = spy(new User("john.doe@example.com", "encoded", "John", "Doe", "123"));
         when(userSpy.getId()).thenReturn(expectedId);
+        when(userSpy.getRoles()).thenReturn(Set.of());
 
         when(userQueryService.handle(any(GetUserByIdQuery.class))).thenReturn(Optional.of(userSpy));
 
@@ -85,9 +82,6 @@ class UsersControllerTest {
         verifyNoMoreInteractions(userQueryService);
     }
 
-    /**
-     * Tests the GET /api/v1/users/{userId} endpoint for not found.
-     */
     @Test
     @DisplayName("getUserById should return 404 Not Found when not found")
     void getUserById_ShouldReturnNotFound_WhenNotFound() {

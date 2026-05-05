@@ -4,9 +4,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import pe.edu.upc.travelmatch.iam.domain.model.aggregates.User;
 import pe.edu.upc.travelmatch.iam.domain.model.entities.Role;
-import pe.edu.upc.travelmatch.iam.domain.model.valueobjects.Roles;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -30,7 +29,7 @@ class AuthenticatedUserResourceFromEntityAssemblerTest {
         var role = mock(Role.class);
         when(user.getId()).thenReturn(1L);
         when(user.getEmail()).thenReturn("user@example.com");
-        when(user.getRoles()).thenReturn(List.of(role));
+        when(user.getRoles()).thenReturn(Set.of(role));
         when(role.getStringName()).thenReturn("ROLE_TOURIST");
 
         var token = "jwt-token-123";

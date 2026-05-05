@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import pe.edu.upc.travelmatch.iam.domain.model.commands.SeedRolesCommand;
 import pe.edu.upc.travelmatch.iam.domain.services.RoleCommandService;
 
@@ -30,14 +30,11 @@ class ApplicationReadyEventHandlerTest {
     private ApplicationReadyEvent applicationReadyEvent;
 
     @Mock
-    private ApplicationContext applicationContext;
+    private ConfigurableApplicationContext applicationContext;
 
     @InjectMocks
     private ApplicationReadyEventHandler applicationReadyEventHandler;
 
-    /**
-     * Tests the on method triggered by ApplicationReadyEvent.
-     */
     @Test
     @DisplayName("on should execute SeedRolesCommand")
     void on_ShouldExecuteSeedRolesCommand() {
