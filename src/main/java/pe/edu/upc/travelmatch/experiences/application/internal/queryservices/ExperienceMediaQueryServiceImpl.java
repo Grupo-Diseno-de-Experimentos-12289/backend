@@ -2,6 +2,8 @@ package pe.edu.upc.travelmatch.experiences.application.internal.queryservices;
 
 import org.springframework.stereotype.Service;
 import pe.edu.upc.travelmatch.experiences.domain.model.entities.ExperienceMedia;
+import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetAllExperiencesQuery;
+import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetExperienceByIdQuery;
 import pe.edu.upc.travelmatch.experiences.domain.services.ExperienceMediaQueryService;
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.ExperienceMediaRepository;
 
@@ -29,5 +31,16 @@ public class ExperienceMediaQueryServiceImpl implements ExperienceMediaQueryServ
     @Override
     public Optional<ExperienceMedia> findById(Long id) {
         return repository.findById(id);
+    }
+
+    @Override
+    public List<ExperienceMedia> handle(GetAllExperiencesQuery query) {
+        return repository.findAll();
+    }
+
+    @Override
+    public Optional<ExperienceMedia> handle(GetExperienceByIdQuery query)
+    {
+        return repository.findById(query.experienceId());
     }
 }
