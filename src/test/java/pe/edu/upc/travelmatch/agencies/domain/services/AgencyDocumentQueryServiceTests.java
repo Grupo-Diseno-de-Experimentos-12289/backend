@@ -25,6 +25,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
+@DisplayName("AgencyDocumentQueryServiceTests")
 public class AgencyDocumentQueryServiceTests {
     @Mock private AgencyDocumentRepository agencyDocumentRepository;
     @Mock private AgencyRepository         agencyRepository;

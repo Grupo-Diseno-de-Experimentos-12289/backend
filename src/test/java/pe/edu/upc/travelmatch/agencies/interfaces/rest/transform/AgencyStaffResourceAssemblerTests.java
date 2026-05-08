@@ -15,7 +15,7 @@ import pe.edu.upc.travelmatch.agencies.interfaces.rest.resources.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-@Nested
+@ExtendWith(MockitoExtension.class)
 @DisplayName("AgencyStaffResourceFromEntityAssembler")
 public class AgencyStaffResourceAssemblerTests {
     @Mock private AgencyStaff staffEntity;
