@@ -130,6 +130,16 @@
 	</dependencies>
 
 	<build>
+		<!-- 👇 ESTE ES EL BLOQUE MÁGICO QUE PERMITE VER LOS .FEATURE 👇 -->
+		<testResources>
+			<testResource>
+				<directory>src/test/java</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</testResource>
+		</testResources>
+		<!-- 👆 HASTA AQUÍ 👆 -->
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
