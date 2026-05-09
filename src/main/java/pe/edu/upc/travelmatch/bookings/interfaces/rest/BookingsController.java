@@ -32,10 +32,12 @@ public class BookingsController {
             CreateBookingCommand command = CreateBookingCommandFromResourceAssembler.toCommandFromResource(resource);
             Long bookingId = bookingCommandService.handle(command);
             var bookingOpt = bookingQueryService.handle(new GetBookingByIdQuery(bookingId));
+
             if (bookingOpt.isEmpty()) return ResponseEntity.notFound().build();
             BookingResource bookingResource = BookingResourceFromEntityAssembler.toResourceFromEntity(bookingOpt.get());
             return new ResponseEntity<>(bookingResource, HttpStatus.CREATED);
         } catch (IllegalArgumentException | IllegalStateException e) {
+
             return ResponseEntity.badRequest().body(null);
         }
     }

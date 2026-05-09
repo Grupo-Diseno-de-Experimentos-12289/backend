@@ -3,12 +3,12 @@ Feature: Gestión de Agencias, Documentos y Staff (Agencies API)
   Background:
     * url 'http://localhost:8091/api/v1'
 
-    # 🔥 Invocamos al ayudante para obtener Token y User ID frescos
+    # Invocamos al ayudante para obtener Token y User ID frescos
     * def authData = call read('classpath:pe/edu/upc/travelmatch/auth-setup.feature')
     * def authHeader = authData.authToken
     * def staffId = authData.newUserId
 
-    # 🔥 Generadores de datos únicos para que NADA choque entre escenarios
+    #  Generadores de datos únicos para que NADA choque entre escenarios
     * def generateUuid = function(){ return java.util.UUID.randomUUID().toString().substring(0,8) }
     * def time = function(){ return java.lang.System.currentTimeMillis().toString() }
 
