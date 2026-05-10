@@ -1,26 +1,8 @@
 package pe.edu.upc.travelmatch.agencies.domain.model.valueobjects;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import pe.edu.upc.travelmatch.agencies.application.internal.queryservices.AgencyDocumentQueryServiceImpl;
-import pe.edu.upc.travelmatch.agencies.application.internal.queryservices.AgencyQueryServiceImpl;
-import pe.edu.upc.travelmatch.agencies.application.internal.queryservices.AgencyStaffQueryServiceImpl;
-import pe.edu.upc.travelmatch.agencies.domain.model.aggregates.Agency;
-import pe.edu.upc.travelmatch.agencies.domain.model.aggregates.AgencyDocument;
-import pe.edu.upc.travelmatch.agencies.domain.model.aggregates.AgencyStaff;
 import pe.edu.upc.travelmatch.agencies.domain.model.queries.*;
-import pe.edu.upc.travelmatch.agencies.domain.model.valueobjects.AgencyName;
-import pe.edu.upc.travelmatch.agencies.infrastructure.persistence.jpa.repositories.AgencyDocumentRepository;
-import pe.edu.upc.travelmatch.agencies.infrastructure.persistence.jpa.repositories.AgencyRepository;
-import pe.edu.upc.travelmatch.agencies.infrastructure.persistence.jpa.repositories.AgencyStaffRepository;
-
-import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

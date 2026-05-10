@@ -1,27 +1,27 @@
 package pe.edu.upc.travelmatch.agencies.interfaces.rest.transform;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pe.edu.upc.travelmatch.agencies.domain.model.aggregates.Agency;
 import pe.edu.upc.travelmatch.agencies.domain.model.aggregates.AgencyDocument;
-import pe.edu.upc.travelmatch.agencies.domain.model.aggregates.AgencyStaff;
-import pe.edu.upc.travelmatch.agencies.domain.model.commands.*;
-import pe.edu.upc.travelmatch.agencies.domain.model.valueobjects.AgencyName;
-import pe.edu.upc.travelmatch.agencies.interfaces.rest.resources.*;
+import pe.edu.upc.travelmatch.agencies.interfaces.rest.resources.AgencyDocumentResource;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 
-@Nested
+
+@ExtendWith(MockitoExtension.class)
 @DisplayName("AgencyDocumentResourceFromEntityAssembler")
 public class AgencyDocumentResourceAssemblerTests {
-    @Mock private AgencyDocument agencyDocument;
-    @Mock private Agency         agency;
+
+    @Mock
+    private AgencyDocument agencyDocument;
+
+    @Mock
+    private Agency agency;
 
     @Test
     @DisplayName("toResourceFromEntity() maps all document fields to AgencyDocumentResource")

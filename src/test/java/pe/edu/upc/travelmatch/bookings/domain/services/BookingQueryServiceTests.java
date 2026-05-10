@@ -118,12 +118,15 @@ public class BookingQueryServiceTests {
 
     @Test
     @DisplayName("GetBookingsByUserIdQuery throws when userId is null")
-    void query_nullUserId_throwsNullPointer() {
+    void query_nullUserId_throwsIllegalArgumentException() {
         // Arrange – nothing
 
         // Act & Assert
-        assertThrows(NullPointerException.class,
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> new GetBookingsByUserIdQuery(null));
+
+
+        assertTrue(exception.getMessage().contains("must not be null"));
     }
 
     @Test
