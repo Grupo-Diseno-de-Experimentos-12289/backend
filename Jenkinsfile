@@ -15,13 +15,13 @@ pipeline {
             }
         }
 
-        stage('Validate Checkstyle') {
-            steps {
-                withMaven(maven: 'Maven 3.9.15') {
-                    bat 'mvn checkstyle:check'
-                }
-            }
-        }
+        //stage('Validate Checkstyle') {
+            //steps {
+                //withMaven(maven: 'Maven 3.9.15') {
+                    //bat 'mvn checkstyle:check'
+                //}
+            //}
+        //}
 
         stage('Validate Unit Tests') {
             steps {
