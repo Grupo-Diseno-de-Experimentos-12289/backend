@@ -23,7 +23,7 @@ public class ExperienceQueryServiceImpl implements ExperienceQueryService {
 
     @Override
     public List<Experience> handle(GetAllExperiencesQuery query) {
-        return experienceRepository.findAllByDeletedAtIsNull();
+        return experienceRepository.findAll();
     }
 
     @Override

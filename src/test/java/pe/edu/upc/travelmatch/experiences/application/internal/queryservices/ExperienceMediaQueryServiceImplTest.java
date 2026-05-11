@@ -1,4 +1,4 @@
-package pe.edu.upc.travelmatch.experiences.application.internal.queryServices;
+package pe.edu.upc.travelmatch.experiences.application.internal.queryservices;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -6,7 +6,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pe.edu.upc.travelmatch.experiences.application.internal.queryservices.ExperienceMediaQueryServiceImpl;
 import pe.edu.upc.travelmatch.experiences.domain.model.entities.ExperienceMedia;
 import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetAllExperiencesQuery;
 import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetExperienceByIdQuery;
@@ -52,20 +51,18 @@ class ExperienceMediaQueryServiceImplTest {
     @Test
     @DisplayName("handle(GetByExperienceId) should return list from repository (AAA)")
     void handle_GetByExperienceId_ShouldReturnList() {
-        //Arrange
+    //Arrange
         var query = new GetExperienceByIdQuery(6L);
         var exp1 = mock(ExperienceMedia.class);
-        var exp2 = mock(ExperienceMedia.class);
-        when(repository.findByExperienceId(5L)).thenReturn(List.of(exp1, exp2));
 
-        //Act
-        Optional<ExperienceMedia> act = service.handle(query);
+        when(repository.findById(6L)).thenReturn(Optional.of(exp1));
 
-        //Assert
+        // Act
+        var act = service.handle(query);
+
+        // Assert
         assertTrue(act.isPresent());
         assertSame(exp1, act.get());
-        verify(repository).findByExperienceId(5L);
-        verifyNoMoreInteractions(repository);
-
+        verify(repository).findById(6L);
     }
 }

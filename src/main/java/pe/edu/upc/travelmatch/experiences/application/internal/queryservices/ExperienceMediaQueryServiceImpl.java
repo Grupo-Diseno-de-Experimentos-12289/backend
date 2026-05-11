@@ -41,6 +41,6 @@ public class ExperienceMediaQueryServiceImpl implements ExperienceMediaQueryServ
     @Override
     public Optional<ExperienceMedia> handle(GetExperienceByIdQuery query)
     {
-        return repository.findById(query.experienceId());
+        return repository.findById(query.experienceId()).stream().findFirst();
     }
 }

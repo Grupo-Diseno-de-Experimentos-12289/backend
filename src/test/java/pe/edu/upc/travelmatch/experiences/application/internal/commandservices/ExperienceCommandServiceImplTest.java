@@ -1,4 +1,4 @@
-package pe.edu.upc.travelmatch.experiences.application.internal.commandServices;
+package pe.edu.upc.travelmatch.experiences.application.internal.commandservices;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -9,7 +9,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pe.edu.upc.travelmatch.experiences.application.internal.commandservices.ExperienceCommandServiceImpl;
 import pe.edu.upc.travelmatch.experiences.domain.model.aggregates.Experience;
 import pe.edu.upc.travelmatch.experiences.domain.model.commands.CreateExperienceCommand;
 import pe.edu.upc.travelmatch.experiences.domain.model.commands.UpdateExperienceCommand;

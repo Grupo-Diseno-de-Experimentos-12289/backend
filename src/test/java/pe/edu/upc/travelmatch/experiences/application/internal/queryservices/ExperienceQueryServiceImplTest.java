@@ -1,4 +1,4 @@
-package pe.edu.upc.travelmatch.experiences.application.internal.queryServices;
+package pe.edu.upc.travelmatch.experiences.application.internal.queryservices;
 
 
 import org.junit.jupiter.api.DisplayName;
@@ -7,7 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pe.edu.upc.travelmatch.experiences.application.internal.queryservices.ExperienceQueryServiceImpl;
 import pe.edu.upc.travelmatch.experiences.domain.model.aggregates.Experience;
 import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetAllExperiencesQuery;
 import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetExperienceByIdQuery;
@@ -25,14 +24,13 @@ public class ExperienceQueryServiceImplTest {
     @Test
     @DisplayName("handle(GetAllExperiencesQuery) should return list from repository (AAA)")
     void handle_GetAllExperiences_ShouldReturnList() {
-
         //Arrange
         var query = new GetAllExperiencesQuery();
-        var exp1= mock(Experience.class);
-        var exp2= mock(Experience.class);
+        var exp1 = mock(Experience.class);
+        var exp2 = mock(Experience.class);
         when(repository.findAll()).thenReturn(java.util.List.of(exp1, exp2));
-        //Act
 
+        //Act
         var act = service.handle(query);
 
         //Assert

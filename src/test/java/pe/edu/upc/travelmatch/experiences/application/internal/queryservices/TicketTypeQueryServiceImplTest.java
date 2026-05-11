@@ -1,11 +1,10 @@
-package pe.edu.upc.travelmatch.experiences.application.internal.queryServices;
+package pe.edu.upc.travelmatch.experiences.application.internal.queryservices;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pe.edu.upc.travelmatch.experiences.application.internal.queryservices.TicketTypeQueryServiceImpl;
 import pe.edu.upc.travelmatch.experiences.domain.model.entities.TicketType;
 import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetAllTicketTypesQuery;
 import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetTicketTypeByIdQuery;
