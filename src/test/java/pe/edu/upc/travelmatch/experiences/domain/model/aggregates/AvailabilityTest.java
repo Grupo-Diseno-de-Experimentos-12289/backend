@@ -129,5 +129,5 @@ public class AvailabilityTest {
         // Assert
         assertNotNull(availability.getDeletedAt());
     }
-    
+
 }

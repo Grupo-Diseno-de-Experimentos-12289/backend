@@ -2,12 +2,12 @@ Feature: Experience Management - Experiences Bounded Context
 
   Background:
     * url 'http://localhost:8091/api/v1'
-    
+
     # Configuración básica: crear usuario staff, agencia y destino
     * def uuid  = function(){ return java.util.UUID.randomUUID().toString().replaceAll('-','').substring(0,8) }
     * def time  = function(){ return java.lang.System.currentTimeMillis().toString() }
     * def uid   = uuid()
-    
+
     # Crear Staff y obtener token
     * def staffEmail = 'staff_' + uid + '@test.pe'
     Given path '/authentication/sign-up'
@@ -25,13 +25,13 @@ Feature: Experience Management - Experiences Bounded Context
     When method POST
     Then status 201
     * def staffId = response.id
-    
+
     Given path '/authentication/sign-in'
     And request { email: '#(staffEmail)', password: 'Staff@2024' }
     When method POST
     Then status 200
     * def authHeader = 'Bearer ' + response.token
-    
+
     # Crear Agencia
     * def ruc = '20' + time().substring(4, 13)
     Given path '/agencies'
@@ -50,7 +50,7 @@ Feature: Experience Management - Experiences Bounded Context
     When method POST
     Then status 201
     * def agencyId = response.id
-    
+
     # Crear Destino
     Given path '/destinations'
     And header Authorization = authHeader
@@ -169,7 +169,7 @@ Feature: Experience Management - Experiences Bounded Context
     """
     When method POST
     Then status 201
-    
+
     # Obtener todas
     Given path '/experiences'
     And header Authorization = authHeader
@@ -196,7 +196,7 @@ Feature: Experience Management - Experiences Bounded Context
     When method POST
     Then status 201
     * def expId = response.id
-    
+
     # Obtener por ID
     Given path '/experiences/' + expId
     And header Authorization = authHeader
@@ -233,7 +233,7 @@ Feature: Experience Management - Experiences Bounded Context
     When method POST
     Then status 201
     * def expId = response.id
-    
+
     # Actualizar
     Given path '/experiences/' + expId
     And header Authorization = authHeader
@@ -295,7 +295,7 @@ Feature: Experience Management - Experiences Bounded Context
     When method POST
     Then status 201
     * def expId = response.id
-    
+
     # Eliminar
     Given path '/experiences/' + expId
     And header Authorization = authHeader
@@ -324,7 +324,7 @@ Feature: Experience Management - Experiences Bounded Context
     When method POST
     Then status 201
     * def expId = response.id
-    
+
     # Crear availability
     Given path '/experiences/' + expId + '/availabilities'
     And header Authorization = authHeader
@@ -360,7 +360,7 @@ Feature: Experience Management - Experiences Bounded Context
     When method POST
     Then status 201
     * def expId = response.id
-    
+
     # Intentar crear availability con fecha fin antes de fecha inicio
     Given path '/experiences/' + expId + '/availabilities'
     And header Authorization = authHeader
@@ -401,7 +401,7 @@ Feature: Experience Management - Experiences Bounded Context
     When method POST
     Then status 201
     * def expId = response.id
-    
+
     # Crear availability
     Given path '/experiences/' + expId + '/availabilities'
     And header Authorization = authHeader
@@ -417,7 +417,7 @@ Feature: Experience Management - Experiences Bounded Context
     When method POST
     Then status 200
     * def availId = response
-    
+
     # Actualizar availability
     Given path '/availabilities/' + availId
     And header Authorization = authHeader
@@ -450,7 +450,7 @@ Feature: Experience Management - Experiences Bounded Context
     When method POST
     Then status 201
     * def expId = response.id
-    
+
     # Crear availability
     Given path '/experiences/' + expId + '/availabilities'
     And header Authorization = authHeader
@@ -466,7 +466,7 @@ Feature: Experience Management - Experiences Bounded Context
     When method POST
     Then status 200
     * def availId = response
-    
+
     # Eliminar
     Given path '/availabilities/' + availId
     And header Authorization = authHeader
@@ -502,7 +502,7 @@ Feature: Experience Management - Experiences Bounded Context
     When method POST
     Then status 201
     * def expId = response.id
-    
+
     # Crear availability
     Given path '/experiences/' + expId + '/availabilities'
     And header Authorization = authHeader
@@ -518,14 +518,14 @@ Feature: Experience Management - Experiences Bounded Context
     When method POST
     Then status 200
     * def availId = response
-    
+
     # Obtener ticket types disponibles
     Given path '/ticket-types'
     And header Authorization = authHeader
     When method GET
     Then status 200
     * def ticketTypeId = response[0].id
-    
+
     # Asociar ticket type a availability
     Given path '/availabilities/' + availId + '/ticket-types'
     And header Authorization = authHeader
@@ -550,7 +550,7 @@ Feature: Experience Management - Experiences Bounded Context
     When method GET
     Then status 200
     * def ticketTypeId = response[0].id
-    
+
     # Intentar asociar a availability que no existe
     Given path '/availabilities/999999/ticket-types'
     And header Authorization = authHeader
@@ -589,7 +589,7 @@ Feature: Experience Management - Experiences Bounded Context
     When method POST
     Then status 201
     * def expId = response.id
-    
+
     # Crear media
     Given path '/experience-media/experiences/' + expId + '/media'
     And header Authorization = authHeader
@@ -630,7 +630,7 @@ Feature: Experience Management - Experiences Bounded Context
     When method POST
     Then status 201
     * def expId = response.id
-    
+
     # Crear media
     Given path '/experience-media/experiences/' + expId + '/media'
     And header Authorization = authHeader
@@ -643,7 +643,7 @@ Feature: Experience Management - Experiences Bounded Context
     """
     When method POST
     Then status 200
-    
+
     # Obtener media del experience
     Given path '/experience-media/experience/' + expId
     And header Authorization = authHeader
@@ -669,7 +669,7 @@ Feature: Experience Management - Experiences Bounded Context
     When method POST
     Then status 201
     * def expId = response.id
-    
+
     # Crear media
     Given path '/experience-media/experiences/' + expId + '/media'
     And header Authorization = authHeader
@@ -683,7 +683,7 @@ Feature: Experience Management - Experiences Bounded Context
     When method POST
     Then status 200
     * def mediaId = response
-    
+
     # Actualizar media
     Given path '/experience-media/' + mediaId
     And header Authorization = authHeader
@@ -717,7 +717,7 @@ Feature: Experience Management - Experiences Bounded Context
     When method POST
     Then status 201
     * def expId = response.id
-    
+
     # Crear media
     Given path '/experience-media/experiences/' + expId + '/media'
     And header Authorization = authHeader
@@ -731,7 +731,7 @@ Feature: Experience Management - Experiences Bounded Context
     When method POST
     Then status 200
     * def mediaId = response
-    
+
     # Eliminar media
     Given path '/experience-media/' + mediaId
     And header Authorization = authHeader

@@ -67,5 +67,4 @@ public class AvailabilityTicketTypeTest {
         assertTrue(exception.getMessage().contains("Not enough stock available"));
         assertEquals(initialStock, availabilityTicketType.getStock()); // El stock no debería cambiar
     }
-    
 }
