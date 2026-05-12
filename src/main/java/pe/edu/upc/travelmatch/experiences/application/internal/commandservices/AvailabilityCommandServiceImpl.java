@@ -8,56 +8,63 @@ import pe.edu.upc.travelmatch.experiences.domain.services.AvailabilityCommandSer
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.AvailabilityRepository;
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.ExperienceRepository;
 
+/**
+ * Service implementation for managing Availability commands.
+ */
 @Service
 public class AvailabilityCommandServiceImpl implements AvailabilityCommandService {
 
-    private final AvailabilityRepository availabilityRepository;
-    private final ExperienceRepository experienceRepository;
+  private final AvailabilityRepository availabilityRepository;
+  private final ExperienceRepository experienceRepository;
 
-    public AvailabilityCommandServiceImpl(
-            AvailabilityRepository availabilityRepository,
-            ExperienceRepository experienceRepository
-    ) {
-        this.availabilityRepository = availabilityRepository;
-        this.experienceRepository = experienceRepository;
-    }
+  /**
+   * Constructs the AvailabilityCommandServiceImpl.
+   *
+   * @param availabilityRepository the availability repository
+   * @param experienceRepository   the experience repository
+   */
+  public AvailabilityCommandServiceImpl(
+      AvailabilityRepository availabilityRepository,
+      ExperienceRepository experienceRepository) {
+    this.availabilityRepository = availabilityRepository;
+    this.experienceRepository = experienceRepository;
+  }
 
-    @Override
-    public Long handle(CreateAvailabilityCommand command) {
-        var experience = experienceRepository.findById(command.experience().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Experience with ID " + command.experience().getId() + " does not exist."));
+  @Override
+  public Long handle(CreateAvailabilityCommand command) {
+    var experience = experienceRepository.findById(command.experience().getId())
+        .orElseThrow(() -> new IllegalArgumentException(
+            "Experience with ID " + command.experience().getId() + " does not exist."));
 
-        var availability = new Availability(
-                experience,
-                command.startDateTime(),
-                command.endDateTime(),
-                command.capacity()
-        );
+    var availability = new Availability(
+        experience,
+        command.startDateTime(),
+        command.endDateTime(),
+        command.capacity());
 
-        var saved = availabilityRepository.save(availability);
-        return saved.getId();
-    }
+    var saved = availabilityRepository.save(availability);
+    return saved.getId();
+  }
 
-    @Override
-    public void updateAvailability(UpdateAvailabilityCommand command) {
-        var availability = availabilityRepository.findById(command.availabilityId())
-                .orElseThrow(() -> new RuntimeException("Availability not found"));
+  @Override
+  public void updateAvailability(UpdateAvailabilityCommand command) {
+    var availability = availabilityRepository.findById(command.availabilityId())
+        .orElseThrow(() -> new RuntimeException("Availability not found"));
 
-        availability.updateInfo(
-                command.startDateTime(),
-                command.endDateTime(),
-                command.capacity()
-        );
+    availability.updateInfo(
+        command.startDateTime(),
+        command.endDateTime(),
+        command.capacity());
 
-        availabilityRepository.save(availability);
-    }
+    availabilityRepository.save(availability);
+  }
 
-    @Override
-    public void deleteAvailability(Long id) {
-        var availability = availabilityRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Availability not found"));
+  @Override
+  public void deleteAvailability(Long id) {
+    var availability = availabilityRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Availability not found"));
 
-        availability.markAsDeleted();
-        availabilityRepository.save(availability);
-    }
+    availability.markAsDeleted();
+    availabilityRepository.save(availability);
+  }
 }
