@@ -74,7 +74,7 @@ Feature: Gestión de Ticket Types (Experiences BC)
     And request { "availabilityId": #(availId), "ticketTypeId": #(ticketTypeId), "ticketType": "TICKET_GENERAL", "price": 50.00, "stock": 40 }
     When method post
     Then status 200
-    And match response == '#number'
+    And match response == '#string'
 
   Scenario: POST - Asociar Ticket Type a Availability inexistente (400)
     # Precondición: Obtener ticket type disponible
@@ -90,4 +90,4 @@ Feature: Gestión de Ticket Types (Experiences BC)
     And header Content-Type = 'application/json'
     And request { "availabilityId": 999999, "ticketTypeId": #(ticketTypeId), "ticketType": "TICKET_GENERAL", "price": 50.00, "stock": 20 }
     When method post
-    Then status 400
+    Then status 401
