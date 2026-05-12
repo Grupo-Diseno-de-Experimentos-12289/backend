@@ -1,4 +1,4 @@
-﻿package pe.edu.upc.travelmatch.experiences.interfaces.rest.resources;
+package pe.edu.upc.travelmatch.experiences.interfaces.rest.resources;
 
 import java.time.LocalDateTime;
 

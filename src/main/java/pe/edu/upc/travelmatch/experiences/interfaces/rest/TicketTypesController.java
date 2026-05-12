@@ -1,4 +1,4 @@
-﻿package pe.edu.upc.travelmatch.experiences.interfaces.rest;
+package pe.edu.upc.travelmatch.experiences.interfaces.rest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;

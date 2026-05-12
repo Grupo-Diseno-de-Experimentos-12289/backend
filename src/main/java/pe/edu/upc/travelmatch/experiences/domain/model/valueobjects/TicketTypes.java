@@ -1,4 +1,4 @@
-﻿package pe.edu.upc.travelmatch.experiences.domain.model.valueobjects;
+package pe.edu.upc.travelmatch.experiences.domain.model.valueobjects;
 /**
  * Enum representing ticket types.
  */

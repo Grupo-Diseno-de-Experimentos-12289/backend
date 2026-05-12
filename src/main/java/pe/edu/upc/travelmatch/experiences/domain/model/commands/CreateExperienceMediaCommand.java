@@ -1,4 +1,4 @@
-﻿package pe.edu.upc.travelmatch.experiences.domain.model.commands;
+package pe.edu.upc.travelmatch.experiences.domain.model.commands;
 import pe.edu.upc.travelmatch.experiences.domain.model.aggregates.Experience;
 /**
  * Command to create an experience media.

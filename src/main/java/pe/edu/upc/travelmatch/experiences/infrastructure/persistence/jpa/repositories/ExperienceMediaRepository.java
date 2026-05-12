@@ -1,4 +1,4 @@
-﻿package pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories;
+package pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

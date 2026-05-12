@@ -1,4 +1,4 @@
-﻿package pe.edu.upc.travelmatch.experiences.domain.model.entities;
+package pe.edu.upc.travelmatch.experiences.domain.model.entities;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

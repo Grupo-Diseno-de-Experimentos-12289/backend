@@ -1,4 +1,4 @@
-﻿package pe.edu.upc.travelmatch.experiences.domain.services;
+package pe.edu.upc.travelmatch.experiences.domain.services;
 import java.util.List;
 import java.util.Optional;
 import pe.edu.upc.travelmatch.experiences.domain.model.entities.Category;

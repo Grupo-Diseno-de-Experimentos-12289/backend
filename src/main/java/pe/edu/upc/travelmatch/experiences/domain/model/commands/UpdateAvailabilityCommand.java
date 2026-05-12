@@ -1,4 +1,4 @@
-﻿package pe.edu.upc.travelmatch.experiences.domain.model.commands;
+package pe.edu.upc.travelmatch.experiences.domain.model.commands;
 import java.time.LocalDateTime;
 /**
  * Command to update an availability.

@@ -1,4 +1,4 @@
-﻿package pe.edu.upc.travelmatch.experiences.domain.model.commands;
+package pe.edu.upc.travelmatch.experiences.domain.model.commands;
 /**
  * Command to update an experience media.
  *

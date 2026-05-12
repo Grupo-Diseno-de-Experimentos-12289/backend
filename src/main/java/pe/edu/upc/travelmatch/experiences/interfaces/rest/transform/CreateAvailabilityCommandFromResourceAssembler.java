@@ -1,4 +1,4 @@
-﻿package pe.edu.upc.travelmatch.experiences.interfaces.rest.transform;
+package pe.edu.upc.travelmatch.experiences.interfaces.rest.transform;
 
 import pe.edu.upc.travelmatch.experiences.domain.model.commands.CreateAvailabilityCommand;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.resources.CreateAvailabilityResource;

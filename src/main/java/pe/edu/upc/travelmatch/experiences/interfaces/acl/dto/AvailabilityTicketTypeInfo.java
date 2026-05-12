@@ -1,4 +1,4 @@
-﻿package pe.edu.upc.travelmatch.experiences.interfaces.acl.dto;
+package pe.edu.upc.travelmatch.experiences.interfaces.acl.dto;
 import java.math.BigDecimal;
 /**
  * Record representing AvailabilityTicketTypeInfo.
