@@ -24,7 +24,7 @@ public class ExperienceSeedersEventHandler {
   /**
    * Constructs an ExperienceSeedersEventHandler.
    *
-   * @param categoryCommandService   the category command service
+   * @param categoryCommandService  the category command service
    * @param ticketTypeCommandService the ticket type command service
    */
   public ExperienceSeedersEventHandler(
