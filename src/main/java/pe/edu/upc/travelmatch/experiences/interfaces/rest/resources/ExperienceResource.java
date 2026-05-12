@@ -1,14 +1,17 @@
-package pe.edu.upc.travelmatch.experiences.interfaces.rest.resources;
+﻿package pe.edu.upc.travelmatch.experiences.interfaces.rest.resources;
 
 import pe.edu.upc.travelmatch.experiences.domain.model.entities.Category;
 
+/**
+ * ExperienceResource(.
+ */
 public record ExperienceResource(
-        Long id,
-        String title,
-        String description,
-        Long agencyId,
-        Category category,
-        Long destinationId,
-        String duration,
-        String meetingPoint
+    Long id,
+    String title,
+    String description,
+    Long agencyId,
+    Category category,
+    Long destinationId,
+    String duration,
+    String meetingPoint
 ) {}

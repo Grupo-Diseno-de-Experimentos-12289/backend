@@ -1,4 +1,4 @@
-package pe.edu.upc.travelmatch.experiences.interfaces.rest;
+﻿package pe.edu.upc.travelmatch.experiences.interfaces.rest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
@@ -16,18 +16,21 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/v1/ticket-types", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Ticket Types", description = "Ticket Type Management Endpoints")
+/**
+ * TicketTypesController.
+ */
 public class TicketTypesController {
-    private final TicketTypeQueryService ticketTypeQueryService;
+  private final TicketTypeQueryService ticketTypeQueryService;
 
-    public TicketTypesController(TicketTypeQueryService ticketTypeQueryService) {
-        this.ticketTypeQueryService = ticketTypeQueryService;
-    }
+  public TicketTypesController(TicketTypeQueryService ticketTypeQueryService) {
+    this.ticketTypeQueryService = ticketTypeQueryService;
+  }
 
-    @GetMapping
-    public ResponseEntity<List<TicketTypeResource>> getAllTicketTypes() {
-        var getAllTicketTypesQuery = new GetAllTicketTypesQuery();
-        var ticketTypes = ticketTypeQueryService.handle(getAllTicketTypesQuery);
-        var ticketTypeResources = ticketTypes.stream().map(TicketTypeResourceFromEntityAssembler::toResourceFromEntity).toList();
-        return ResponseEntity.ok(ticketTypeResources);
-    }
+  @GetMapping
+  public ResponseEntity<List<TicketTypeResource>> getAllTicketTypes() {
+    var getAllTicketTypesQuery = new GetAllTicketTypesQuery();
+    var ticketTypes = ticketTypeQueryService.handle(getAllTicketTypesQuery);
+    var ticketTypeResources = ticketTypes.stream().map(TicketTypeResourceFromEntityAssembler::toResourceFromEntity).toList();
+    return ResponseEntity.ok(ticketTypeResources);
+  }
 }

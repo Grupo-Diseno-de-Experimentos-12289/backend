@@ -1,8 +1,11 @@
-package pe.edu.upc.travelmatch.experiences.interfaces.rest.resources;
+﻿package pe.edu.upc.travelmatch.experiences.interfaces.rest.resources;
 
+/**
+ * ExperienceMediaResource(.
+ */
 public record ExperienceMediaResource(
-        Long id,
-        Long experienceId,
-        String mediaUrl,
-        String caption
+    Long id,
+    Long experienceId,
+    String mediaUrl,
+    String caption
 ) {}
