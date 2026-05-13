@@ -8,9 +8,7 @@ import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.Categories;
 import pe.edu.upc.travelmatch.experiences.domain.services.CategoryCommandService;
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.CategoryRepository;
 
-/**
- * Service implementation for managing Category commands.
- */
+/** Service implementation for managing Category commands. */
 @Service
 public class CategoryCommandServiceImpl implements CategoryCommandService {
 
@@ -27,10 +25,12 @@ public class CategoryCommandServiceImpl implements CategoryCommandService {
 
   @Override
   public void handle(SeedCategoriesCommand command) {
-    Arrays.stream(Categories.values()).forEach(category -> {
-      if (!categoryRepository.existsByName(category)) {
-        categoryRepository.save(new Category(Categories.valueOf(category.name())));
-      }
-    });
+    Arrays.stream(Categories.values())
+        .forEach(
+            category -> {
+              if (!categoryRepository.existsByName(category)) {
+                categoryRepository.save(new Category(Categories.valueOf(category.name())));
+              }
+            });
   }
 }

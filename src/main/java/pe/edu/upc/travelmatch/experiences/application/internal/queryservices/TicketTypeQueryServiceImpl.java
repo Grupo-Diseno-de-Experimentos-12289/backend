@@ -9,9 +9,7 @@ import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetTicketTypeById
 import pe.edu.upc.travelmatch.experiences.domain.services.TicketTypeQueryService;
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.TicketTypeRepository;
 
-/**
- * Service implementation for managing TicketType queries.
- */
+/** Service implementation for managing TicketType queries. */
 @Service
 public class TicketTypeQueryServiceImpl implements TicketTypeQueryService {
 

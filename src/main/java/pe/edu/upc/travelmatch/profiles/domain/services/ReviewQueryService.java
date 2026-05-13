@@ -1,15 +1,20 @@
 package pe.edu.upc.travelmatch.profiles.domain.services;
 
+import java.util.List;
+import java.util.Optional;
 import pe.edu.upc.travelmatch.profiles.domain.model.aggregates.Review;
 import pe.edu.upc.travelmatch.profiles.domain.model.queries.GetReviewByUserIdAndExperienceIdQuery;
 import pe.edu.upc.travelmatch.profiles.domain.model.queries.GetReviewsByExperienceIdQuery;
 import pe.edu.upc.travelmatch.profiles.domain.model.queries.GetReviewsByUserIdQuery;
 
-import java.util.List;
-import java.util.Optional;
-
+/** ReviewQueryService contract. */
 public interface ReviewQueryService {
-    List<Review> handle(GetReviewsByUserIdQuery query);
-    List<Review> handle(GetReviewsByExperienceIdQuery query);
-    Optional<Review> handle(GetReviewByUserIdAndExperienceIdQuery query);
+  /** Handle. */
+  List<Review> handle(GetReviewsByUserIdQuery query);
+
+  /** Handle. */
+  List<Review> handle(GetReviewsByExperienceIdQuery query);
+
+  /** Handle. */
+  Optional<Review> handle(GetReviewByUserIdAndExperienceIdQuery query);
 }

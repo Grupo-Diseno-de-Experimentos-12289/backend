@@ -9,9 +9,7 @@ import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetCategoryByIdQu
 import pe.edu.upc.travelmatch.experiences.domain.services.CategoryQueryService;
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.CategoryRepository;
 
-/**
- * Service implementation for managing Category queries.
- */
+/** Service implementation for managing Category queries. */
 @Service
 public class CategoryQueryServiceImpl implements CategoryQueryService {
 

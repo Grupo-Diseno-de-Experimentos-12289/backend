@@ -14,9 +14,7 @@ import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.reposit
 import pe.edu.upc.travelmatch.experiences.interfaces.acl.dto.AvailabilityInfo;
 import pe.edu.upc.travelmatch.experiences.interfaces.acl.dto.AvailabilityTicketTypeInfo;
 
-/**
- * Facade for the Experiences Bounded Context.
- */
+/** Facade for the Experiences Bounded Context. */
 @Service
 public class ExperiencesContextFacade {
 
@@ -25,9 +23,7 @@ public class ExperiencesContextFacade {
   private final AvailabilityRepository availabilityRepository;
   private final TicketTypeRepository ticketTypeRepository;
 
-  /**
-   * Constructor for ExperiencesContextFacade.
-   */
+  /** Constructor for ExperiencesContextFacade. */
   public ExperiencesContextFacade(
       ExperienceQueryService experienceQueryService,
       AvailabilityQueryService availabilityQueryService,
@@ -39,91 +35,89 @@ public class ExperiencesContextFacade {
     this.ticketTypeRepository = ticketTypeRepository;
   }
 
-  /**
-   * Fetches an experience by its ID.
-   */
+  /** Fetches an experience by its ID. */
   public Optional<Experience> fetchExperienceById(Long experienceId) {
     return experienceQueryService.handle(new GetExperienceByIdQuery(experienceId));
   }
 
-  /**
-   * Checks if an experience exists by its ID.
-   */
+  /** Checks if an experience exists by its ID. */
   public boolean existsExperienceById(Long experienceId) {
     return fetchExperienceById(experienceId).isPresent();
   }
 
-  /**
-   * Checks if an experience is owned by a specific agency.
-   */
+  /** Checks if an experience is owned by a specific agency. */
   public boolean isExperienceOwnedByAgency(Long experienceId, Long agencyId) {
     var experience = fetchExperienceById(experienceId);
     return experience.isPresent() && experience.get().getAgencyId().equals(agencyId);
   }
 
-  /**
-   * Fetches availability information by ID.
-   */
+  /** Fetches availability information by ID. */
   public Optional<AvailabilityInfo> fetchAvailabilityInfo(Long availabilityId) {
-    var availabilityOpt = availabilityQueryService
-        .handle(new GetAvailabilityByIdQuery(availabilityId));
+    var availabilityOpt =
+        availabilityQueryService.handle(new GetAvailabilityByIdQuery(availabilityId));
 
-    return availabilityOpt.map(availability -> {
-      var ticketTypesInfo = availability.getTicketTypes().stream()
-          .map(att -> new AvailabilityTicketTypeInfo(
-              att.getTicketType().getId(),
-              att.getTicketType().getTicketTypeName(),
-              att.getPrice(),
-              att.getStock()
-          )).toList();
+    return availabilityOpt.map(
+        availability -> {
+          var ticketTypesInfo =
+              availability.getTicketTypes().stream()
+                  .map(
+                      att ->
+                          new AvailabilityTicketTypeInfo(
+                              att.getTicketType().getId(),
+                              att.getTicketType().getTicketTypeName(),
+                              att.getPrice(),
+                              att.getStock()))
+                  .toList();
 
-      return new AvailabilityInfo(
-          availability.getId(),
-          availability.getExperience().getId(),
-          availability.getStartDateTime(),
-          availability.getEndDateTime(),
-          ticketTypesInfo
-      );
-    });
+          return new AvailabilityInfo(
+              availability.getId(),
+              availability.getExperience().getId(),
+              availability.getStartDateTime(),
+              availability.getEndDateTime(),
+              ticketTypesInfo);
+        });
   }
 
-  /**
-   * Decrements the stock for a specific availability and ticket type.
-   */
+  /** Decrements the stock for a specific availability and ticket type. */
   public void decrementStock(Long availabilityId, Long ticketTypeId, int quantity) {
-    var availability = availabilityRepository.findById(availabilityId)
-        .orElseThrow(() -> new IllegalArgumentException("Availability not found"));
+    var availability =
+        availabilityRepository
+            .findById(availabilityId)
+            .orElseThrow(() -> new IllegalArgumentException("Availability not found"));
 
-    var ticketType = ticketTypeRepository.findById(ticketTypeId)
-        .orElseThrow(() -> new IllegalArgumentException("TicketType not found"));
+    var ticketType =
+        ticketTypeRepository
+            .findById(ticketTypeId)
+            .orElseThrow(() -> new IllegalArgumentException("TicketType not found"));
 
     availability.decrementStock(ticketType, quantity);
     availabilityRepository.save(availability);
   }
 
-  /**
-   * Fetches the ticket price for a specific availability and ticket type.
-   */
+  /** Fetches the ticket price for a specific availability and ticket type. */
   public Optional<BigDecimal> fetchTicketPrice(Long availabilityId, Long ticketTypeId) {
-    var availabilityOpt = availabilityQueryService
-        .handle(new GetAvailabilityByIdQuery(availabilityId));
+    var availabilityOpt =
+        availabilityQueryService.handle(new GetAvailabilityByIdQuery(availabilityId));
 
-    return availabilityOpt.flatMap(availability -> availability.getTicketTypes().stream()
-        .filter(at -> at.getTicketType().getId().equals(ticketTypeId))
-        .map(AvailabilityTicketType::getPrice)
-        .findFirst());
+    return availabilityOpt.flatMap(
+        availability ->
+            availability.getTicketTypes().stream()
+                .filter(at -> at.getTicketType().getId().equals(ticketTypeId))
+                .map(AvailabilityTicketType::getPrice)
+                .findFirst());
   }
 
-  /**
-   * Checks if there is enough stock for a specific availability and ticket type.
-   */
+  /** Checks if there is enough stock for a specific availability and ticket type. */
   public boolean isStockAvailable(Long availabilityId, Long ticketTypeId, int requestedQuantity) {
-    var availabilityOpt = availabilityQueryService
-        .handle(new GetAvailabilityByIdQuery(availabilityId));
+    var availabilityOpt =
+        availabilityQueryService.handle(new GetAvailabilityByIdQuery(availabilityId));
 
-    return availabilityOpt.map(availability -> availability.getTicketTypes().stream()
-        .filter(at -> at.getTicketType().getId().equals(ticketTypeId))
-        .anyMatch(at -> at.getStock() >= requestedQuantity)).orElse(false);
+    return availabilityOpt
+        .map(
+            availability ->
+                availability.getTicketTypes().stream()
+                    .filter(at -> at.getTicketType().getId().equals(ticketTypeId))
+                    .anyMatch(at -> at.getStock() >= requestedQuantity))
+        .orElse(false);
   }
-
 }

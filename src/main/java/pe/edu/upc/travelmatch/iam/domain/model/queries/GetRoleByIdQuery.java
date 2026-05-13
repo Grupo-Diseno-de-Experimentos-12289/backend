@@ -1,4 +1,4 @@
 package pe.edu.upc.travelmatch.iam.domain.model.queries;
 
-public record GetRoleByIdQuery(Long roleId) {
-}
+/** GetRoleByIdQuery value carrier. */
+public record GetRoleByIdQuery(Long roleId) {}

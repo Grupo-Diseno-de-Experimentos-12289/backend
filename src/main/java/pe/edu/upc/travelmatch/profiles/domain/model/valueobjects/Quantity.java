@@ -2,13 +2,18 @@ package pe.edu.upc.travelmatch.profiles.domain.model.valueobjects;
 
 import jakarta.persistence.Embeddable;
 
+/** Quantity value carrier. */
 @Embeddable
 public record Quantity(int value) {
-    public Quantity {
-        if(value < 0)
-            throw new IllegalArgumentException("The quantity must be greater than zero");
+  /** Documentation. */
+  public Quantity {
+    if (value < 0) {
+      throw new IllegalArgumentException("The quantity must be greater than zero");
     }
-    public Quantity(){
-        this(0);
-    }
+  }
+
+  /** Constructs a new Quantity. */
+  public Quantity() {
+    this(0);
+  }
 }

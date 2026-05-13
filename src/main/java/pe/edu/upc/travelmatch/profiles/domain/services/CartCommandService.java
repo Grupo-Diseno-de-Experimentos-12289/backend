@@ -1,15 +1,28 @@
 package pe.edu.upc.travelmatch.profiles.domain.services;
 
+import java.util.Optional;
 import pe.edu.upc.travelmatch.profiles.domain.model.aggregates.Cart;
-import pe.edu.upc.travelmatch.profiles.domain.model.commands.*;
+import pe.edu.upc.travelmatch.profiles.domain.model.commands.AddCartItemCommand;
+import pe.edu.upc.travelmatch.profiles.domain.model.commands.ClearCartCommand;
+import pe.edu.upc.travelmatch.profiles.domain.model.commands.CreateCartCommand;
+import pe.edu.upc.travelmatch.profiles.domain.model.commands.RemoveCartItemCommand;
+import pe.edu.upc.travelmatch.profiles.domain.model.commands.UpdateCartItemQuantityCommand;
 import pe.edu.upc.travelmatch.profiles.domain.model.entities.CartItem;
 
-import java.util.Optional;
-
+/** CartCommandService contract. */
 public interface CartCommandService {
-    Long handle(CreateCartCommand command);
-    Optional<Cart> handle(ClearCartCommand command);
-    Optional<CartItem> handle(AddCartItemCommand command);
-    Optional<Cart> handle(RemoveCartItemCommand command);
-    Optional<CartItem> handle(UpdateCartItemQuantityCommand command);
+  /** Handle. */
+  Long handle(CreateCartCommand command);
+
+  /** Handle. */
+  Optional<Cart> handle(ClearCartCommand command);
+
+  /** Handle. */
+  Optional<CartItem> handle(AddCartItemCommand command);
+
+  /** Handle. */
+  Optional<Cart> handle(RemoveCartItemCommand command);
+
+  /** Handle. */
+  Optional<CartItem> handle(UpdateCartItemQuantityCommand command);
 }

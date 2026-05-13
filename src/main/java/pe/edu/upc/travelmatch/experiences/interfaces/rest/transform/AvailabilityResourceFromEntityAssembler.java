@@ -3,17 +3,15 @@ package pe.edu.upc.travelmatch.experiences.interfaces.rest.transform;
 import pe.edu.upc.travelmatch.experiences.domain.model.aggregates.Availability;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.resources.AvailabilityResource;
 
-/**
- * AvailabilityResourceFromEntityAssembler.
- */
+/** AvailabilityResourceFromEntityAssembler. */
 public class AvailabilityResourceFromEntityAssembler {
+  /** To resource from entity. */
   public static AvailabilityResource toResourceFromEntity(Availability entity) {
     return new AvailabilityResource(
         entity.getId(),
         entity.getExperience().getId(),
         entity.getStartDateTime(),
         entity.getEndDateTime(),
-        entity.getCapacity()
-    );
+        entity.getCapacity());
   }
 }

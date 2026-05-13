@@ -1,5 +1,15 @@
 package pe.edu.upc.travelmatch.iam.interfaces.rest;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,42 +24,36 @@ import pe.edu.upc.travelmatch.iam.domain.model.valueobjects.Roles;
 import pe.edu.upc.travelmatch.iam.domain.services.RoleQueryService;
 import pe.edu.upc.travelmatch.iam.interfaces.rest.resources.RoleResource;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
 /**
  * Unit tests for {@link RolesController}.
  *
- * This class validates the roles endpoint, ensuring it returns all available roles
- * correctly mapped to resources.
+ * <p>This class validates the roles endpoint, ensuring it returns all available roles correctly
+ * mapped to resources.
  */
 @ExtendWith(MockitoExtension.class)
 class RolesControllerTest {
 
-    @Mock private RoleQueryService roleQueryService;
-    @InjectMocks private RolesController rolesController;
+  @Mock private RoleQueryService roleQueryService;
+  @InjectMocks private RolesController rolesController;
 
-    @Test
-    @DisplayName("getAllRoles should return 200 OK and list of RoleResource")
-    void getAllRoles_ShouldReturnOkAndListOfRoleResource() {
-        // Arrange
-        var roleSpy = spy(new Role(Roles.ROLE_ADMIN));
-        when(roleSpy.getId()).thenReturn(1L);
+  @Test
+  @DisplayName("getAllRoles should return 200 OK and list of RoleResource")
+  void getAllRoles_ShouldReturnOkAndListOfRoleResource() {
+    // Arrange
+    var roleSpy = spy(new Role(Roles.ROLE_ADMIN));
+    when(roleSpy.getId()).thenReturn(1L);
 
-        when(roleQueryService.handle(any(GetAllRolesQuery.class))).thenReturn(List.of(roleSpy));
+    when(roleQueryService.handle(any(GetAllRolesQuery.class))).thenReturn(List.of(roleSpy));
 
-        // Act
-        ResponseEntity<List<RoleResource>> response = rolesController.getAllRoles();
+    // Act
+    ResponseEntity<List<RoleResource>> response = rolesController.getAllRoles();
 
-        // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(1, response.getBody().size());
-        
-        verify(roleQueryService).handle(any(GetAllRolesQuery.class));
-        verifyNoMoreInteractions(roleQueryService);
-    }
+    // Assert
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertNotNull(response.getBody());
+    assertEquals(1, response.getBody().size());
+
+    verify(roleQueryService).handle(any(GetAllRolesQuery.class));
+    verifyNoMoreInteractions(roleQueryService);
+  }
 }

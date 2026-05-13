@@ -1,5 +1,6 @@
 package pe.edu.upc.travelmatch.agencies.application.internal.commandservices;
 
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.travelmatch.agencies.domain.model.aggregates.Agency;
 import pe.edu.upc.travelmatch.agencies.domain.model.aggregates.AgencyDocument;
@@ -7,62 +8,57 @@ import pe.edu.upc.travelmatch.agencies.domain.model.commands.CreateAgencyDocumen
 import pe.edu.upc.travelmatch.agencies.domain.model.commands.DeleteAgencyDocumentCommand;
 import pe.edu.upc.travelmatch.agencies.domain.model.commands.UpdateAgencyDocumentCommand;
 import pe.edu.upc.travelmatch.agencies.domain.services.AgencyDocumentCommandService;
-import pe.edu.upc.travelmatch.agencies.infrastructure.persistence.jpa.repositories.AgencyRepository;
 import pe.edu.upc.travelmatch.agencies.infrastructure.persistence.jpa.repositories.AgencyDocumentRepository;
+import pe.edu.upc.travelmatch.agencies.infrastructure.persistence.jpa.repositories.AgencyRepository;
 
-import java.util.Optional;
-
+/** AgencyDocumentCommandServiceImpl type. */
 @Service
 public class AgencyDocumentCommandServiceImpl implements AgencyDocumentCommandService {
 
-    private final AgencyDocumentRepository agencyDocumentRepository;
-    private final AgencyRepository agencyRepository;
+  private final AgencyDocumentRepository agencyDocumentRepository;
+  private final AgencyRepository agencyRepository;
 
-    public AgencyDocumentCommandServiceImpl(AgencyDocumentRepository agencyDocumentRepository, AgencyRepository agencyRepository) {
-        this.agencyDocumentRepository = agencyDocumentRepository;
-        this.agencyRepository = agencyRepository;
+  /** Constructs a new AgencyDocumentCommandServiceImpl. */
+  public AgencyDocumentCommandServiceImpl(
+      AgencyDocumentRepository agencyDocumentRepository, AgencyRepository agencyRepository) {
+    this.agencyDocumentRepository = agencyDocumentRepository;
+    this.agencyRepository = agencyRepository;
+  }
+
+  @Override
+  public Optional<AgencyDocument> handle(CreateAgencyDocumentCommand command) {
+
+    Optional<Agency> agency = agencyRepository.findById(command.agencyId());
+    if (agency.isEmpty()) {
+      throw new IllegalArgumentException(
+          "Agency with ID " + command.agencyId() + " does not exist.");
     }
 
-    @Override
-    public Optional<AgencyDocument> handle(CreateAgencyDocumentCommand command) {
+    var agencyDocument =
+        new AgencyDocument(
+            agency.get(), command.documentType(), command.documentUrl(), command.description());
+    return Optional.of(agencyDocumentRepository.save(agencyDocument));
+  }
 
-        Optional<Agency> agency = agencyRepository.findById(command.agencyId());
-        if (agency.isEmpty()) {
-            throw new IllegalArgumentException("Agency with ID " + command.agencyId() + " does not exist.");
-        }
+  @Override
+  public Optional<AgencyDocument> handle(UpdateAgencyDocumentCommand command) {
 
-        var agencyDocument = new AgencyDocument(
-                agency.get(),
-                command.documentType(),
-                command.documentUrl(),
-                command.description()
-        );
-        return Optional.of(agencyDocumentRepository.save(agencyDocument));
+    Optional<AgencyDocument> existingDocument = agencyDocumentRepository.findById(command.id());
+    if (existingDocument.isEmpty()) {
+      return Optional.empty();
     }
 
-    @Override
-    public Optional<AgencyDocument> handle(UpdateAgencyDocumentCommand command) {
+    AgencyDocument documentToUpdate = existingDocument.get();
+    documentToUpdate.update(command.documentType(), command.documentUrl(), command.description());
+    return Optional.of(agencyDocumentRepository.save(documentToUpdate));
+  }
 
-        Optional<AgencyDocument> existingDocument = agencyDocumentRepository.findById(command.id());
-        if (existingDocument.isEmpty()) {
-            return Optional.empty();
-        }
+  @Override
+  public void handle(DeleteAgencyDocumentCommand command) {
 
-        AgencyDocument documentToUpdate = existingDocument.get();
-        documentToUpdate.update(
-                command.documentType(),
-                command.documentUrl(),
-                command.description()
-        );
-        return Optional.of(agencyDocumentRepository.save(documentToUpdate));
+    if (!agencyDocumentRepository.existsById(command.id())) {
+      throw new IllegalArgumentException("Document with ID " + command.id() + " does not exist.");
     }
-
-    @Override
-    public void handle(DeleteAgencyDocumentCommand command) {
-
-        if (!agencyDocumentRepository.existsById(command.id())) {
-            throw new IllegalArgumentException("Document with ID " + command.id() + " does not exist.");
-        }
-        agencyDocumentRepository.deleteById(command.id());
-    }
+    agencyDocumentRepository.deleteById(command.id());
+  }
 }

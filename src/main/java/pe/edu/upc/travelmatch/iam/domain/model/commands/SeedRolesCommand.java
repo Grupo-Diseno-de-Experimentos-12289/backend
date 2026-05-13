@@ -1,4 +1,4 @@
 package pe.edu.upc.travelmatch.iam.domain.model.commands;
 
-public record SeedRolesCommand() {
-}
+/** SeedRolesCommand value carrier. */
+public record SeedRolesCommand() {}

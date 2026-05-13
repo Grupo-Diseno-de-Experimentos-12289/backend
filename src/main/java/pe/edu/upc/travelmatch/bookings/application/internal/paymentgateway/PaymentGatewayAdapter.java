@@ -1,5 +1,7 @@
 package pe.edu.upc.travelmatch.bookings.application.internal.paymentgateway;
 
+/** PaymentGatewayAdapter contract. */
 public interface PaymentGatewayAdapter {
-    StripePaymentIntentResponse processTransaction(String paymentMethod, long amount, Long bookingId);
+  /** Process transaction. */
+  StripePaymentIntentResponse processTransaction(String paymentMethod, long amount, Long bookingId);
 }

@@ -1,9 +1,9 @@
 package pe.edu.upc.travelmatch.experiences.domain.services;
+
 import pe.edu.upc.travelmatch.experiences.domain.model.commands.CreateAvailabilityCommand;
 import pe.edu.upc.travelmatch.experiences.domain.model.commands.UpdateAvailabilityCommand;
-/**
- * Service to manage Availability commands.
- */
+
+/** Service to manage Availability commands. */
 public interface AvailabilityCommandService {
   /**
    * Handles the CreateAvailabilityCommand.
@@ -12,12 +12,14 @@ public interface AvailabilityCommandService {
    * @return the assigned availability ID
    */
   Long handle(CreateAvailabilityCommand command);
+
   /**
    * Updates an existing availability.
    *
    * @param command the update command object
    */
   void updateAvailability(UpdateAvailabilityCommand command);
+
   /**
    * Deletes an existing availability by its ID.
    *

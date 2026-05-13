@@ -1,170 +1,203 @@
 package pe.edu.upc.travelmatch.bookings.application.internal.commandservices;
 
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.travelmatch.bookings.application.internal.outboundservices.acl.ExternalExperienceService;
 import pe.edu.upc.travelmatch.bookings.application.internal.paymentgateway.StripePaymentGatewayAdapter;
 import pe.edu.upc.travelmatch.bookings.domain.model.aggregates.Booking;
-import pe.edu.upc.travelmatch.bookings.domain.model.commands.*;
+import pe.edu.upc.travelmatch.bookings.domain.model.commands.CancelBookingCommand;
+import pe.edu.upc.travelmatch.bookings.domain.model.commands.CompletePayoutCommand;
+import pe.edu.upc.travelmatch.bookings.domain.model.commands.CreateBookingCommand;
+import pe.edu.upc.travelmatch.bookings.domain.model.commands.FailPaymentCommand;
+import pe.edu.upc.travelmatch.bookings.domain.model.commands.InitiatePaymentCommand;
+import pe.edu.upc.travelmatch.bookings.domain.model.commands.InitiateRefundCommand;
+import pe.edu.upc.travelmatch.bookings.domain.model.commands.ProcessPaymentCommand;
+import pe.edu.upc.travelmatch.bookings.domain.model.commands.ProcessPayoutCommand;
 import pe.edu.upc.travelmatch.bookings.domain.model.entities.Payment;
 import pe.edu.upc.travelmatch.bookings.domain.model.entities.Refund;
-import pe.edu.upc.travelmatch.bookings.domain.model.valueobjects.*;
+import pe.edu.upc.travelmatch.bookings.domain.model.valueobjects.AvailabilityId;
+import pe.edu.upc.travelmatch.bookings.domain.model.valueobjects.BookingStatus;
+import pe.edu.upc.travelmatch.bookings.domain.model.valueobjects.Money;
+import pe.edu.upc.travelmatch.bookings.domain.model.valueobjects.PaymentStatus;
+import pe.edu.upc.travelmatch.bookings.domain.model.valueobjects.RefundStatus;
+import pe.edu.upc.travelmatch.bookings.domain.model.valueobjects.UserId;
 import pe.edu.upc.travelmatch.bookings.domain.services.BookingCommandService;
 import pe.edu.upc.travelmatch.bookings.infrastructure.persistence.jpa.repositories.BookingRepository;
 
-import java.math.BigDecimal;
-import java.time.Instant;
-import java.util.Optional;
-
+/** BookingCommandServiceImpl type. */
 @Service
 public class BookingCommandServiceImpl implements BookingCommandService {
-    private final BookingRepository bookingRepository;
-    private final ExternalExperienceService externalExperienceService;
-    private final StripePaymentGatewayAdapter paymentGatewayAdapter;
-    public BookingCommandServiceImpl(
-            BookingRepository bookingRepository,
-            ExternalExperienceService externalExperienceService,
-            StripePaymentGatewayAdapter paymentGatewayAdapter
-    ) {
-        this.bookingRepository = bookingRepository;
-        this.externalExperienceService = externalExperienceService;
-        this.paymentGatewayAdapter = paymentGatewayAdapter;
+  private final BookingRepository bookingRepository;
+  private final ExternalExperienceService externalExperienceService;
+  private final StripePaymentGatewayAdapter paymentGatewayAdapter;
+
+  /** Constructs a new BookingCommandServiceImpl. */
+  public BookingCommandServiceImpl(
+      BookingRepository bookingRepository,
+      ExternalExperienceService externalExperienceService,
+      StripePaymentGatewayAdapter paymentGatewayAdapter) {
+    this.bookingRepository = bookingRepository;
+    this.externalExperienceService = externalExperienceService;
+    this.paymentGatewayAdapter = paymentGatewayAdapter;
+  }
+
+  @Override
+  public Long handle(CreateBookingCommand command) {
+    if (!externalExperienceService.existsAvailabilityById(command.availabilityId())) {
+      throw new IllegalArgumentException(
+          "Availability with id " + command.availabilityId() + " does not exist.");
     }
 
-    @Override
-    public Long handle(CreateBookingCommand command) {
-        if (!externalExperienceService.existsAvailabilityById(command.availabilityId()))
-            throw new IllegalArgumentException("Availability with id " + command.availabilityId() + " does not exist.");
-
-        if (!externalExperienceService.hasSufficientStock(command.availabilityId(), command.ticketTypeId(), command.quantity()))
-            throw new IllegalStateException("Not enough stock available for the selected ticket type.");
-
-        var unitPrice = externalExperienceService.getPriceForTicketType(command.availabilityId(), command.ticketTypeId());
-        var totalPrice = unitPrice.multiply(java.math.BigDecimal.valueOf(command.quantity()));
-        externalExperienceService.decrementStock(command.availabilityId(), command.ticketTypeId(), command.quantity());
-
-        var booking = new Booking(
-                new UserId(command.userId()),
-                new AvailabilityId(command.availabilityId()),
-                new Money(totalPrice, "PEN"),
-                command.quantity(),
-                BookingStatus.PENDING,
-                command.bookingDate()
-        );
-        bookingRepository.save(booking);
-        return booking.getId();
+    if (!externalExperienceService.hasSufficientStock(
+        command.availabilityId(), command.ticketTypeId(), command.quantity())) {
+      throw new IllegalStateException("Not enough stock available for the selected ticket type.");
     }
 
-    @Override
-    public Optional<Booking> handle(CancelBookingCommand command) {
-        var bookingOpt = bookingRepository.findById(command.bookingId());
-        if(bookingOpt.isEmpty())
-            return Optional.empty();
-        var booking = bookingOpt.get();
-        if (booking.getBookingStatus() != BookingStatus.PENDING) {
-            throw new IllegalStateException("Only bookings in PENDING state can be cancelled.");
-        }
-        booking.markAsCancelled();
-        bookingRepository.save(booking);
-        return Optional.of(booking);
+    var unitPrice =
+        externalExperienceService.getPriceForTicketType(
+            command.availabilityId(), command.ticketTypeId());
+    var totalPrice = unitPrice.multiply(java.math.BigDecimal.valueOf(command.quantity()));
+    externalExperienceService.decrementStock(
+        command.availabilityId(), command.ticketTypeId(), command.quantity());
+
+    var booking =
+        new Booking(
+            new UserId(command.userId()),
+            new AvailabilityId(command.availabilityId()),
+            new Money(totalPrice, "PEN"),
+            command.quantity(),
+            BookingStatus.PENDING,
+            command.bookingDate());
+    bookingRepository.save(booking);
+    return booking.getId();
+  }
+
+  @Override
+  public Optional<Booking> handle(CancelBookingCommand command) {
+    var bookingOpt = bookingRepository.findById(command.bookingId());
+    if (bookingOpt.isEmpty()) {
+      return Optional.empty();
+    }
+    var booking = bookingOpt.get();
+    if (booking.getBookingStatus() != BookingStatus.PENDING) {
+      throw new IllegalStateException("Only bookings in PENDING state can be cancelled.");
+    }
+    booking.markAsCancelled();
+    bookingRepository.save(booking);
+    return Optional.of(booking);
+  }
+
+  @Override
+  public String handle(InitiatePaymentCommand command) {
+    var booking =
+        bookingRepository
+            .findById(command.bookingId())
+            .orElseThrow(() -> new IllegalArgumentException("Booking not found."));
+
+    if (booking.getBookingStatus() != BookingStatus.PENDING) {
+      throw new IllegalStateException("Booking must be in PENDING state to initiate payment.");
     }
 
-    @Override
-    public String handle(InitiatePaymentCommand command) {
-        var booking = bookingRepository.findById(command.bookingId())
-                .orElseThrow(() -> new IllegalArgumentException("Booking not found."));
-
-        if (booking.getBookingStatus() != BookingStatus.PENDING)
-            throw new IllegalStateException("Booking must be in PENDING state to initiate payment.");
-
-        if (booking.getPayment() != null)
-            throw new IllegalStateException("Booking already has a payment initiated.");
-
-        long amountInCents = booking.getTotalBookingPrice()
-                .getAmount()
-                .multiply(BigDecimal.valueOf(100)).longValue();
-
-        var result = paymentGatewayAdapter
-                .processTransaction(command.paymentMethod(), amountInCents, booking.getId());
-
-        if (result == null) {
-            throw new IllegalStateException("Stripe failed to create a PaymentIntent.");
-        }
-
-        return result.clientSecret();
+    if (booking.getPayment() != null) {
+      throw new IllegalStateException("Booking already has a payment initiated.");
     }
 
+    long amountInCents =
+        booking.getTotalBookingPrice().getAmount().multiply(BigDecimal.valueOf(100)).longValue();
 
-    @Override
-    public Long handle(ProcessPaymentCommand command) {
-        var booking = bookingRepository.findById(command.bookingId())
-                .orElseThrow(() -> new IllegalArgumentException("Booking not found"));
+    var result =
+        paymentGatewayAdapter.processTransaction(
+            command.paymentMethod(), amountInCents, booking.getId());
 
-        if (booking.getBookingStatus() != BookingStatus.PENDING)
-            throw new IllegalStateException("Booking not in PENDING state.");
-
-        if (booking.getPayment() != null)
-            throw new IllegalStateException("Booking already has a payment.");
-
-        var payment = new Payment(
-                booking.getTotalBookingPrice(),
-                command.paymentMethod(),
-                command.transactionId(),
-                PaymentStatus.SUCCEEDED,
-                Instant.now()
-        );
-
-        payment.setBooking(booking);
-        booking.addPayment(payment);
-        booking.markAsSucceeded();
-
-        return bookingRepository.save(booking).getId();
+    if (result == null) {
+      throw new IllegalStateException("Stripe failed to create a PaymentIntent.");
     }
 
-    @Override
-    public boolean handle(FailPaymentCommand command) {
-        var booking = bookingRepository.findById(command.bookingId())
-                .orElseThrow(() -> new IllegalArgumentException("Booking not found."));
+    return result.clientSecret();
+  }
 
-        if (booking.getBookingStatus() != BookingStatus.PENDING) {
-            throw new IllegalStateException("Only pending bookings can be failed.");
-        }
+  @Override
+  public Long handle(ProcessPaymentCommand command) {
+    var booking =
+        bookingRepository
+            .findById(command.bookingId())
+            .orElseThrow(() -> new IllegalArgumentException("Booking not found"));
 
-        booking.markAsFailed();
-        bookingRepository.save(booking);
-
-        return true;
+    if (booking.getBookingStatus() != BookingStatus.PENDING) {
+      throw new IllegalStateException("Booking not in PENDING state.");
     }
 
-    @Override
-    public Long handle(ProcessPayoutCommand command) {
-        return 0L;
+    if (booking.getPayment() != null) {
+      throw new IllegalStateException("Booking already has a payment.");
     }
 
-    @Override
-    public boolean handle(CompletePayoutCommand command) {
-        return false;
+    var payment =
+        new Payment(
+            booking.getTotalBookingPrice(),
+            command.paymentMethod(),
+            command.transactionId(),
+            PaymentStatus.SUCCEEDED,
+            Instant.now());
+
+    payment.setBooking(booking);
+    booking.addPayment(payment);
+    booking.markAsSucceeded();
+
+    return bookingRepository.save(booking).getId();
+  }
+
+  @Override
+  public boolean handle(FailPaymentCommand command) {
+    var booking =
+        bookingRepository
+            .findById(command.bookingId())
+            .orElseThrow(() -> new IllegalArgumentException("Booking not found."));
+
+    if (booking.getBookingStatus() != BookingStatus.PENDING) {
+      throw new IllegalStateException("Only pending bookings can be failed.");
     }
 
-    @Override
-    public Long handle(InitiateRefundCommand command) {
-        var booking = bookingRepository.findById(command.bookingId())
-                .orElseThrow(() -> new IllegalArgumentException("Booking not found"));
+    booking.markAsFailed();
+    bookingRepository.save(booking);
 
-        if (booking.getBookingStatus() != BookingStatus.SUCCEEDED &&
-                booking.getBookingStatus() != BookingStatus.CANCELLED) {
-            throw new IllegalStateException("Refunds can only be created for SUCCEEDED or CANCELLED bookings.");
-        }
-        if (booking.getRefund() != null) {
-            throw new IllegalStateException("Refund already exists for this booking.");
-        }
-        var refund = new Refund(
-                booking.getTotalBookingPrice(),
-                command.refundReason(),
-                RefundStatus.PENDING,
-                Instant.now()
-        );
-        booking.addRefund(refund);
-        bookingRepository.save(booking);
-        return refund.getId();
+    return true;
+  }
+
+  @Override
+  public Long handle(ProcessPayoutCommand command) {
+    return 0L;
+  }
+
+  @Override
+  public boolean handle(CompletePayoutCommand command) {
+    return false;
+  }
+
+  @Override
+  public Long handle(InitiateRefundCommand command) {
+    var booking =
+        bookingRepository
+            .findById(command.bookingId())
+            .orElseThrow(() -> new IllegalArgumentException("Booking not found"));
+
+    if (booking.getBookingStatus() != BookingStatus.SUCCEEDED
+        && booking.getBookingStatus() != BookingStatus.CANCELLED) {
+      throw new IllegalStateException(
+          "Refunds can only be created for SUCCEEDED or CANCELLED bookings.");
     }
+    if (booking.getRefund() != null) {
+      throw new IllegalStateException("Refund already exists for this booking.");
+    }
+    var refund =
+        new Refund(
+            booking.getTotalBookingPrice(),
+            command.refundReason(),
+            RefundStatus.PENDING,
+            Instant.now());
+    booking.addRefund(refund);
+    bookingRepository.save(booking);
+    return refund.getId();
+  }
 }

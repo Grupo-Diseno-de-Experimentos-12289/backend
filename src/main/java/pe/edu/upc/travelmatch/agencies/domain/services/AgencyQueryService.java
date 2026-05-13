@@ -1,13 +1,16 @@
 package pe.edu.upc.travelmatch.agencies.domain.services;
 
-import pe.edu.upc.travelmatch.agencies.domain.model.aggregates.Agency;
-import pe.edu.upc.travelmatch.agencies.domain.model.queries.GetAllAgenciesQuery;
-import pe.edu.upc.travelmatch.agencies.domain.model.queries.GetAgencyByIdQuery;
-
 import java.util.List;
 import java.util.Optional;
+import pe.edu.upc.travelmatch.agencies.domain.model.aggregates.Agency;
+import pe.edu.upc.travelmatch.agencies.domain.model.queries.GetAgencyByIdQuery;
+import pe.edu.upc.travelmatch.agencies.domain.model.queries.GetAllAgenciesQuery;
 
+/** AgencyQueryService contract. */
 public interface AgencyQueryService {
-    Optional<Agency> handle(GetAgencyByIdQuery query);
-    List<Agency> handle(GetAllAgenciesQuery query);
+  /** Handle. */
+  Optional<Agency> handle(GetAgencyByIdQuery query);
+
+  /** Handle. */
+  List<Agency> handle(GetAllAgenciesQuery query);
 }

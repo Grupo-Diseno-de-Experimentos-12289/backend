@@ -1,5 +1,7 @@
 package pe.edu.upc.travelmatch.experiences.domain.model.valueobjects;
+
 import jakarta.persistence.Embeddable;
+
 /**
  * Value object representing an Agency ID.
  *
@@ -17,9 +19,8 @@ public record AgencyId(Long value) {
       throw new IllegalArgumentException("AgencyId must be a positive number");
     }
   }
-  /**
-   * Default constructor.
-   */
+
+  /** Default constructor. */
   public AgencyId() {
     this(0L);
   }

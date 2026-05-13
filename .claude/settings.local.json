@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./mvnw checkstyle:checkstyle -q)",
+      "Bash(curl -L -o D:/CHECKSTYLE/backend/.tools/google-java-format.jar https://github.com/google/google-java-format/releases/download/v1.24.0/google-java-format-1.24.0-all-deps.jar)",
+      "Bash(java *)",
+      "Bash(xargs -0 -n 30 java --add-exports jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED --add-exports jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED -jar D:/CHECKSTYLE/backend/.tools/google-java-format.jar -i)",
+      "Bash(./mvnw compile *)",
+      "Bash(py --version)",
+      "Bash(awk '/<file name=/{f=$0} /InvalidJavadocPositionCheck|AbbreviationAsWordInNameCheck|MemberNameCheck|LineLengthCheck/{print f; print $0}' D:/CHECKSTYLE/backend/target/checkstyle-result.xml)",
+      "PowerShell(& powershell.exe -ExecutionPolicy Bypass -File \"D:\\\\CHECKSTYLE\\\\backend\\\\.tools\\\\Insert-JavadocStubs.ps1\")",
+      "Bash(./mvnw checkstyle:check)",
+      "Bash(./mvnw test-compile *)",
+      "Bash(git mv *)"
+    ]
+  }
+}
