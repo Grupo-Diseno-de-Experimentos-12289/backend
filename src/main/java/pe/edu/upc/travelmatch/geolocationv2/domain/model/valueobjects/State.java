@@ -2,16 +2,28 @@ package pe.edu.upc.travelmatch.geolocationv2.domain.model.valueobjects;
 
 import jakarta.persistence.Embeddable;
 
+/**
+ * State value object.
+ *
+ * @param state the state name
+ */
 @Embeddable
 public record State(String state) {
-    public State() {
-        this(null);
-    }
+  /**
+   * Default constructor.
+   */
+  public State() {
+    this(null);
+  }
 
-    public State {
-        if (state == null || state.isBlank()) {
-            throw new IllegalArgumentException("State cannot be null or blank");
-        }
+  /**
+   * Compact constructor.
+   *
+   * @throws IllegalArgumentException if state is null or blank
+   */
+  public State {
+    if (state == null || state.isBlank()) {
+      throw new IllegalArgumentException("State cannot be null or blank");
     }
+  }
 }
-

@@ -1,24 +1,45 @@
 package pe.edu.upc.travelmatch.iam.infrastructure.hashing.bcrypt.services;
 
-import pe.edu.upc.travelmatch.iam.infrastructure.hashing.bcrypt.BCryptHashingService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import pe.edu.upc.travelmatch.iam.infrastructure.hashing.bcrypt.BcryptHashingService;
 
+/**
+ * Bcrypt implementation of the IAM hashing service.
+ */
 @Service
-public class HashingServiceImpl implements BCryptHashingService {
-    private final BCryptPasswordEncoder passwordEncoder;
+public final class HashingServiceImpl implements BcryptHashingService {
+  /** Password encoder. */
+  private final BCryptPasswordEncoder passwordEncoder;
 
-    public HashingServiceImpl() {
-        this.passwordEncoder = new BCryptPasswordEncoder();
-    }
+  /** Default constructor. */
+  public HashingServiceImpl() {
+    this.passwordEncoder = new BCryptPasswordEncoder();
+  }
 
-    @Override
-    public String encode(CharSequence rawPassword) {
-        return passwordEncoder.encode(rawPassword);
-    }
+  /**
+   * Encodes a password.
+   *
+   * @param rawPassword raw password
+   * @return encoded password
+   */
+  @Override
+  public String encode(final CharSequence rawPassword) {
+    return passwordEncoder.encode(rawPassword);
+  }
 
-    @Override
-    public boolean matches(CharSequence rawPassword, String encodedPassword) {
-        return passwordEncoder.matches(rawPassword, encodedPassword);
-    }
+  /**
+   * Checks whether a password matches the encoded value.
+   *
+   * @param rawPassword raw password
+   * @param encodedPassword encoded password
+   * @return true if the passwords match
+   */
+  @Override
+  public boolean matches(
+      final CharSequence rawPassword,
+      final String encodedPassword
+  ) {
+    return passwordEncoder.matches(rawPassword, encodedPassword);
+  }
 }
