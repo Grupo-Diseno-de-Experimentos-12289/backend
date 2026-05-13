@@ -6,7 +6,7 @@ import com.intuit.karate.Results;
 import com.intuit.karate.Runner;
 import org.junit.jupiter.api.Test;
 
-public class ExperiencesRunner {
+class ExperiencesRunner {
   @Test
   void testParallel() {
     Results results =

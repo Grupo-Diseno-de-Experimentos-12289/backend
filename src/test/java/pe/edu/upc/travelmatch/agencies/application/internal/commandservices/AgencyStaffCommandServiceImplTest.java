@@ -3,7 +3,6 @@ package pe.edu.upc.travelmatch.agencies.application.internal.commandservices;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -25,7 +24,7 @@ import pe.edu.upc.travelmatch.agencies.infrastructure.persistence.jpa.repositori
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("AgencyStaffCommandServiceImpl Tests")
-public class AgencyStaffCommandServiceImplTest {
+class AgencyStaffCommandServiceImplTest {
   @Mock private AgencyStaffRepository agencyStaffRepository;
   @Mock private AgencyRepository agencyRepository;
 

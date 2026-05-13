@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -16,7 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pe.edu.upc.travelmatch.profiles.application.internal.outboundservices.acl.ExternalExperienceService;
 import pe.edu.upc.travelmatch.profiles.application.internal.outboundservices.acl.ExternalIamService;
 import pe.edu.upc.travelmatch.profiles.domain.model.aggregates.Cart;
 import pe.edu.upc.travelmatch.profiles.domain.model.commands.AddCartItemCommand;
@@ -37,8 +35,6 @@ class CartCommandServiceImplTest {
 
   @Mock private ExternalIamService externalIamService;
 
-  @Mock private ExternalExperienceService externalExperienceService;
-
   @InjectMocks private CartCommandServiceImpl cartCommandService;
 
   @Test
@@ -46,18 +42,12 @@ class CartCommandServiceImplTest {
     // Arrange
     UserId userId = new UserId(1L);
     CreateCartCommand command = new CreateCartCommand(userId);
-    Cart cart = new Cart(userId);
 
     when(externalIamService.existsUserById(userId)).thenReturn(true);
-    when(cartRepository.save(any(Cart.class)))
-        .thenAnswer(
-            invocation -> {
-              Cart savedCart = invocation.getArgument(0);
-              return savedCart;
-            });
+    when(cartRepository.save(any(Cart.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
     // Act
-    Long resultId = cartCommandService.handle(command);
+    cartCommandService.handle(command);
 
     // Assert
     verify(externalIamService, times(1)).existsUserById(userId);

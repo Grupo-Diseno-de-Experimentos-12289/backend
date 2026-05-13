@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import pe.edu.upc.travelmatch.experiences.domain.model.commands.UpdateExperienceMediaCommand;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.resources.UpdateExperienceMediaResource;
 
-public class UpdateExperienceMediaCommandFromResourceAssemblerTest {
+class UpdateExperienceMediaCommandFromResourceAssemblerTest {
 
   @Test
   @DisplayName(
@@ -16,7 +16,6 @@ public class UpdateExperienceMediaCommandFromResourceAssemblerTest {
   void toCommandFromResource_ShouldMap() {
     // Arrange
     var resource = new UpdateExperienceMediaResource("http://example.com/media.jpg", "image/jpeg");
-    var newExperienceMedia = 1L;
     // Act
     UpdateExperienceMediaCommand cmd =
         UpdateExperienceMediaCommandFromResourceAssembler.toCommandFromResource(1L, resource);

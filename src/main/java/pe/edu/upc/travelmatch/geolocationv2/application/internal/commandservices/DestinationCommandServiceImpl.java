@@ -42,11 +42,13 @@ public class DestinationCommandServiceImpl implements DestinationCommandService 
     if (this.destinationRepository.existsByNameAndIdIsNot(name, destinationId)) {
       throw new IllegalArgumentException("Destination with name " + name + " already exists");
     }
-    if (!this.destinationRepository.existsById(destinationId)) {
-      throw new IllegalArgumentException(
-          "Destination with id " + destinationId + " does not exist");
-    }
-    var destinationToUpdate = this.destinationRepository.findById(destinationId).get();
+    var destinationToUpdate =
+        this.destinationRepository
+            .findById(destinationId)
+            .orElseThrow(
+                () ->
+                    new IllegalArgumentException(
+                        "Destination with id " + destinationId + " does not exist"));
     destinationToUpdate.updateInformation(
         command.name(),
         command.address(),

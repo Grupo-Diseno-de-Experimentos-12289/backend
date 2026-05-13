@@ -3,7 +3,6 @@ package pe.edu.upc.travelmatch.agencies.interfaces.rest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +21,7 @@ import pe.edu.upc.travelmatch.agencies.domain.services.AgencyStaffCommandService
 import pe.edu.upc.travelmatch.agencies.domain.services.AgencyStaffQueryService;
 import pe.edu.upc.travelmatch.agencies.interfaces.rest.resources.AgencyStaffResource;
 import pe.edu.upc.travelmatch.agencies.interfaces.rest.resources.CreateAgencyStaffResource;
-import pe.edu.upc.travelmatch.agencies.interfaces.rest.resources.UpdateAgencyStaffResource; // Importación necesaria
+import pe.edu.upc.travelmatch.agencies.interfaces.rest.resources.UpdateAgencyStaffResource;
 import pe.edu.upc.travelmatch.agencies.interfaces.rest.transform.AgencyStaffResourceFromEntityAssembler;
 import pe.edu.upc.travelmatch.agencies.interfaces.rest.transform.CreateAgencyStaffCommandFromResourceAssembler;
 import pe.edu.upc.travelmatch.agencies.interfaces.rest.transform.UpdateAgencyStaffCommandFromResourceAssembler;
@@ -57,10 +56,9 @@ public class AgencyStaffController {
           .handle(command)
           .map(
               staff ->
-                  new ResponseEntity<>(
-                      AgencyStaffResourceFromEntityAssembler.toResourceFromEntity(staff),
-                      HttpStatus.CREATED))
-          .orElseGet(() -> ResponseEntity.badRequest().build());
+                  ResponseEntity.status(HttpStatus.CREATED)
+                      .body(AgencyStaffResourceFromEntityAssembler.toResourceFromEntity(staff)))
+          .orElseGet(() -> ResponseEntity.internalServerError().build());
     } catch (IllegalArgumentException e) {
       return ResponseEntity.badRequest().build();
     }
@@ -79,12 +77,9 @@ public class AgencyStaffController {
       var command = UpdateAgencyStaffCommandFromResourceAssembler.toCommandFromResource(resource);
       return agencyStaffCommandService
           .handle(command)
-          .map(
-              staff ->
-                  new ResponseEntity<>(
-                      AgencyStaffResourceFromEntityAssembler.toResourceFromEntity(staff),
-                      HttpStatus.OK))
-          .orElseGet(() -> ResponseEntity.notFound().build());
+          .map(AgencyStaffResourceFromEntityAssembler::toResourceFromEntity)
+          .<ResponseEntity<AgencyStaffResource>>map(ResponseEntity::ok)
+          .orElse(ResponseEntity.notFound().build());
     } catch (IllegalArgumentException e) {
       return ResponseEntity.badRequest().build();
     }
@@ -92,7 +87,7 @@ public class AgencyStaffController {
 
   /** Delete staff. */
   @DeleteMapping("/{staffId}")
-  public ResponseEntity<?> deleteStaff(@PathVariable Long agencyId, @PathVariable Long staffId) {
+  public ResponseEntity<Void> deleteStaff(@PathVariable Long agencyId, @PathVariable Long staffId) {
     try {
       var command = new DeleteAgencyStaffCommand(staffId);
       agencyStaffCommandService.handle(command);
@@ -110,10 +105,7 @@ public class AgencyStaffController {
     List<AgencyStaffResource> staffResources =
         agencyStaffQueryService.handle(query).stream()
             .map(AgencyStaffResourceFromEntityAssembler::toResourceFromEntity)
-            .collect(Collectors.toList());
-    if (staffResources.isEmpty()) {
-      return ResponseEntity.ok(staffResources);
-    }
+            .toList();
     return ResponseEntity.ok(staffResources);
   }
 
@@ -124,11 +116,8 @@ public class AgencyStaffController {
     var query = new GetAgencyStaffByIdQuery(staffId);
     return agencyStaffQueryService
         .handle(query)
-        .map(
-            staff ->
-                new ResponseEntity<>(
-                    AgencyStaffResourceFromEntityAssembler.toResourceFromEntity(staff),
-                    HttpStatus.OK))
+        .map(AgencyStaffResourceFromEntityAssembler::toResourceFromEntity)
+        .map(ResponseEntity::ok)
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
 }

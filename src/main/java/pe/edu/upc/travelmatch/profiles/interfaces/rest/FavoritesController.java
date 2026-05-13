@@ -4,6 +4,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,6 +32,7 @@ import pe.edu.upc.travelmatch.profiles.interfaces.rest.transform.FavoriteResourc
 @RequestMapping(value = "api/v1/favorites", produces = APPLICATION_JSON_VALUE)
 @Tag(name = "Favorites", description = "Favorites Management Endpoints")
 public class FavoritesController {
+  private static final Logger LOG = LoggerFactory.getLogger(FavoritesController.class);
   private final FavoriteCommandService favoriteCommandService;
   private final FavoriteQueryService favoriteQueryService;
 
@@ -47,7 +50,7 @@ public class FavoritesController {
     var createFavoriteCommand =
         CreateFavoriteCommandFromResourceAssembler.toCommandFromResource(createFavoriteResource);
     var favoriteId = favoriteCommandService.handle(createFavoriteCommand);
-    System.out.println("Favorite created with id: " + favoriteId);
+    LOG.info("Favorite created with id: {}", favoriteId);
     var getFavoriteByUserIdAndExperienceIdQuery =
         new GetFavoriteByUserIdAndExperienceIdQuery(
             new UserId(createFavoriteResource.userId()),
@@ -75,7 +78,7 @@ public class FavoritesController {
 
   /** Delete favorite. */
   @DeleteMapping("users/{userId}/experience/{experienceId}")
-  public ResponseEntity<?> deleteFavorite(
+  public ResponseEntity<Void> deleteFavorite(
       @PathVariable Long experienceId, @PathVariable Long userId) {
     ExperienceId experienceIdValueObject = new ExperienceId(experienceId);
     UserId userIdValueObject = new UserId(userId);

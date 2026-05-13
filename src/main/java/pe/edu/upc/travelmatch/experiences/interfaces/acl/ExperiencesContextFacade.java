@@ -47,8 +47,9 @@ public class ExperiencesContextFacade {
 
   /** Checks if an experience is owned by a specific agency. */
   public boolean isExperienceOwnedByAgency(Long experienceId, Long agencyId) {
-    var experience = fetchExperienceById(experienceId);
-    return experience.isPresent() && experience.get().getAgencyId().equals(agencyId);
+    return fetchExperienceById(experienceId)
+        .map(experience -> experience.getAgencyId().value().equals(agencyId))
+        .orElse(false);
   }
 
   /** Fetches availability information by ID. */

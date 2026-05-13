@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import pe.edu.upc.travelmatch.experiences.domain.model.entities.Category;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.resources.CategoryResource;
 
-public class CategoryResourceFromEntityAssemblerTest {
+class CategoryResourceFromEntityAssemblerTest {
 
   @Test
   @DisplayName("toResource should map Category entity to CategoryResource (AAA)")

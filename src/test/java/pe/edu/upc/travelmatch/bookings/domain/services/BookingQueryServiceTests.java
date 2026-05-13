@@ -33,7 +33,7 @@ import pe.edu.upc.travelmatch.bookings.infrastructure.persistence.jpa.repositori
 @Nested
 @ExtendWith(MockitoExtension.class)
 @DisplayName("BookingQueryServiceImpl")
-public class BookingQueryServiceTests {
+class BookingQueryServiceTests {
   private static final Money MONEY = new Money(new BigDecimal("100.00"), "PEN");
   @Mock private BookingRepository bookingRepository;
   @InjectMocks private BookingQueryServiceImpl bookingQueryService;
@@ -141,10 +141,11 @@ public class BookingQueryServiceTests {
   @Test
   @DisplayName("GetBookingsByUserIdQuery throws when userId value is 0")
   void query_zeroUserId_throwsIllegalArgument() {
-    // Arrange – nothing
+    // Arrange
+    UserId zeroUserId = new UserId(0L);
 
     // Act & Assert
     assertThrows(
-        IllegalArgumentException.class, () -> new GetBookingsByUserIdQuery(new UserId(0L)));
+        IllegalArgumentException.class, () -> new GetBookingsByUserIdQuery(zeroUserId));
   }
 }

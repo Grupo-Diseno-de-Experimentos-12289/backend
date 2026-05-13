@@ -20,7 +20,7 @@ import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetExperienceById
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.ExperienceRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class ExperienceQueryServiceImplTest {
+class ExperienceQueryServiceImplTest {
 
   @Mock private ExperienceRepository repository;
   @InjectMocks private ExperienceQueryServiceImpl service;

@@ -3,6 +3,8 @@ package pe.edu.upc.travelmatch.profiles.interfaces.rest;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,6 +39,7 @@ import pe.edu.upc.travelmatch.profiles.interfaces.rest.transform.UpdateCartItemQ
 @RequestMapping(value = "/api/v1/carts", produces = APPLICATION_JSON_VALUE)
 @Tag(name = "Carts", description = "Carts Management Endpoints")
 public class CartsController {
+  private static final Logger LOG = LoggerFactory.getLogger(CartsController.class);
   private final CartCommandService cartCommandService;
   private final CartQueryService cartQueryService;
 
@@ -51,7 +54,7 @@ public class CartsController {
   public ResponseEntity<CartResource> createCart(@RequestBody CreateCartResource resource) {
     var createCartCommand = CreateCartCommandFromResourceAssembler.toCommandFromResource(resource);
     var cartId = cartCommandService.handle(createCartCommand);
-    System.out.println("Cart created with id " + cartId);
+    LOG.info("Cart created with id {}", cartId);
     var getCartByUserIdQuery = new GetCartByUserIdQuery(new UserId(resource.userId()));
     var cart = cartQueryService.handle(getCartByUserIdQuery);
     if (cart.isEmpty()) {

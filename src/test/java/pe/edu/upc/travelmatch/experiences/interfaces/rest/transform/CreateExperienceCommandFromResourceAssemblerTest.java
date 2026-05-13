@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import pe.edu.upc.travelmatch.experiences.domain.model.commands.CreateExperienceCommand;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.resources.CreateExperienceResource;
 
-public class CreateExperienceCommandFromResourceAssemblerTest {
+class CreateExperienceCommandFromResourceAssemblerTest {
 
   @Test
   @DisplayName("toCommand should map CreateExperienceResource to CreateExperienceCommand (AAA)")

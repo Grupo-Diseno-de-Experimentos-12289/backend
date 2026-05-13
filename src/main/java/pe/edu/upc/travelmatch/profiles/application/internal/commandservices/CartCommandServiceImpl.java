@@ -3,7 +3,6 @@ package pe.edu.upc.travelmatch.profiles.application.internal.commandservices;
 import java.math.BigDecimal;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
-import pe.edu.upc.travelmatch.profiles.application.internal.outboundservices.acl.ExternalExperienceService;
 import pe.edu.upc.travelmatch.profiles.application.internal.outboundservices.acl.ExternalIamService;
 import pe.edu.upc.travelmatch.profiles.domain.model.aggregates.Cart;
 import pe.edu.upc.travelmatch.profiles.domain.model.commands.AddCartItemCommand;
@@ -21,16 +20,12 @@ import pe.edu.upc.travelmatch.profiles.infrastructure.persistence.jpa.repositori
 public class CartCommandServiceImpl implements CartCommandService {
   private final CartRepository cartRepository;
   private final ExternalIamService externalIamService;
-  private final ExternalExperienceService externalExperiencesService;
 
   /** Constructs a new CartCommandServiceImpl. */
   public CartCommandServiceImpl(
-      CartRepository cartRepository,
-      ExternalIamService externalIamService,
-      ExternalExperienceService externalExperiencesService) {
+      CartRepository cartRepository, ExternalIamService externalIamService) {
     this.cartRepository = cartRepository;
     this.externalIamService = externalIamService;
-    this.externalExperiencesService = externalExperiencesService;
   }
 
   @Override
@@ -61,12 +56,6 @@ public class CartCommandServiceImpl implements CartCommandService {
       throw new IllegalStateException("No cart found for the given user.");
     }
 
-    //        if
-    // (!externalExperiencesService.existsExperienceById(command.availabilityId().experienceId())) {
-    //            throw new IllegalArgumentException("The provided availability ID does not link to
-    // a valid experience.");
-    //        }
-    // Price value should be retrieved from Experiences BC via ACL
     Money price = new Money(new BigDecimal(10), "PEN");
     CartItem newItem = new CartItem(command.availabilityId(), command.quantity(), price);
     cart.get().addItem(newItem);

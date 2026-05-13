@@ -25,11 +25,6 @@ public class BookingQueryServiceImpl implements BookingQueryService {
     return bookingRepository.findById(query.bookingId());
   }
 
-  //    @Override
-  //    public List<Booking> handle(GetBookingsByAgencyIdQuery query) {
-  //        return List.of();
-  //    }
-
   @Override
   public List<Booking> handle(GetBookingsByUserIdQuery query) {
     return bookingRepository.findAllByUserId(query.userId());

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import pe.edu.upc.travelmatch.experiences.domain.model.entities.TicketType;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.resources.TicketTypeResource;
 
-public class TicketTypeResourceFromEntityAssemblerTest {
+class TicketTypeResourceFromEntityAssemblerTest {
 
   @Test
   @DisplayName("toResource should map TicketType entity to TicketTypeResource (AAA)")

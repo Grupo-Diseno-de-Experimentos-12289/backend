@@ -2,7 +2,6 @@ package pe.edu.upc.travelmatch.geolocationv2.interfaces.rest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +28,7 @@ import pe.edu.upc.travelmatch.geolocationv2.interfaces.rest.transform.UpdateDest
 
 /** Documentation. */
 @CrossOrigin(
-    origins = "*",
+    origins = {"http://localhost:5173", "http://localhost:4200"},
     methods = {RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE})
 @RestController
 @RequestMapping(value = "/api/v1/destinations", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -57,10 +56,11 @@ public class DestinationsController {
       return ResponseEntity.badRequest().build();
     }
     var getDestinationByIdQuery = new GetDestinationByIdQuery(destinationId);
-    var optionalDestination = this.destinationQueryService.handle(getDestinationByIdQuery);
-    var destinationResource =
-        DestinationResourceFromEntityAssembler.toResourceFromEntity(optionalDestination.get());
-    return new ResponseEntity<>(destinationResource, HttpStatus.CREATED);
+    return this.destinationQueryService
+        .handle(getDestinationByIdQuery)
+        .map(DestinationResourceFromEntityAssembler::toResourceFromEntity)
+        .map(resourceCreated -> new ResponseEntity<>(resourceCreated, HttpStatus.CREATED))
+        .orElseGet(() -> ResponseEntity.badRequest().build());
   }
 
   /** Get all destinations. */
@@ -71,7 +71,7 @@ public class DestinationsController {
     var destinationResources =
         destinations.stream()
             .map(DestinationResourceFromEntityAssembler::toResourceFromEntity)
-            .collect(Collectors.toList());
+            .toList();
     return ResponseEntity.ok(destinationResources);
   }
 
@@ -79,13 +79,11 @@ public class DestinationsController {
   @GetMapping("/{destinationId}")
   public ResponseEntity<DestinationResource> getDestinationById(@PathVariable Long destinationId) {
     var getDestinationByIdQuery = new GetDestinationByIdQuery(destinationId);
-    var optionalDestination = this.destinationQueryService.handle(getDestinationByIdQuery);
-    if (optionalDestination.isEmpty()) {
-      return ResponseEntity.badRequest().build();
-    }
-    var destinationResource =
-        DestinationResourceFromEntityAssembler.toResourceFromEntity(optionalDestination.get());
-    return ResponseEntity.ok(destinationResource);
+    return this.destinationQueryService
+        .handle(getDestinationByIdQuery)
+        .map(DestinationResourceFromEntityAssembler::toResourceFromEntity)
+        .map(ResponseEntity::ok)
+        .orElseGet(() -> ResponseEntity.badRequest().build());
   }
 
   /** Update destination. */
@@ -95,18 +93,16 @@ public class DestinationsController {
     var updateDestinationCommand =
         UpdateDestinationCommandFromResourceAssembler.toCommandFromResource(
             destinationId, resource);
-    var optionalDestination = this.destinationCommandService.handle(updateDestinationCommand);
-    if (optionalDestination.isEmpty()) {
-      return ResponseEntity.badRequest().build();
-    }
-    var destinationResource =
-        DestinationResourceFromEntityAssembler.toResourceFromEntity(optionalDestination.get());
-    return ResponseEntity.ok(destinationResource);
+    return this.destinationCommandService
+        .handle(updateDestinationCommand)
+        .map(DestinationResourceFromEntityAssembler::toResourceFromEntity)
+        .map(ResponseEntity::ok)
+        .orElseGet(() -> ResponseEntity.badRequest().build());
   }
 
   /** Delete destination. */
   @DeleteMapping("/{destinationId}")
-  public ResponseEntity<?> deleteDestination(@PathVariable Long destinationId) {
+  public ResponseEntity<Void> deleteDestination(@PathVariable Long destinationId) {
     var deleteDestinationCommand = new DeleteDestinationCommand(destinationId);
     this.destinationCommandService.handle(deleteDestinationCommand);
     return ResponseEntity.noContent().build();

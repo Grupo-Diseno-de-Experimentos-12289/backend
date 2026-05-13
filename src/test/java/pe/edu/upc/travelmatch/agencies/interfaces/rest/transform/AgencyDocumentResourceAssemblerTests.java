@@ -15,7 +15,7 @@ import pe.edu.upc.travelmatch.agencies.domain.model.aggregates.AgencyDocument;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("AgencyDocumentResourceFromEntityAssembler")
-public class AgencyDocumentResourceAssemblerTests {
+class AgencyDocumentResourceAssemblerTests {
 
   @Mock private AgencyDocument agencyDocument;
 

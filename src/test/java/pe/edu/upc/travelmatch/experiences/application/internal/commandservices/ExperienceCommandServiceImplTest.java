@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -35,7 +34,7 @@ import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.reposit
 @Nested
 @ExtendWith(MockitoExtension.class)
 @DisplayName("ExperienceCommandServiceImpl Tests")
-public class ExperienceCommandServiceImplTest {
+class ExperienceCommandServiceImplTest {
 
   @Mock private ExperienceRepository experienceRepository;
 

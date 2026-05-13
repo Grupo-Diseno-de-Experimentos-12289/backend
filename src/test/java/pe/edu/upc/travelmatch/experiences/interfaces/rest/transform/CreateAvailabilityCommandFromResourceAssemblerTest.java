@@ -12,7 +12,7 @@ import pe.edu.upc.travelmatch.experiences.domain.model.aggregates.Experience;
 import pe.edu.upc.travelmatch.experiences.domain.model.commands.CreateAvailabilityCommand;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.resources.CreateAvailabilityResource;
 
-public class CreateAvailabilityCommandFromResourceAssemblerTest {
+class CreateAvailabilityCommandFromResourceAssemblerTest {
 
   @Test
   @DisplayName(

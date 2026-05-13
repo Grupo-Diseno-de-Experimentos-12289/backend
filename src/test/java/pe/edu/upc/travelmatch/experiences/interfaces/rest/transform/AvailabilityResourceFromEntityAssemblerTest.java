@@ -14,7 +14,7 @@ import pe.edu.upc.travelmatch.experiences.domain.model.aggregates.Availability;
 import pe.edu.upc.travelmatch.experiences.domain.model.aggregates.Experience;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.resources.AvailabilityResource;
 
-public class AvailabilityResourceFromEntityAssemblerTest {
+class AvailabilityResourceFromEntityAssemblerTest {
 
   @Test
   @DisplayName("toResource should map Availability entity to AvailabilityResource (AAA)")

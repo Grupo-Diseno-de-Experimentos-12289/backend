@@ -49,7 +49,7 @@ class DestinationCommandServiceImplTest {
     when(destinationRepository.existsByName(name)).thenReturn(false);
 
     // Act
-    var result = destinationCommandService.handle(command);
+    destinationCommandService.handle(command);
 
     // Assert
     verify(destinationRepository).existsByName(name);
@@ -117,7 +117,6 @@ class DestinationCommandServiceImplTest {
 
     when(destinationRepository.existsByNameAndIdIsNot(name, command.destinationId()))
         .thenReturn(false);
-    when(destinationRepository.existsById(command.destinationId())).thenReturn(true);
     when(destinationRepository.findById(command.destinationId()))
         .thenReturn(Optional.of(existingDestination));
     when(destinationRepository.save(existingDestination)).thenReturn(existingDestination);
@@ -130,7 +129,6 @@ class DestinationCommandServiceImplTest {
     assertEquals(existingDestination, result.get());
 
     verify(destinationRepository).existsByNameAndIdIsNot(name, command.destinationId());
-    verify(destinationRepository).existsById(command.destinationId());
     verify(destinationRepository).findById(command.destinationId());
     verify(existingDestination)
         .updateInformation(
@@ -181,7 +179,7 @@ class DestinationCommandServiceImplTest {
 
     when(destinationRepository.existsByNameAndIdIsNot(name, command.destinationId()))
         .thenReturn(false);
-    when(destinationRepository.existsById(command.destinationId())).thenReturn(false);
+    when(destinationRepository.findById(command.destinationId())).thenReturn(Optional.empty());
 
     // Act + Assert
     assertThrows(
@@ -190,7 +188,7 @@ class DestinationCommandServiceImplTest {
         "Destination with id 1 does not exist");
 
     verify(destinationRepository).existsByNameAndIdIsNot(name, command.destinationId());
-    verify(destinationRepository).existsById(command.destinationId());
+    verify(destinationRepository).findById(command.destinationId());
     verifyNoMoreInteractions(destinationRepository);
   }
 

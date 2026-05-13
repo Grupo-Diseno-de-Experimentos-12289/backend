@@ -4,6 +4,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +34,7 @@ import pe.edu.upc.travelmatch.profiles.interfaces.rest.transform.UpdateReviewCom
 @RequestMapping(value = "/api/v1/reviews", produces = APPLICATION_JSON_VALUE)
 @Tag(name = "Reviews", description = "Review Management Endpoints")
 public class ReviewsController {
+  private static final Logger LOG = LoggerFactory.getLogger(ReviewsController.class);
   private final ReviewCommandService reviewCommandService;
   private final ReviewQueryService reviewQueryService;
 
@@ -49,7 +52,7 @@ public class ReviewsController {
     var createReviewCommand =
         CreateReviewCommandFromResourceAssembler.toCommandFromResource(createReviewResource);
     var reviewId = reviewCommandService.handle(createReviewCommand);
-    System.out.println("Review created with id: " + reviewId);
+    LOG.info("Review created with id: {}", reviewId);
     var getReviewByUserIdAndExperienceIdQuery =
         new GetReviewByUserIdAndExperienceIdQuery(
             new UserId(createReviewResource.userId()),

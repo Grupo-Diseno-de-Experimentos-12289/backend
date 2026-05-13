@@ -6,12 +6,16 @@ import com.stripe.model.PaymentIntent;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /** StripePaymentGatewayAdapter type. */
 @Component
 public class StripePaymentGatewayAdapter implements PaymentGatewayAdapter {
+
+  private static final Logger LOG = LoggerFactory.getLogger(StripePaymentGatewayAdapter.class);
 
   /** Constructs a new StripePaymentGatewayAdapter. */
   public StripePaymentGatewayAdapter(@Value("${stripe.secret}") String stripeKey) {
@@ -34,7 +38,7 @@ public class StripePaymentGatewayAdapter implements PaymentGatewayAdapter {
       PaymentIntent intent = PaymentIntent.create(params);
       return new StripePaymentIntentResponse(intent.getId(), intent.getClientSecret());
     } catch (StripeException e) {
-      System.out.println("Stripe error: " + e.getMessage());
+      LOG.error("Stripe error: {}", e.getMessage());
       return null;
     }
   }

@@ -3,7 +3,6 @@ package pe.edu.upc.travelmatch.profiles.application.internal.commandservices;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -41,19 +40,14 @@ class FavoriteCommandServiceImplTest {
     UserId userId = new UserId(1L);
     ExperienceId experienceId = new ExperienceId(10L);
     CreateFavoriteCommand command = new CreateFavoriteCommand(userId, experienceId);
-    Favorite favorite = new Favorite(userId, experienceId);
 
     when(externalIamService.existsUserById(userId)).thenReturn(true);
     when(externalExperienceService.existsExperienceById(experienceId)).thenReturn(true);
     when(favoriteRepository.save(any(Favorite.class)))
-        .thenAnswer(
-            invocation -> {
-              Favorite savedFavorite = invocation.getArgument(0);
-              return savedFavorite;
-            });
+        .thenAnswer(invocation -> invocation.getArgument(0));
 
     // Act
-    Long resultId = favoriteCommandService.handle(command);
+    favoriteCommandService.handle(command);
 
     // Assert
     verify(externalIamService, times(1)).existsUserById(userId);

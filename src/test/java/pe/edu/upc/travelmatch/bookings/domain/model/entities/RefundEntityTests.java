@@ -13,7 +13,7 @@ import pe.edu.upc.travelmatch.bookings.domain.model.valueobjects.RefundStatus;
 
 @Nested
 @DisplayName("Refund Entity - Status Transitions")
-public class RefundEntityTests {
+class RefundEntityTests {
   private static final Money MONEY = new Money(new BigDecimal("100.00"), "PEN");
 
   @Test

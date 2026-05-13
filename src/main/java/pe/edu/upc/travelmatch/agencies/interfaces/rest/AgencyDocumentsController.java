@@ -3,7 +3,6 @@ package pe.edu.upc.travelmatch.agencies.interfaces.rest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -58,10 +57,10 @@ public class AgencyDocumentsController {
           .handle(command)
           .map(
               document ->
-                  new ResponseEntity<>(
-                      AgencyDocumentResourceFromEntityAssembler.toResourceFromEntity(document),
-                      HttpStatus.CREATED))
-          .orElseGet(() -> ResponseEntity.badRequest().build());
+                  ResponseEntity.status(HttpStatus.CREATED)
+                      .body(
+                          AgencyDocumentResourceFromEntityAssembler.toResourceFromEntity(document)))
+          .orElseGet(() -> ResponseEntity.internalServerError().build());
     } catch (IllegalArgumentException e) {
       return ResponseEntity.badRequest().build();
     }
@@ -81,12 +80,9 @@ public class AgencyDocumentsController {
           UpdateAgencyDocumentCommandFromResourceAssembler.toCommandFromResource(resource);
       return agencyDocumentCommandService
           .handle(command)
-          .map(
-              document ->
-                  new ResponseEntity<>(
-                      AgencyDocumentResourceFromEntityAssembler.toResourceFromEntity(document),
-                      HttpStatus.OK))
-          .orElseGet(() -> ResponseEntity.notFound().build());
+          .map(AgencyDocumentResourceFromEntityAssembler::toResourceFromEntity)
+          .<ResponseEntity<AgencyDocumentResource>>map(ResponseEntity::ok)
+          .orElse(ResponseEntity.notFound().build());
     } catch (IllegalArgumentException e) {
       return ResponseEntity.badRequest().build();
     }
@@ -94,7 +90,7 @@ public class AgencyDocumentsController {
 
   /** Delete document. */
   @DeleteMapping("/{documentId}")
-  public ResponseEntity<?> deleteDocument(
+  public ResponseEntity<Void> deleteDocument(
       @PathVariable Long agencyId, @PathVariable Long documentId) {
     try {
       var command = new DeleteAgencyDocumentCommand(documentId);
@@ -113,10 +109,7 @@ public class AgencyDocumentsController {
     List<AgencyDocumentResource> documentResources =
         agencyDocumentQueryService.handle(query).stream()
             .map(AgencyDocumentResourceFromEntityAssembler::toResourceFromEntity)
-            .collect(Collectors.toList());
-    if (documentResources.isEmpty()) {
-      return ResponseEntity.ok(documentResources);
-    }
+            .toList();
     return ResponseEntity.ok(documentResources);
   }
 
@@ -127,11 +120,8 @@ public class AgencyDocumentsController {
     var query = new GetAgencyDocumentByIdQuery(documentId);
     return agencyDocumentQueryService
         .handle(query)
-        .map(
-            document ->
-                new ResponseEntity<>(
-                    AgencyDocumentResourceFromEntityAssembler.toResourceFromEntity(document),
-                    HttpStatus.OK))
+        .map(AgencyDocumentResourceFromEntityAssembler::toResourceFromEntity)
+        .map(ResponseEntity::ok)
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
 }

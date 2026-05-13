@@ -24,7 +24,7 @@ import pe.edu.upc.travelmatch.bookings.domain.model.valueobjects.TransactionId;
 import pe.edu.upc.travelmatch.bookings.domain.model.valueobjects.UserId;
 
 @DisplayName("Booking Aggregate - Unit Tests")
-public class BookingAggregateTest {
+class BookingAggregateTest {
   // ── shared fixtures ──────────────────────────────────────
   private Money totalPrice;
   private Booking booking;

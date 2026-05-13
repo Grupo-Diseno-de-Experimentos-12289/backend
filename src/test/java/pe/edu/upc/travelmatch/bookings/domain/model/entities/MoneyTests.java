@@ -13,8 +13,7 @@ import pe.edu.upc.travelmatch.bookings.domain.model.valueobjects.Money;
 
 @Nested
 @DisplayName("Money Value Object")
-public class MoneyTests {
-  private static final Money MONEY = new Money(new BigDecimal("100.00"), "PEN");
+class MoneyTests {
 
   @Test
   @DisplayName("Money() with valid amount and currency creates instance correctly")

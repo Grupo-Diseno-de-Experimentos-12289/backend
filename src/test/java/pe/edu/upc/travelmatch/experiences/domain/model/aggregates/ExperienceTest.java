@@ -13,7 +13,7 @@ import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.AgencyId;
 import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.DestinationId;
 
 @ExtendWith(MockitoExtension.class)
-public class ExperienceTest {
+class ExperienceTest {
 
   @Mock private Category category;
 

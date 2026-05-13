@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -32,7 +31,7 @@ import pe.edu.upc.travelmatch.experiences.interfaces.rest.transform.UpdateExperi
 @RestController
 @RequestMapping(value = "/api/v1/experiences")
 @CrossOrigin(
-    origins = "*",
+    origins = {"http://localhost:5173", "http://localhost:4200"},
     methods = {RequestMethod.GET, RequestMethod.POST})
 @Tag(name = "Experiences", description = "Experiences Management Endpoints")
 public class ExperiencesController {
@@ -84,9 +83,7 @@ public class ExperiencesController {
   public ResponseEntity<List<ExperienceResource>> getAllExperiences() {
     var result = queryService.handle(new GetAllExperiencesQuery());
     var resources =
-        result.stream()
-            .map(ExperienceResourceFromEntityAssembler::toResourceFromEntity)
-            .collect(Collectors.toList());
+        result.stream().map(ExperienceResourceFromEntityAssembler::toResourceFromEntity).toList();
 
     return ResponseEntity.ok(resources);
   }

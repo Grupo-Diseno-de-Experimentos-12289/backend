@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -50,14 +49,10 @@ class ReviewCommandServiceImplTest {
     when(externalIamService.existsUserById(userId)).thenReturn(true);
     when(externalExperienceService.existsExperienceById(experienceId)).thenReturn(true);
     when(reviewRepository.save(any(Review.class)))
-        .thenAnswer(
-            invocation -> {
-              Review savedReview = invocation.getArgument(0);
-              return savedReview;
-            });
+        .thenAnswer(invocation -> invocation.getArgument(0));
 
     // Act
-    Long resultId = reviewCommandService.handle(command);
+    reviewCommandService.handle(command);
 
     // Assert
     verify(externalIamService, times(1)).existsUserById(userId);

@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 // =========================================================
 @Nested
 @DisplayName("AgencyName Value Object")
-public class AgencyNameTest {
+class AgencyNameTest {
   @Test
   @DisplayName("AgencyName stores the provided name correctly")
   void constructor_validName_nameIsStored() {

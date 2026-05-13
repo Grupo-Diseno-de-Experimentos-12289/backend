@@ -36,7 +36,7 @@ public class UserCommandServiceImpl implements UserCommandService {
   @Override
   public Optional<User> handle(SignUpCommand command) {
     if (userRepository.existsByEmail(command.email())) {
-      throw new RuntimeException("Email already exists");
+      throw new IllegalArgumentException("Email already exists");
     }
 
     var roles = command.roles();
@@ -52,7 +52,7 @@ public class UserCommandServiceImpl implements UserCommandService {
                   role ->
                       roleRepository
                           .findByName(role.getName())
-                          .orElseThrow(() -> new RuntimeException("Role not found")))
+                          .orElseThrow(() -> new IllegalArgumentException("Role not found")))
               .toList();
     }
     var user =
@@ -72,9 +72,9 @@ public class UserCommandServiceImpl implements UserCommandService {
     var user =
         userRepository
             .findByEmail(command.email())
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> new IllegalArgumentException("User not found"));
     if (!hashingService.matches(command.password(), user.getPassword())) {
-      throw new RuntimeException("Invalid password");
+      throw new IllegalArgumentException("Invalid password");
     }
     var token = tokenService.generateToken(user.getEmail());
     return Optional.of(new ImmutablePair<>(user, token));

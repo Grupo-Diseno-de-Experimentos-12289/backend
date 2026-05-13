@@ -14,7 +14,7 @@ import pe.edu.upc.travelmatch.experiences.domain.model.entities.Category;
 import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.AgencyId;
 import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.DestinationId;
 
-public class ExperienceResourceFromEntityAssemblerTest {
+class ExperienceResourceFromEntityAssemblerTest {
 
   @Test
   @DisplayName("toResource should map Experience entity to ExperienceResource (AAA)")

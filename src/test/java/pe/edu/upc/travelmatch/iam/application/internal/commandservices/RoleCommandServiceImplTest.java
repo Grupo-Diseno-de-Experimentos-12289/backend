@@ -1,7 +1,6 @@
 package pe.edu.upc.travelmatch.iam.application.internal.commandservices;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

@@ -15,7 +15,7 @@ import pe.edu.upc.travelmatch.agencies.domain.model.aggregates.AgencyStaff;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("AgencyStaffResourceFromEntityAssembler")
-public class AgencyStaffResourceAssemblerTests {
+class AgencyStaffResourceAssemblerTests {
   @Mock private AgencyStaff staffEntity;
   @Mock private Agency agency;
 

@@ -3,7 +3,6 @@ package pe.edu.upc.travelmatch.agencies.interfaces.rest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -55,8 +54,8 @@ public class AgencyController {
       return agencyQueryService
           .handle(new GetAgencyByIdQuery(agencyId))
           .map(AgencyResourceFromAgencyAssembler::toResourceFromEntity)
-          .map(agencyResource -> new ResponseEntity<>(agencyResource, HttpStatus.CREATED))
-          .orElseGet(() -> ResponseEntity.badRequest().build());
+          .map(agencyResource -> ResponseEntity.status(HttpStatus.CREATED).body(agencyResource))
+          .orElseGet(() -> ResponseEntity.internalServerError().build());
     } catch (IllegalArgumentException e) {
       return ResponseEntity.badRequest().build();
     }
@@ -80,7 +79,7 @@ public class AgencyController {
     List<AgencyResource> agencyResources =
         agencyQueryService.handle(getAllAgenciesQuery).stream()
             .map(AgencyResourceFromAgencyAssembler::toResourceFromEntity)
-            .collect(Collectors.toList());
+            .toList();
     return ResponseEntity.ok(agencyResources);
   }
 
@@ -106,7 +105,7 @@ public class AgencyController {
 
   /** Delete agency. */
   @DeleteMapping("/{agencyId}")
-  public ResponseEntity<?> deleteAgency(@PathVariable Long agencyId) {
+  public ResponseEntity<Void> deleteAgency(@PathVariable Long agencyId) {
     try {
       var deleteAgencyCommand = new DeleteAgencyCommand(agencyId);
       agencyCommandService.handle(deleteAgencyCommand);

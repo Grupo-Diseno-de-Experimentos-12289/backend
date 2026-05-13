@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -33,7 +32,7 @@ import pe.edu.upc.travelmatch.agencies.interfaces.acl.AgenciesContextFacade;
 @Nested
 @ExtendWith(MockitoExtension.class)
 @DisplayName("AgencyCommandServiceImpl Tests")
-public class AgencyCommandServiceImplTest {
+class AgencyCommandServiceImplTest {
   @Mock private AgencyRepository agencyRepository;
 
   @Mock private AgenciesContextFacade agenciesContextFacade;
@@ -75,7 +74,7 @@ public class AgencyCommandServiceImplTest {
     when(agencyRepository.save(agencyCaptor.capture())).thenAnswer(inv -> inv.getArgument(0));
 
     // --- Act (Ejecutar) ---
-    Long resultId = agencyCommandService.handle(command);
+    agencyCommandService.handle(command);
 
     // --- Assert (Verificar) ---
     verify(agencyRepository, times(1)).save(any(Agency.class));

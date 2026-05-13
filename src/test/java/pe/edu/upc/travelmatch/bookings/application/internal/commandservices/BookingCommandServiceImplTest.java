@@ -9,10 +9,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyLong;
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -50,7 +46,7 @@ import pe.edu.upc.travelmatch.bookings.infrastructure.persistence.jpa.repositori
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("BookingCommandServiceImpl - Unit Tests")
-public class BookingCommandServiceImplTest {
+class BookingCommandServiceImplTest {
   // ── mocks ────────────────────────────────────────────────
   @Mock private BookingRepository bookingRepository;
   @Mock private ExternalExperienceService externalExperienceService;

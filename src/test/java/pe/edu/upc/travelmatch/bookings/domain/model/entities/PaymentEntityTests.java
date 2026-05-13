@@ -14,7 +14,7 @@ import pe.edu.upc.travelmatch.bookings.domain.model.valueobjects.TransactionId;
 
 @Nested
 @DisplayName("Payment Entity - Status Transitions")
-public class PaymentEntityTests {
+class PaymentEntityTests {
   private static final Money MONEY = new Money(new BigDecimal("100.00"), "PEN");
 
   @Test

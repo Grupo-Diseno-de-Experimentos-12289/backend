@@ -13,7 +13,7 @@ import pe.edu.upc.travelmatch.agencies.interfaces.rest.resources.UpdateAgencyDoc
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("UpdateAgencyDocumentCommandFromResourceAssembler")
-public class UpdateAgencyDocumentCommandAssemblerTests {
+class UpdateAgencyDocumentCommandAssemblerTests {
   @Test
   @DisplayName("toCommandFromResource() maps all UpdateAgencyDocumentResource fields to command")
   void toCommandFromResource_validResource_allFieldsMapped() {

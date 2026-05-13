@@ -94,7 +94,7 @@ public class BookingsController {
     try {
       var command =
           InitiateRefundCommandFromResourceAssembler.toCommandFromResource(bookingId, resource);
-      var refundId = bookingCommandService.handle(command);
+      bookingCommandService.handle(command);
       var booking = bookingQueryService.handle(new GetBookingByIdQuery(bookingId));
       if (booking.isEmpty() || booking.get().getRefund() == null) {
         return ResponseEntity.notFound().build();
@@ -124,7 +124,7 @@ public class BookingsController {
 
   /** Fail payment. */
   @PostMapping("/fail-payment")
-  public ResponseEntity<?> failPayment(@RequestBody FailPaymentResource resource) {
+  public ResponseEntity<Void> failPayment(@RequestBody FailPaymentResource resource) {
     var command = FailPaymentCommandFromResourceAssembler.toCommandFromResource(resource);
     var success = bookingCommandService.handle(command);
     return success ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();

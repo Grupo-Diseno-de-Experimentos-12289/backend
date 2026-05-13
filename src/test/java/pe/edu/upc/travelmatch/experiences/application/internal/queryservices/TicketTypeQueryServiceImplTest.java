@@ -21,7 +21,7 @@ import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetTicketTypeById
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.TicketTypeRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class TicketTypeQueryServiceImplTest {
+class TicketTypeQueryServiceImplTest {
 
   @Mock private TicketTypeRepository repository;
   @InjectMocks private TicketTypeQueryServiceImpl service;

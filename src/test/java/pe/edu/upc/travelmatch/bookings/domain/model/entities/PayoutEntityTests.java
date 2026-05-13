@@ -13,7 +13,7 @@ import pe.edu.upc.travelmatch.bookings.domain.model.valueobjects.PayoutStatus;
 
 @Nested
 @DisplayName("Payout Entity - Status Transitions")
-public class PayoutEntityTests {
+class PayoutEntityTests {
   private static final Money MONEY = new Money(new BigDecimal("100.00"), "PEN");
 
   @Test

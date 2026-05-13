@@ -11,7 +11,6 @@ public interface BookingQueryService {
   /** Handle. */
   Optional<Booking> handle(GetBookingByIdQuery query);
 
-  //    List<Booking> handle(GetBookingsByAgencyIdQuery query);
   /** Handle. */
   List<Booking> handle(GetBookingsByUserIdQuery query);
 }

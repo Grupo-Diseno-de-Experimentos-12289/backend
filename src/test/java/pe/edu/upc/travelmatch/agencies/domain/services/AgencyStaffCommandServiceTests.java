@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
@@ -33,7 +32,7 @@ import pe.edu.upc.travelmatch.agencies.infrastructure.persistence.jpa.repositori
 @Nested
 @ExtendWith(MockitoExtension.class)
 @DisplayName("AgencyStaffCommandServiceImpl")
-public class AgencyStaffCommandServiceTests {
+class AgencyStaffCommandServiceTests {
 
   @Mock private AgencyStaffRepository agencyStaffRepository;
   @Mock private AgencyRepository agencyRepository;

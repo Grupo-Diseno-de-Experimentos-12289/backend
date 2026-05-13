@@ -27,7 +27,7 @@ import pe.edu.upc.travelmatch.agencies.infrastructure.persistence.jpa.repositori
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("AgencyDocumentQueryServiceTests")
-public class AgencyDocumentQueryServiceTests {
+class AgencyDocumentQueryServiceTests {
   @Mock private AgencyDocumentRepository agencyDocumentRepository;
   @Mock private AgencyRepository agencyRepository;
 

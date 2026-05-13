@@ -19,7 +19,7 @@ import pe.edu.upc.travelmatch.bookings.infrastructure.persistence.jpa.repositori
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("BookingQueryServiceImpl Tests")
-public class BookingQueryServiceImplTest {
+class BookingQueryServiceImplTest {
   @Mock private BookingRepository bookingRepository;
 
   @InjectMocks private BookingQueryServiceImpl bookingQueryService;

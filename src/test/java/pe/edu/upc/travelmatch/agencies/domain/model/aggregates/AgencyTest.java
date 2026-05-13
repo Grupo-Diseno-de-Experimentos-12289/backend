@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import pe.edu.upc.travelmatch.agencies.domain.model.valueobjects.AgencyName;
 
-public class AgencyTest {
+class AgencyTest {
   // =========================================================
   //  AGENCY AGGREGATE DOMAIN BEHAVIOR
   // =========================================================

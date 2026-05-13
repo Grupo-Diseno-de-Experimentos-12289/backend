@@ -10,7 +10,7 @@ import pe.edu.upc.travelmatch.bookings.domain.model.commands.CreateBookingComman
 import pe.edu.upc.travelmatch.bookings.interfaces.rest.resources.CreateBookingResource;
 
 @DisplayName("CreateBookingCommandFromResourceAssembler Tests")
-public class CreateBookingCommandFromResourceAssemblerTest {
+class CreateBookingCommandFromResourceAssemblerTest {
 
   @Test
   @DisplayName("Debe mapear un Resource a Command correctamente")

@@ -15,7 +15,7 @@ import pe.edu.upc.travelmatch.agencies.domain.model.valueobjects.AgencyName;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("AgencyResourceFromAgencyAssembler")
-public class AgencyResourceAssemblerTests {
+class AgencyResourceAssemblerTests {
   @Mock private Agency agency;
 
   @Test

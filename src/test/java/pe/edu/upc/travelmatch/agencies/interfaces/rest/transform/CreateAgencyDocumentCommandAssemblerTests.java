@@ -12,7 +12,7 @@ import pe.edu.upc.travelmatch.agencies.interfaces.rest.resources.CreateAgencyDoc
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("CreateAgencyDocumentCommandFromResourceAssembler")
-public class CreateAgencyDocumentCommandAssemblerTests {
+class CreateAgencyDocumentCommandAssemblerTests {
   @Test
   @DisplayName("toCommandFromResource() maps all CreateAgencyDocumentResource fields to command")
   void toCommandFromResource_validResource_allFieldsMapped() {

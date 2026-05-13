@@ -36,7 +36,7 @@ import pe.edu.upc.travelmatch.experiences.interfaces.rest.transform.CreateAvaila
 @RequestMapping("/api/v1")
 @Tag(name = "Availabilities", description = "Availability Management Endpoints")
 @CrossOrigin(
-    origins = "*",
+    origins = {"http://localhost:5173", "http://localhost:4200"},
     methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class AvailabilitiesController {
 
@@ -74,7 +74,7 @@ public class AvailabilitiesController {
     var experience =
         experienceRepository
             .findById(experienceId)
-            .orElseThrow(() -> new RuntimeException("Experience not found"));
+            .orElseThrow(() -> new IllegalArgumentException("Experience not found"));
 
     CreateAvailabilityCommand command =
         new CreateAvailabilityCommand(
@@ -143,7 +143,7 @@ public class AvailabilitiesController {
     var availability =
         availabilityRepository
             .findById(availabilityId)
-            .orElseThrow(() -> new RuntimeException("Availability not found"));
+            .orElseThrow(() -> new IllegalArgumentException("Availability not found"));
 
     CreateAvailabilityTicketTypeCommand command =
         CreateAvailabilityTicketTypeCommandFromResourceAssembler.toCommandFromResource(

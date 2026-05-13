@@ -2,7 +2,7 @@ package pe.edu.upc.travelmatch;
 
 import com.intuit.karate.junit5.Karate;
 
-public class KarateTestRunner {
+class KarateTestRunner {
 
   @Karate.Test
   Karate testAll() {

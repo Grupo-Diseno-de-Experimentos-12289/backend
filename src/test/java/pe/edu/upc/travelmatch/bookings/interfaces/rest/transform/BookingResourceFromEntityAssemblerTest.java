@@ -17,7 +17,7 @@ import pe.edu.upc.travelmatch.bookings.domain.model.valueobjects.UserId;
 import pe.edu.upc.travelmatch.bookings.interfaces.rest.resources.BookingResource;
 
 @DisplayName("BookingResourceFromEntityAssembler Tests")
-public class BookingResourceFromEntityAssemblerTest {
+class BookingResourceFromEntityAssemblerTest {
 
   @Test
   @DisplayName("Debe mapear una Entidad Booking a un Resource correctamente")

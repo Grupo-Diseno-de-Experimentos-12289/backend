@@ -14,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import pe.edu.upc.travelmatch.experiences.domain.model.entities.TicketType;
 
 @ExtendWith(MockitoExtension.class)
-public class AvailabilityTest {
+class AvailabilityTest {
   @Mock private Experience experience;
 
   @Mock private TicketType ticketType;
