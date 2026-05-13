@@ -16,18 +16,21 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/v1/categories", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Categories", description = "Category Management Endpoints")
+/**
+ * CategoriesController.
+ */
 public class CategoriesController {
-    private final CategoryQueryService categoryQueryService;
+  private final CategoryQueryService categoryQueryService;
 
-    public CategoriesController(CategoryQueryService categoryQueryService) {
-        this.categoryQueryService = categoryQueryService;
-    }
+  public CategoriesController(CategoryQueryService categoryQueryService) {
+    this.categoryQueryService = categoryQueryService;
+  }
 
-    @GetMapping
-    public ResponseEntity<List<CategoryResource>> getAllCategories() {
-        var getAllCategories = new GetAllCategoriesQuery();
-        var categories = categoryQueryService.handle(getAllCategories);
-        var categoryResources = categories.stream().map(CategoryResourceFromEntityAssembler::toResourceFromEntity).toList();
-        return ResponseEntity.ok(categoryResources);
-    }
+  @GetMapping
+  public ResponseEntity<List<CategoryResource>> getAllCategories() {
+    var getAllCategories = new GetAllCategoriesQuery();
+    var categories = categoryQueryService.handle(getAllCategories);
+    var categoryResources = categories.stream().map(CategoryResourceFromEntityAssembler::toResourceFromEntity).toList();
+    return ResponseEntity.ok(categoryResources);
+  }
 }

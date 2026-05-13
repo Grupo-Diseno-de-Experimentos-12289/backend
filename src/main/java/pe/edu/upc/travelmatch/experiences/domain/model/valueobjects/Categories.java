@@ -1,8 +1,14 @@
 package pe.edu.upc.travelmatch.experiences.domain.model.valueobjects;
-
+/**
+ * Enum representing categories.
+ */
 public enum Categories {
-    CULTURA,
-    GASTRONOMIA,
-    NATURALEZA,
-    DEPORTE;
+  /** Cultura. */
+  CULTURA,
+  /** Gastronomía. */
+  GASTRONOMIA,
+  /** Naturaleza. */
+  NATURALEZA,
+  /** Deporte. */
+  DEPORTE
 }

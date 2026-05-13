@@ -23,125 +23,128 @@ import java.util.List;
 @RequestMapping("/api/v1")
 @Tag(name = "Availabilities", description = "Availability Management Endpoints")
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+/**
+ * AvailabilitiesController.
+ */
 public class AvailabilitiesController {
 
-    private final AvailabilityCommandService availabilityCommandService;
-    private final AvailabilityQueryService availabilityQueryService;
-    private final AvailabilityTicketTypeCommandService availabilityTicketTypeCommandService;
-    private final ExperienceRepository experienceRepository;
-    private final AvailabilityRepository availabilityRepository;
+  private final AvailabilityCommandService availabilityCommandService;
+  private final AvailabilityQueryService availabilityQueryService;
+  private final AvailabilityTicketTypeCommandService availabilityTicketTypeCommandService;
+  private final ExperienceRepository experienceRepository;
+  private final AvailabilityRepository availabilityRepository;
 
-    public AvailabilitiesController(
-            AvailabilityCommandService availabilityCommandService,
-            AvailabilityQueryService availabilityQueryService,
-            AvailabilityTicketTypeCommandService availabilityTicketTypeCommandService,
-            ExperienceRepository experienceRepository,
-            AvailabilityRepository availabilityRepository
-    ) {
-        this.availabilityCommandService = availabilityCommandService;
-        this.availabilityQueryService = availabilityQueryService;
-        this.availabilityTicketTypeCommandService = availabilityTicketTypeCommandService;
-        this.experienceRepository = experienceRepository;
-        this.availabilityRepository = availabilityRepository;
+  public AvailabilitiesController(
+    AvailabilityCommandService availabilityCommandService,
+    AvailabilityQueryService availabilityQueryService,
+    AvailabilityTicketTypeCommandService availabilityTicketTypeCommandService,
+    ExperienceRepository experienceRepository,
+    AvailabilityRepository availabilityRepository
+  ) {
+    this.availabilityCommandService = availabilityCommandService;
+    this.availabilityQueryService = availabilityQueryService;
+    this.availabilityTicketTypeCommandService = availabilityTicketTypeCommandService;
+    this.experienceRepository = experienceRepository;
+    this.availabilityRepository = availabilityRepository;
+  }
+
+  @Operation(
+    summary = "Create availability for an experience",
+    description = "Creates a new availability entry for a given experience",
+    responses = {
+        @ApiResponse(responseCode = "200", description = "Availability created successfully"),
+        @ApiResponse(responseCode = "400", description = "Invalid input data")
     }
+  )
+  @PostMapping("/experiences/{experienceId}/availabilities")
+  public ResponseEntity<Long> createAvailability(
+    @PathVariable Long experienceId,
+    @RequestBody CreateAvailabilityResource resource
+  ) {
+    var experience = experienceRepository.findById(experienceId)
+      .orElseThrow(() -> new RuntimeException("Experience not found"));
 
-    @Operation(
-            summary = "Create availability for an experience",
-            description = "Creates a new availability entry for a given experience",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Availability created successfully"),
-                    @ApiResponse(responseCode = "400", description = "Invalid input data")
-            }
-    )
-    @PostMapping("/experiences/{experienceId}/availabilities")
-    public ResponseEntity<Long> createAvailability(
-            @PathVariable Long experienceId,
-            @RequestBody CreateAvailabilityResource resource
-    ) {
-        var experience = experienceRepository.findById(experienceId)
-                .orElseThrow(() -> new RuntimeException("Experience not found"));
+    CreateAvailabilityCommand command = new CreateAvailabilityCommand(
+      experience,
+      resource.startDateTime(),
+      resource.endDateTime(),
+      resource.capacity()
+    );
+    Long id = availabilityCommandService.handle(command);
+    return ResponseEntity.ok(id);
+  }
 
-        CreateAvailabilityCommand command = new CreateAvailabilityCommand(
-                experience,
-                resource.startDateTime(),
-                resource.endDateTime(),
-                resource.capacity()
-        );
-        Long id = availabilityCommandService.handle(command);
-        return ResponseEntity.ok(id);
+  @Operation(
+    summary = "Update availability",
+    description = "Updates an existing availability by ID",
+    responses = {
+        @ApiResponse(responseCode = "204", description = "Availability updated successfully"),
+        @ApiResponse(responseCode = "400", description = "Invalid data")
     }
+  )
+  @PutMapping("/availabilities/{availabilityId}")
+  public ResponseEntity<Void> updateAvailability(
+    @PathVariable Long availabilityId,
+    @RequestBody UpdateAvailabilityResource resource
+  ) {
+    UpdateAvailabilityCommand command = new UpdateAvailabilityCommand(
+      availabilityId,
+      resource.startDateTime(),
+      resource.endDateTime(),
+      resource.capacity()
+    );
+    availabilityCommandService.updateAvailability(command);
+    return ResponseEntity.noContent().build();
+  }
 
-    @Operation(
-            summary = "Update availability",
-            description = "Updates an existing availability by ID",
-            responses = {
-                    @ApiResponse(responseCode = "204", description = "Availability updated successfully"),
-                    @ApiResponse(responseCode = "400", description = "Invalid data")
-            }
-    )
-    @PutMapping("/availabilities/{availabilityId}")
-    public ResponseEntity<Void> updateAvailability(
-            @PathVariable Long availabilityId,
-            @RequestBody UpdateAvailabilityResource resource
-    ) {
-        UpdateAvailabilityCommand command = new UpdateAvailabilityCommand(
-                availabilityId,
-                resource.startDateTime(),
-                resource.endDateTime(),
-                resource.capacity()
-        );
-        availabilityCommandService.updateAvailability(command);
-        return ResponseEntity.noContent().build();
+  @Operation(
+    summary = "Delete availability",
+    description = "Deletes a specific availability by ID",
+    responses = {
+        @ApiResponse(responseCode = "204", description = "Availability deleted successfully")
     }
+  )
+  @DeleteMapping("/availabilities/{availabilityId}")
+  public ResponseEntity<Void> deleteAvailability(@PathVariable Long availabilityId) {
+    availabilityCommandService.deleteAvailability(availabilityId);
+    return ResponseEntity.noContent().build();
+  }
 
-    @Operation(
-            summary = "Delete availability",
-            description = "Deletes a specific availability by ID",
-            responses = {
-                    @ApiResponse(responseCode = "204", description = "Availability deleted successfully")
-            }
-    )
-    @DeleteMapping("/availabilities/{availabilityId}")
-    public ResponseEntity<Void> deleteAvailability(@PathVariable Long availabilityId) {
-        availabilityCommandService.deleteAvailability(availabilityId);
-        return ResponseEntity.noContent().build();
+  @Operation(
+    summary = "Get all availabilities",
+    description = "Retrieves all availabilities in the system",
+    responses = {
+        @ApiResponse(responseCode = "200", description = "List of availabilities returned")
     }
+  )
+  @GetMapping("/availabilities")
+  public ResponseEntity<List<AvailabilityResource>> getAllAvailabilities() {
+    List<Availability> list = availabilityQueryService.getAllAvailabilities();
+    var result = list.stream()
+      .map(AvailabilityResourceFromEntityAssembler::toResourceFromEntity)
+      .toList();
+    return ResponseEntity.ok(result);
+  }
 
-    @Operation(
-            summary = "Get all availabilities",
-            description = "Retrieves all availabilities in the system",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "List of availabilities returned")
-            }
-    )
-    @GetMapping("/availabilities")
-    public ResponseEntity<List<AvailabilityResource>> getAllAvailabilities() {
-        List<Availability> list = availabilityQueryService.getAllAvailabilities();
-        var result = list.stream()
-                .map(AvailabilityResourceFromEntityAssembler::toResourceFromEntity)
-                .toList();
-        return ResponseEntity.ok(result);
+  @Operation(
+    summary = "Create a ticket type for an availability",
+    description = "Registers a new ticket type under a specific availability",
+    responses = {
+        @ApiResponse(responseCode = "200", description = "Ticket type created successfully")
     }
+  )
+  @PostMapping("/availabilities/{availabilityId}/ticket-types")
+  public ResponseEntity<Long> createTicketTypeForAvailability(
+    @PathVariable Long availabilityId,
+    @RequestBody CreateAvailabilityTicketTypeResource resource
+  ) {
+    var availability = availabilityRepository.findById(availabilityId)
+      .orElseThrow(() -> new RuntimeException("Availability not found"));
 
-    @Operation(
-            summary = "Create a ticket type for an availability",
-            description = "Registers a new ticket type under a specific availability",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Ticket type created successfully")
-            }
-    )
-    @PostMapping("/availabilities/{availabilityId}/ticket-types")
-    public ResponseEntity<Long> createTicketTypeForAvailability(
-            @PathVariable Long availabilityId,
-            @RequestBody CreateAvailabilityTicketTypeResource resource
-    ) {
-        var availability = availabilityRepository.findById(availabilityId)
-                .orElseThrow(() -> new RuntimeException("Availability not found"));
+    CreateAvailabilityTicketTypeCommand command =
+      CreateAvailabilityTicketTypeCommandFromResourceAssembler.toCommandFromResource(resource, availability);
 
-        CreateAvailabilityTicketTypeCommand command =
-                CreateAvailabilityTicketTypeCommandFromResourceAssembler.toCommandFromResource(resource, availability);
-
-        Long id = availabilityTicketTypeCommandService.handle(command);
-        return ResponseEntity.ok(id);
-    }
+    Long id = availabilityTicketTypeCommandService.handle(command);
+    return ResponseEntity.ok(id);
+  }
 }

@@ -1,6 +1,10 @@
 package pe.edu.upc.travelmatch.experiences.domain.model.valueobjects;
-
+/**
+ * Enum representing ticket types.
+ */
 public enum TicketTypes {
-    TICKET_GENERAL,
-    TICKET_VIP
+  /** Ticket General. */
+  TICKET_GENERAL,
+  /** Ticket VIP. */
+  TICKET_VIP
 }

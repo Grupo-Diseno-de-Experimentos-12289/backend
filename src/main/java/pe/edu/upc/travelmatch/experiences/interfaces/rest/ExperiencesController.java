@@ -27,111 +27,114 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/api/v1/experiences")
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST})
 @Tag(name = "Experiences", description = "Experiences Management Endpoints")
+/**
+ * ExperiencesController.
+ */
 public class ExperiencesController {
 
-    private final ExperienceCommandService commandService;
-    private final ExperienceQueryService queryService;
+  private final ExperienceCommandService commandService;
+  private final ExperienceQueryService queryService;
 
-    public ExperiencesController(
-            ExperienceCommandService commandService,
-            ExperienceQueryService queryService
-    ) {
-        this.commandService = commandService;
-        this.queryService = queryService;
+  public ExperiencesController(
+    ExperienceCommandService commandService,
+    ExperienceQueryService queryService
+  ) {
+    this.commandService = commandService;
+    this.queryService = queryService;
+  }
+
+  @Operation(
+    summary = "Create a new experience",
+    description = "Creates a new experience linked to a specific agency",
+    responses = {
+        @ApiResponse(responseCode = "200", description = "Experience created successfully"),
+        @ApiResponse(responseCode = "400", description = "Invalid request data")
+    }
+  )
+  @PostMapping("/{agencyId}/experiences")
+  public ResponseEntity<ExperienceResource> createExperience(
+    @PathVariable Long agencyId,
+    @RequestBody CreateExperienceResource resource
+  ) {
+    var command = CreateExperienceCommandFromResourceAssembler
+      .toCommandFromResource(resource, agencyId);
+
+    var id = commandService.handle(command);
+    var getExperienceByIdQuery = new GetExperienceByIdQuery(id);
+    var experience = queryService.handle(getExperienceByIdQuery);
+    if(experience.isEmpty()) {
+    return ResponseEntity.notFound().build();
     }
 
-    @Operation(
-            summary = "Create a new experience",
-            description = "Creates a new experience linked to a specific agency",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Experience created successfully"),
-                    @ApiResponse(responseCode = "400", description = "Invalid request data")
-            }
-    )
-    @PostMapping("/{agencyId}/experiences")
-    public ResponseEntity<ExperienceResource> createExperience(
-            @PathVariable Long agencyId,
-            @RequestBody CreateExperienceResource resource
-    ) {
-        var command = CreateExperienceCommandFromResourceAssembler
-                .toCommandFromResource(resource, agencyId);
+    var experienceResource = ExperienceResourceFromEntityAssembler.toResourceFromEntity(experience.get());
+    return new ResponseEntity<>(experienceResource, HttpStatus.CREATED);
+  }
 
-        var id = commandService.handle(command);
-        var getExperienceByIdQuery = new GetExperienceByIdQuery(id);
-        var experience = queryService.handle(getExperienceByIdQuery);
-        if(experience.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        var experienceResource = ExperienceResourceFromEntityAssembler.toResourceFromEntity(experience.get());
-        return new ResponseEntity<>(experienceResource, HttpStatus.CREATED);
+  @Operation(
+    summary = "Get all experiences",
+    description = "Retrieves all experiences stored in the system",
+    responses = {
+        @ApiResponse(responseCode = "200", description = "List of experiences returned")
     }
+  )
+  @GetMapping
+  public ResponseEntity<List<ExperienceResource>> getAllExperiences() {
+    var result = queryService.handle(new GetAllExperiencesQuery());
+    var resources = result.stream()
+      .map(ExperienceResourceFromEntityAssembler::toResourceFromEntity)
+      .collect(Collectors.toList());
 
-    @Operation(
-            summary = "Get all experiences",
-            description = "Retrieves all experiences stored in the system",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "List of experiences returned")
-            }
-    )
-    @GetMapping
-    public ResponseEntity<List<ExperienceResource>> getAllExperiences() {
-        var result = queryService.handle(new GetAllExperiencesQuery());
-        var resources = result.stream()
-                .map(ExperienceResourceFromEntityAssembler::toResourceFromEntity)
-                .collect(Collectors.toList());
+    return ResponseEntity.ok(resources);
+  }
 
-        return ResponseEntity.ok(resources);
+  @Operation(
+    summary = "Update an experience",
+    description = "Updates an existing experience by ID",
+    responses = {
+        @ApiResponse(responseCode = "200", description = "Experience updated successfully"),
+        @ApiResponse(responseCode = "404", description = "Experience not found")
     }
+  )
+  @PutMapping("/{experienceId}")
+  public ResponseEntity<ExperienceResource> updateExperience(
+    @PathVariable Long experienceId,
+    @RequestBody UpdateExperienceResource resource
+  ) {
+    var command = UpdateExperienceCommandFromResourceAssembler.toCommandFromResource(resource, experienceId);
+    commandService.updateExperience(command);
 
-    @Operation(
-            summary = "Update an experience",
-            description = "Updates an existing experience by ID",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Experience updated successfully"),
-                    @ApiResponse(responseCode = "404", description = "Experience not found")
-            }
-    )
-    @PutMapping("/{experienceId}")
-    public ResponseEntity<ExperienceResource> updateExperience(
-            @PathVariable Long experienceId,
-            @RequestBody UpdateExperienceResource resource
-    ) {
-        var command = UpdateExperienceCommandFromResourceAssembler.toCommandFromResource(resource, experienceId);
-        commandService.updateExperience(command);
+    return queryService.handle(new GetExperienceByIdQuery(experienceId))
+      .map(ExperienceResourceFromEntityAssembler::toResourceFromEntity)
+      .map(ResponseEntity::ok)
+      .orElseGet(() -> ResponseEntity.notFound().build());
+  }
 
-        return queryService.handle(new GetExperienceByIdQuery(experienceId))
-                .map(ExperienceResourceFromEntityAssembler::toResourceFromEntity)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+  @Operation(
+    summary = "Delete an experience",
+    description = "Logically deletes an experience by setting deletedAt",
+    responses = {
+        @ApiResponse(responseCode = "204", description = "Experience deleted successfully")
     }
-
-    @Operation(
-            summary = "Delete an experience",
-            description = "Logically deletes an experience by setting deletedAt",
-            responses = {
-                    @ApiResponse(responseCode = "204", description = "Experience deleted successfully")
-            }
-    )
-    @DeleteMapping("/{experienceId}")
-    public ResponseEntity<Void> deleteExperience(@PathVariable Long experienceId) {
-        commandService.deleteExperience(experienceId);
-        return ResponseEntity.noContent().build();
+  )
+  @DeleteMapping("/{experienceId}")
+  public ResponseEntity<Void> deleteExperience(@PathVariable Long experienceId) {
+    commandService.deleteExperience(experienceId);
+    return ResponseEntity.noContent().build();
+  }
+  @Operation(
+    summary = "Get experience by ID",
+    description = "Retrieves a single experience by its ID",
+    responses = {
+        @ApiResponse(responseCode = "200", description = "Experience found"),
+        @ApiResponse(responseCode = "404", description = "Experience not found")
     }
-    @Operation(
-            summary = "Get experience by ID",
-            description = "Retrieves a single experience by its ID",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Experience found"),
-                    @ApiResponse(responseCode = "404", description = "Experience not found")
-            }
-    )
-    @GetMapping("/{experienceId}")
-    public ResponseEntity<ExperienceResource> getExperienceById(@PathVariable Long experienceId) {
-        var result = queryService.handle(new GetExperienceByIdQuery(experienceId))
-                .map(ExperienceResourceFromEntityAssembler::toResourceFromEntity);
+  )
+  @GetMapping("/{experienceId}")
+  public ResponseEntity<ExperienceResource> getExperienceById(@PathVariable Long experienceId) {
+    var result = queryService.handle(new GetExperienceByIdQuery(experienceId))
+      .map(ExperienceResourceFromEntityAssembler::toResourceFromEntity);
 
-        return result.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
+    return result.map(ResponseEntity::ok)
+      .orElseGet(() -> ResponseEntity.notFound().build());
+  }
 }
