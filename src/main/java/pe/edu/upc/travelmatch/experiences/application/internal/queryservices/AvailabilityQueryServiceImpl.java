@@ -8,9 +8,7 @@ import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetAvailabilityBy
 import pe.edu.upc.travelmatch.experiences.domain.services.AvailabilityQueryService;
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.AvailabilityRepository;
 
-/**
- * Service implementation for managing Availability queries.
- */
+/** Service implementation for managing Availability queries. */
 @Service
 public class AvailabilityQueryServiceImpl implements AvailabilityQueryService {
 

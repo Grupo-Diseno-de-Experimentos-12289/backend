@@ -1,8 +1,10 @@
 package pe.edu.upc.travelmatch.bookings;
+
 import com.intuit.karate.junit5.Karate;
-public class BookingsRunner {
-    @Karate.Test
-    Karate testBookings() {
-        return Karate.run("bookings").relativeTo(getClass());
-    }
+
+class BookingsRunner {
+  @Karate.Test
+  Karate testBookings() {
+    return Karate.run("bookings").relativeTo(getClass());
+  }
 }

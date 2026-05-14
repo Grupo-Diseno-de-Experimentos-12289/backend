@@ -1,10 +1,10 @@
 package pe.edu.upc.travelmatch.agencies.interfaces.rest.resources;
 
+/** AgencyResource value carrier. */
 public record AgencyResource(
-        Long id,
-        String name,
-        String description,
-        String ruc,
-        String contactEmail,
-        String contactPhone
-) {}
+    Long id,
+    String name,
+    String description,
+    String ruc,
+    String contactEmail,
+    String contactPhone) {}

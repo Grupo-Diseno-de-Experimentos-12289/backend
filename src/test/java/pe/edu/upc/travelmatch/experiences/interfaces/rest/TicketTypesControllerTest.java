@@ -1,5 +1,11 @@
 package pe.edu.upc.travelmatch.experiences.interfaces.rest;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,51 +19,43 @@ import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.TicketTypes;
 import pe.edu.upc.travelmatch.experiences.domain.services.TicketTypeQueryService;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.resources.TicketTypeResource;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-
 @ExtendWith(MockitoExtension.class)
 class TicketTypesControllerTest {
 
-    @Mock
-    private TicketTypeQueryService ticketTypeQueryService;
+  @Mock private TicketTypeQueryService ticketTypeQueryService;
 
-    @InjectMocks
-    private TicketTypesController ticketTypesController;
+  @InjectMocks private TicketTypesController ticketTypesController;
 
-    @Test
-    void testGetAllTicketTypes_Ok() {
-        // Arrange
-        TicketType ticketType = new TicketType(TicketTypes.TICKET_GENERAL);
-        List<TicketType> ticketTypesList = List.of(ticketType);
+  @Test
+  void testGetAllTicketTypes_Ok() {
+    // Arrange
+    TicketType ticketType = new TicketType(TicketTypes.TICKET_GENERAL);
+    List<TicketType> ticketTypesList = List.of(ticketType);
 
-        when(ticketTypeQueryService.handle(any(GetAllTicketTypesQuery.class))).thenReturn(ticketTypesList);
+    when(ticketTypeQueryService.handle(any(GetAllTicketTypesQuery.class)))
+        .thenReturn(ticketTypesList);
 
-        // Act
-        ResponseEntity<List<TicketTypeResource>> response = ticketTypesController.getAllTicketTypes();
+    // Act
+    ResponseEntity<List<TicketTypeResource>> response = ticketTypesController.getAllTicketTypes();
 
-        // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(1, response.getBody().size());
-        assertEquals("TICKET_GENERAL", response.getBody().get(0).name());
-    }
+    // Assert
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertNotNull(response.getBody());
+    assertEquals(1, response.getBody().size());
+    assertEquals("TICKET_GENERAL", response.getBody().get(0).name());
+  }
 
-    @Test
-    void testGetAllTicketTypes_EmptyList() {
-        // Arrange
-        when(ticketTypeQueryService.handle(any(GetAllTicketTypesQuery.class))).thenReturn(List.of());
+  @Test
+  void testGetAllTicketTypes_EmptyList() {
+    // Arrange
+    when(ticketTypeQueryService.handle(any(GetAllTicketTypesQuery.class))).thenReturn(List.of());
 
-        // Act
-        ResponseEntity<List<TicketTypeResource>> response = ticketTypesController.getAllTicketTypes();
+    // Act
+    ResponseEntity<List<TicketTypeResource>> response = ticketTypesController.getAllTicketTypes();
 
-        // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(0, response.getBody().size());
-    }
+    // Assert
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertNotNull(response.getBody());
+    assertEquals(0, response.getBody().size());
+  }
 }

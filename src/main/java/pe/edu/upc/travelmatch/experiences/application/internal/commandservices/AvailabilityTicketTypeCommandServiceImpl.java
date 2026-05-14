@@ -6,9 +6,7 @@ import pe.edu.upc.travelmatch.experiences.domain.services.AvailabilityTicketType
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.AvailabilityRepository;
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.TicketTypeRepository;
 
-/**
- * Service implementation for managing AvailabilityTicketType commands.
- */
+/** Service implementation for managing AvailabilityTicketType commands. */
 @Service
 public class AvailabilityTicketTypeCommandServiceImpl
     implements AvailabilityTicketTypeCommandService {
@@ -19,25 +17,32 @@ public class AvailabilityTicketTypeCommandServiceImpl
   /**
    * Constructs an AvailabilityTicketTypeCommandServiceImpl.
    *
-   * @param ticketTypeRepository   the ticket type repository
+   * @param ticketTypeRepository the ticket type repository
    * @param availabilityRepository the availability repository
    */
   public AvailabilityTicketTypeCommandServiceImpl(
-      TicketTypeRepository ticketTypeRepository,
-      AvailabilityRepository availabilityRepository) {
+      TicketTypeRepository ticketTypeRepository, AvailabilityRepository availabilityRepository) {
     this.ticketTypeRepository = ticketTypeRepository;
     this.availabilityRepository = availabilityRepository;
   }
 
   @Override
   public Long handle(CreateAvailabilityTicketTypeCommand command) {
-    var availability = availabilityRepository.findById(command.availabilityId())
-        .orElseThrow(() -> new IllegalArgumentException(
-            "Availability with ID " + command.availabilityId() + " does not exist."));
+    var availability =
+        availabilityRepository
+            .findById(command.availabilityId())
+            .orElseThrow(
+                () ->
+                    new IllegalArgumentException(
+                        "Availability with ID " + command.availabilityId() + " does not exist."));
 
-    var ticketType = ticketTypeRepository.findById(command.ticketTypeId())
-        .orElseThrow(() -> new IllegalArgumentException(
-            "TicketType not found with ID: " + command.ticketTypeId()));
+    var ticketType =
+        ticketTypeRepository
+            .findById(command.ticketTypeId())
+            .orElseThrow(
+                () ->
+                    new IllegalArgumentException(
+                        "TicketType not found with ID: " + command.ticketTypeId()));
 
     availability.addTicketType(ticketType, command.price(), command.stock());
     availabilityRepository.save(availability);

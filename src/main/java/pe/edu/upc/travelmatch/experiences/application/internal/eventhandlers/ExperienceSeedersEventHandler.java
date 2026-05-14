@@ -11,9 +11,7 @@ import pe.edu.upc.travelmatch.experiences.domain.model.commands.SeedTicketTypesC
 import pe.edu.upc.travelmatch.experiences.domain.services.CategoryCommandService;
 import pe.edu.upc.travelmatch.experiences.domain.services.TicketTypeCommandService;
 
-/**
- * Event handler for executing experience seeders upon application ready.
- */
+/** Event handler for executing experience seeders upon application ready. */
 @Service
 public class ExperienceSeedersEventHandler {
 
@@ -24,7 +22,7 @@ public class ExperienceSeedersEventHandler {
   /**
    * Constructs an ExperienceSeedersEventHandler.
    *
-   * @param categoryCommandService  the category command service
+   * @param categoryCommandService the category command service
    * @param ticketTypeCommandService the ticket type command service
    */
   public ExperienceSeedersEventHandler(
@@ -42,8 +40,10 @@ public class ExperienceSeedersEventHandler {
   @EventListener
   public void on(final ApplicationReadyEvent event) {
     var applicationName = event.getApplicationContext().getId();
-    LOGGER.info("Starting to verify seeding of categories and ticket types for {} at {}",
-        applicationName, getCurrentTimestamp());
+    LOGGER.info(
+        "Starting to verify seeding of categories and ticket types for {} at {}",
+        applicationName,
+        getCurrentTimestamp());
 
     try {
       LOGGER.info("Seeding categories...");
@@ -59,8 +59,8 @@ public class ExperienceSeedersEventHandler {
       LOGGER.error("Error while seeding categories or ticket types: {}", e.getMessage());
     }
 
-    LOGGER.info("Seeding verification finished for {} at {}",
-        applicationName, getCurrentTimestamp());
+    LOGGER.info(
+        "Seeding verification finished for {} at {}", applicationName, getCurrentTimestamp());
   }
 
   private Timestamp getCurrentTimestamp() {

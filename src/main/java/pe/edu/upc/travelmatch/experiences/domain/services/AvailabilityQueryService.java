@@ -1,11 +1,11 @@
 package pe.edu.upc.travelmatch.experiences.domain.services;
+
 import java.util.List;
 import java.util.Optional;
 import pe.edu.upc.travelmatch.experiences.domain.model.aggregates.Availability;
 import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetAvailabilityByIdQuery;
-/**
- * Service to manage Availability queries.
- */
+
+/** Service to manage Availability queries. */
 public interface AvailabilityQueryService {
   /**
    * Retrieves all non-deleted availabilities.
@@ -13,6 +13,7 @@ public interface AvailabilityQueryService {
    * @return the list of availabilities
    */
   List<Availability> getAllAvailabilities();
+
   /**
    * Handles the get availability by id query.
    *

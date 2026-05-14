@@ -1,5 +1,4 @@
 package pe.edu.upc.travelmatch.bookings.domain.model.queries;
 
-public record GetBookingByIdQuery(
-        Long bookingId
-) { }
+/** GetBookingByIdQuery value carrier. */
+public record GetBookingByIdQuery(Long bookingId) {}

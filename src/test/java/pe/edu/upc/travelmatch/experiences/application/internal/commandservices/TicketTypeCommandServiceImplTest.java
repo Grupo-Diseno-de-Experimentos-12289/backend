@@ -1,5 +1,13 @@
 package pe.edu.upc.travelmatch.experiences.application.internal.commandservices;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -8,45 +16,42 @@ import pe.edu.upc.travelmatch.experiences.domain.model.entities.TicketType;
 import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.TicketTypes;
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.TicketTypeRepository;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
-
 class TicketTypeCommandServiceImplTest {
 
-    private TicketTypeRepository ticketTypeRepository;
-    private TicketTypeCommandServiceImpl ticketTypeCommandService;
+  private TicketTypeRepository ticketTypeRepository;
+  private TicketTypeCommandServiceImpl ticketTypeCommandService;
 
-    @BeforeEach
-    void setUp() {
-        ticketTypeRepository = mock(TicketTypeRepository.class);
-        ticketTypeCommandService = new TicketTypeCommandServiceImpl(ticketTypeRepository);
-    }
+  @BeforeEach
+  void setUp() {
+    ticketTypeRepository = mock(TicketTypeRepository.class);
+    ticketTypeCommandService = new TicketTypeCommandServiceImpl(ticketTypeRepository);
+  }
 
-    @Test
-    void testHandleSeedTicketTypesCommand_CreatesMissingTicketTypes() {
-        // Arrange
-        when(ticketTypeRepository.existsByName(any())).thenReturn(false);
+  @Test
+  void testHandleSeedTicketTypesCommand_CreatesMissingTicketTypes() {
+    // Arrange
+    when(ticketTypeRepository.existsByName(any())).thenReturn(false);
 
-        // Act
-        ticketTypeCommandService.handle(new SeedTicketTypesCommand());
+    // Act
+    ticketTypeCommandService.handle(new SeedTicketTypesCommand());
 
-        // Assert
-        ArgumentCaptor<TicketType> captor = ArgumentCaptor.forClass(TicketType.class);
-        verify(ticketTypeRepository, times(TicketTypes.values().length)).save(captor.capture());
+    // Assert
+    ArgumentCaptor<TicketType> captor = ArgumentCaptor.forClass(TicketType.class);
+    verify(ticketTypeRepository, times(TicketTypes.values().length)).save(captor.capture());
 
-        var savedTypes = captor.getAllValues();
-        assertEquals(TicketTypes.values().length, savedTypes.size());
-    }
+    var savedTypes = captor.getAllValues();
+    assertEquals(TicketTypes.values().length, savedTypes.size());
+  }
 
-    @Test
-    void testHandleSeedTicketTypesCommand_SkipsExistingTicketTypes() {
-        // Arrange
-        when(ticketTypeRepository.existsByName(any())).thenReturn(true);
+  @Test
+  void testHandleSeedTicketTypesCommand_SkipsExistingTicketTypes() {
+    // Arrange
+    when(ticketTypeRepository.existsByName(any())).thenReturn(true);
 
-        // Act
-        ticketTypeCommandService.handle(new SeedTicketTypesCommand());
+    // Act
+    ticketTypeCommandService.handle(new SeedTicketTypesCommand());
 
-        // Assert
-        verify(ticketTypeRepository, never()).save(any(TicketType.class));
-    }
+    // Assert
+    verify(ticketTypeRepository, never()).save(any(TicketType.class));
+  }
 }

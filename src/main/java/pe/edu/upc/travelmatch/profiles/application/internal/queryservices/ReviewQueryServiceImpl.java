@@ -1,5 +1,7 @@
 package pe.edu.upc.travelmatch.profiles.application.internal.queryservices;
 
+import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.travelmatch.profiles.domain.model.aggregates.Review;
 import pe.edu.upc.travelmatch.profiles.domain.model.queries.GetReviewByUserIdAndExperienceIdQuery;
@@ -8,30 +10,29 @@ import pe.edu.upc.travelmatch.profiles.domain.model.queries.GetReviewsByUserIdQu
 import pe.edu.upc.travelmatch.profiles.domain.services.ReviewQueryService;
 import pe.edu.upc.travelmatch.profiles.infrastructure.persistence.jpa.repositories.ReviewRepository;
 
-import java.util.List;
-import java.util.Optional;
-
+/** ReviewQueryServiceImpl type. */
 @Service
 public class ReviewQueryServiceImpl implements ReviewQueryService {
 
-    private final ReviewRepository reviewRepository;
+  private final ReviewRepository reviewRepository;
 
-    public ReviewQueryServiceImpl(ReviewRepository reviewRepository) {
-        this.reviewRepository = reviewRepository;
-    }
+  /** Constructs a new ReviewQueryServiceImpl. */
+  public ReviewQueryServiceImpl(ReviewRepository reviewRepository) {
+    this.reviewRepository = reviewRepository;
+  }
 
-    @Override
-    public List<Review> handle(GetReviewsByUserIdQuery query) {
-        return this.reviewRepository.findAllByUserId(query.userId());
-    }
+  @Override
+  public List<Review> handle(GetReviewsByUserIdQuery query) {
+    return this.reviewRepository.findAllByUserId(query.userId());
+  }
 
-    @Override
-    public List<Review> handle(GetReviewsByExperienceIdQuery query) {
-        return this.reviewRepository.findAllByExperienceId(query.experienceId());
-    }
+  @Override
+  public List<Review> handle(GetReviewsByExperienceIdQuery query) {
+    return this.reviewRepository.findAllByExperienceId(query.experienceId());
+  }
 
-    @Override
-    public Optional<Review> handle(GetReviewByUserIdAndExperienceIdQuery query) {
-        return this.reviewRepository.findByUserIdAndExperienceId(query.userId(), query.experienceId());
-    }
+  @Override
+  public Optional<Review> handle(GetReviewByUserIdAndExperienceIdQuery query) {
+    return this.reviewRepository.findByUserIdAndExperienceId(query.userId(), query.experienceId());
+  }
 }

@@ -1,48 +1,59 @@
 package pe.edu.upc.travelmatch.agencies.domain.model.aggregates;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.domain.AbstractAggregateRoot;
 
+/** AgencyDocument type. */
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 public class AgencyDocument extends AbstractAggregateRoot<AgencyDocument> {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "agency_id", nullable = false)
-    private Agency agency;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "agency_id", nullable = false)
+  private Agency agency;
 
-    @NotBlank
-    @Column(nullable = false)
-    private String documentType;
+  @NotBlank
+  @Column(nullable = false)
+  private String documentType;
 
-    @NotBlank
-    @Column(nullable = false)
-    private String documentUrl;
+  @NotBlank
+  @Column(nullable = false)
+  private String documentUrl;
 
-    @Column(nullable = true)
-    private String description;
+  @Column(nullable = true)
+  private String description;
 
-    public AgencyDocument(Agency agency, String documentType, String documentUrl, String description) {
-        this.agency = agency;
-        this.documentType = documentType;
-        this.documentUrl = documentUrl;
-        this.description = description;
-    }
+  /** Constructs a new AgencyDocument. */
+  public AgencyDocument(
+      Agency agency, String documentType, String documentUrl, String description) {
+    this.agency = agency;
+    this.documentType = documentType;
+    this.documentUrl = documentUrl;
+    this.description = description;
+  }
 
-    public AgencyDocument update(String documentType, String documentUrl, String description) {
-        this.documentType = documentType;
-        this.documentUrl = documentUrl;
-        this.description = description;
-        return this;
-    }
+  /** Update. */
+  public AgencyDocument update(String documentType, String documentUrl, String description) {
+    this.documentType = documentType;
+    this.documentUrl = documentUrl;
+    this.description = description;
+    return this;
+  }
 }

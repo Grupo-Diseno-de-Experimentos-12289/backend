@@ -4,12 +4,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import pe.edu.upc.travelmatch.agencies.domain.model.aggregates.Agency;
 
-import java.util.Optional;
-
+/** AgencyRepository contract. */
 @Repository
 public interface AgencyRepository extends JpaRepository<Agency, Long> {
-    boolean existsByRuc(String ruc);
-    boolean existsByContactEmail(String contactEmail);
-    boolean existsByContactEmailAndIdIsNot(String contactEmail, Long currentAgencyId);
-    boolean existsByUserId(Long userId);
+  /** Exists by ruc. */
+  boolean existsByRuc(String ruc);
+
+  /** Exists by contact email. */
+  boolean existsByContactEmail(String contactEmail);
+
+  /** Exists by contact email and id is not. */
+  boolean existsByContactEmailAndIdIsNot(String contactEmail, Long currentAgencyId);
+
+  /** Exists by user id. */
+  boolean existsByUserId(Long userId);
 }

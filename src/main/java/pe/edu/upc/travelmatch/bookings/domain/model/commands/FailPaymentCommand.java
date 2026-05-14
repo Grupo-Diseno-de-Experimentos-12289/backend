@@ -1,6 +1,4 @@
 package pe.edu.upc.travelmatch.bookings.domain.model.commands;
 
-public record FailPaymentCommand(
-        Long bookingId,
-        String reason
-) { }
+/** FailPaymentCommand value carrier. */
+public record FailPaymentCommand(Long bookingId, String reason) {}

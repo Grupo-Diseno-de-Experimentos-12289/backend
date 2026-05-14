@@ -9,9 +9,7 @@ import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetExperienceById
 import pe.edu.upc.travelmatch.experiences.domain.services.ExperienceMediaQueryService;
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.ExperienceMediaRepository;
 
-/**
- * Service implementation for managing ExperienceMedia queries.
- */
+/** Service implementation for managing ExperienceMedia queries. */
 @Service
 public class ExperienceMediaQueryServiceImpl implements ExperienceMediaQueryService {
 

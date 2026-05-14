@@ -1,12 +1,12 @@
 package pe.edu.upc.travelmatch.experiences.domain.services;
+
 import java.util.List;
 import java.util.Optional;
 import pe.edu.upc.travelmatch.experiences.domain.model.entities.TicketType;
 import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetAllTicketTypesQuery;
 import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetTicketTypeByIdQuery;
-/**
- * Service to manage TicketType queries.
- */
+
+/** Service to manage TicketType queries. */
 public interface TicketTypeQueryService {
   /**
    * Retrieves all the ticket types.
@@ -15,6 +15,7 @@ public interface TicketTypeQueryService {
    * @return the list of ticket types
    */
   List<TicketType> handle(GetAllTicketTypesQuery query);
+
   /**
    * Handles the GetTicketTypeByIdQuery.
    *

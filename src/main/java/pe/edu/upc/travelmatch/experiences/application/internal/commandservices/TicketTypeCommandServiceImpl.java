@@ -8,9 +8,7 @@ import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.TicketTypes;
 import pe.edu.upc.travelmatch.experiences.domain.services.TicketTypeCommandService;
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.TicketTypeRepository;
 
-/**
- * Service implementation for managing TicketType commands.
- */
+/** Service implementation for managing TicketType commands. */
 @Service
 public class TicketTypeCommandServiceImpl implements TicketTypeCommandService {
 
@@ -27,10 +25,12 @@ public class TicketTypeCommandServiceImpl implements TicketTypeCommandService {
 
   @Override
   public void handle(SeedTicketTypesCommand command) {
-    Arrays.stream(TicketTypes.values()).forEach(ticketType -> {
-      if (!ticketTypeRepository.existsByName(ticketType)) {
-        ticketTypeRepository.save(new TicketType(TicketTypes.valueOf(ticketType.name())));
-      }
-    });
+    Arrays.stream(TicketTypes.values())
+        .forEach(
+            ticketType -> {
+              if (!ticketTypeRepository.existsByName(ticketType)) {
+                ticketTypeRepository.save(new TicketType(TicketTypes.valueOf(ticketType.name())));
+              }
+            });
   }
 }
