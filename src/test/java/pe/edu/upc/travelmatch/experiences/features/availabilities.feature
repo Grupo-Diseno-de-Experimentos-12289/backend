@@ -39,7 +39,7 @@ Feature: Gestión de Availabilities (Experiences BC)
     And request { "experienceId": #(sharedExpId), "startDateTime": "2027-06-01T09:00:00", "endDateTime": "2027-06-01T12:00:00", "capacity": 30 }
     When method post
     Then status 200
-    And match response == '#number'
+    And match response == '#regex \\d+'
     * def availId = response
 
   Scenario: PUT - Actualizar Availability exitosamente (204)
