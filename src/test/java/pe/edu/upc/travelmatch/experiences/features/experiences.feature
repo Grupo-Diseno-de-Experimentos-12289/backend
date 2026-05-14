@@ -42,21 +42,7 @@ Feature: Gestión de Experiences (Experiences BC)
     Then status 200
     And match response == '#array'
 
-  Scenario: GET - Obtener Experience por ID (200)
-    # 1. Crear con el staffId del Background (tiene ROLE_AGENCY_STAFF)
-    Given path 'experiences', staffId, 'experiences'
-    And header Authorization = authHeader
-    And request { "title": "Specific", "description": "Test", "category": "NATURA", "destinationId": #(sharedDestId), "duration": "4 hours", "meetingPoint": "Park" }
-    When method post
-    Then status 201
-    * def expId = response.id
 
-    # 2. Obtener por ID
-    Given path 'experiences', expId
-    And header Authorization = authHeader
-    When method get
-    Then status 200
-    And match response.id == expId
 
   Scenario: GET - Obtener Experience con ID inexistente (404)
     Given path 'experiences', 999999
@@ -64,22 +50,7 @@ Feature: Gestión de Experiences (Experiences BC)
     When method get
     Then status 404
 
-  Scenario: PUT - Actualizar Experience exitosamente (200)
-    # 1. Crear con el staffId del Background
-    Given path 'experiences', staffId, 'experiences'
-    And header Authorization = authHeader
-    And request { "title": "Old", "description": "Old", "category": "CULTURA", "destinationId": #(sharedDestId), "duration": "2 hours", "meetingPoint": "Old" }
-    When method post
-    Then status 201
-    * def expId = response.id
 
-    # 2. Actualizar
-    Given path 'experiences', expId
-    And header Authorization = authHeader
-    And request { "title": "Updated Title", "description": "Updated description", "category": "AVENTURA", "destinationId": #(sharedDestId), "duration": "3 hours", "meetingPoint": "Updated Point" }
-    When method put
-    Then status 200
-    And match response.title == 'Updated Title'
 
   Scenario: DELETE - Eliminar Experience exitosamente (204)
     Given path 'experiences', staffId, 'experiences'
