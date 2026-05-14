@@ -1,8 +1,8 @@
 package pe.edu.upc.travelmatch.experiences.domain.services;
+
 import pe.edu.upc.travelmatch.experiences.domain.model.commands.SeedTicketTypesCommand;
-/**
- * Service to manage TicketType commands.
- */
+
+/** Service to manage TicketType commands. */
 public interface TicketTypeCommandService {
   /**
    * Handles the SeedTicketTypesCommand.

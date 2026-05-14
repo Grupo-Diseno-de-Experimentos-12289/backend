@@ -1,4 +1,5 @@
 package pe.edu.upc.travelmatch.experiences.domain.model.entities;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,24 +11,23 @@ import java.util.List;
 import lombok.Getter;
 import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.TicketTypes;
 import pe.edu.upc.travelmatch.shared.domain.model.entities.AuditableModel;
-/**
- * Entity class for TicketType.
- */
+
+/** Entity class for TicketType. */
 @Entity
 public class TicketType extends AuditableModel {
   @Id
   @Getter
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
   @Getter
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, unique = true, length = 30)
   private TicketTypes name;
-  /**
-   * Default constructor.
-   */
-  public TicketType() {
-  }
+
+  /** Default constructor. */
+  public TicketType() {}
+
   /**
    * Constructor with name.
    *
@@ -36,6 +36,7 @@ public class TicketType extends AuditableModel {
   public TicketType(TicketTypes name) {
     this.name = name;
   }
+
   /**
    * Get the ticket type name as string.
    *
@@ -44,6 +45,7 @@ public class TicketType extends AuditableModel {
   public String getTicketTypeName() {
     return name.name();
   }
+
   /**
    * Gets the default ticket type.
    *
@@ -52,6 +54,7 @@ public class TicketType extends AuditableModel {
   public static TicketType getDefaultTicketType() {
     return new TicketType(TicketTypes.TICKET_GENERAL);
   }
+
   /**
    * Converts a string name to a TicketType.
    *
@@ -61,6 +64,7 @@ public class TicketType extends AuditableModel {
   public static TicketType toTicketTypeFromName(String ticketType) {
     return new TicketType(TicketTypes.valueOf(ticketType));
   }
+
   /**
    * Validates a list of ticket types.
    *

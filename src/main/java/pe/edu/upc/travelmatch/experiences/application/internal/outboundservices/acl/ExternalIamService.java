@@ -3,10 +3,7 @@ package pe.edu.upc.travelmatch.experiences.application.internal.outboundservices
 import org.springframework.stereotype.Service;
 import pe.edu.upc.travelmatch.iam.interfaces.acl.IamContextFacade;
 
-/**
- * External IAM Service.
- * Facade for interacting with the IAM bounded context from Experiences.
- */
+/** External IAM Service. Facade for interacting with the IAM bounded context from Experiences. */
 @Service("experienceExternalIamService")
 public class ExternalIamService {
 

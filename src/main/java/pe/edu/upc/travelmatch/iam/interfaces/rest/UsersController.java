@@ -1,6 +1,7 @@
 package pe.edu.upc.travelmatch.iam.interfaces.rest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,32 +14,37 @@ import pe.edu.upc.travelmatch.iam.domain.services.UserQueryService;
 import pe.edu.upc.travelmatch.iam.interfaces.rest.resources.UserResource;
 import pe.edu.upc.travelmatch.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
 
-import java.util.List;
-
+/** UsersController type. */
 @RestController
 @RequestMapping(value = "/api/v1/users", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Users", description = "User Management Endpoints")
 public class UsersController {
-    private final UserQueryService userQueryService;
+  private final UserQueryService userQueryService;
 
-    public UsersController(UserQueryService userQueryService) {
-        this.userQueryService = userQueryService;
-    }
+  /** Constructs a new UsersController. */
+  public UsersController(UserQueryService userQueryService) {
+    this.userQueryService = userQueryService;
+  }
 
-    @GetMapping
-    public ResponseEntity<List<UserResource>> getAllUsers() {
-        var getAllUsersQuery = new GetAllUsersQuery();
-        var users = userQueryService.handle(getAllUsersQuery);
-        var userResources = users.stream().map(UserResourceFromEntityAssembler::toResourceFromEntity).toList();
-        return ResponseEntity.ok(userResources);
-    }
+  /** Get all users. */
+  @GetMapping
+  public ResponseEntity<List<UserResource>> getAllUsers() {
+    var getAllUsersQuery = new GetAllUsersQuery();
+    var users = userQueryService.handle(getAllUsersQuery);
+    var userResources =
+        users.stream().map(UserResourceFromEntityAssembler::toResourceFromEntity).toList();
+    return ResponseEntity.ok(userResources);
+  }
 
-    @GetMapping(value = "/{userId}")
-    public ResponseEntity<UserResource> getUserById(@PathVariable Long userId) {
-        var getUserByIdQuery = new GetUserByIdQuery(userId);
-        var user = userQueryService.handle(getUserByIdQuery);
-        if (user.isEmpty()) return ResponseEntity.notFound().build();
-        var userResource = UserResourceFromEntityAssembler.toResourceFromEntity(user.get());
-        return ResponseEntity.ok(userResource);
+  /** Get user by id. */
+  @GetMapping(value = "/{userId}")
+  public ResponseEntity<UserResource> getUserById(@PathVariable Long userId) {
+    var getUserByIdQuery = new GetUserByIdQuery(userId);
+    var user = userQueryService.handle(getUserByIdQuery);
+    if (user.isEmpty()) {
+      return ResponseEntity.notFound().build();
     }
+    var userResource = UserResourceFromEntityAssembler.toResourceFromEntity(user.get());
+    return ResponseEntity.ok(userResource);
+  }
 }

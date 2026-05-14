@@ -22,9 +22,7 @@ import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.AgencyId;
 import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.DestinationId;
 import pe.edu.upc.travelmatch.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 
-/**
- * Represents an Experience entity.
- */
+/** Represents an Experience entity. */
 @Entity
 @Getter
 @NoArgsConstructor
@@ -65,13 +63,13 @@ public class Experience extends AuditableAbstractAggregateRoot<Experience> {
   /**
    * Constructs a new Experience.
    *
-   * @param title         the experience title
-   * @param description   the experience description
-   * @param agencyId      the agency ID
-   * @param category      the category
+   * @param title the experience title
+   * @param description the experience description
+   * @param agencyId the agency ID
+   * @param category the category
    * @param destinationId the destination ID
-   * @param duration      the typical duration
-   * @param meetingPoint  the meeting point for the experience
+   * @param duration the typical duration
+   * @param meetingPoint the meeting point for the experience
    */
   public Experience(
       String title,
@@ -90,9 +88,7 @@ public class Experience extends AuditableAbstractAggregateRoot<Experience> {
     this.meetingPoint = meetingPoint;
   }
 
-  /**
-   * Marks the experience as logically deleted.
-   */
+  /** Marks the experience as logically deleted. */
   public void markAsDeleted() {
     this.deletedAt = new Date();
   }
@@ -100,12 +96,12 @@ public class Experience extends AuditableAbstractAggregateRoot<Experience> {
   /**
    * Updates the mutable information of the experience.
    *
-   * @param title         the new title
-   * @param description   the new description
-   * @param category      the new category
+   * @param title the new title
+   * @param description the new description
+   * @param category the new category
    * @param destinationId the new destination ID
-   * @param duration      the new duration
-   * @param meetingPoint  the new meeting point
+   * @param duration the new duration
+   * @param meetingPoint the new meeting point
    */
   public void updateInfo(
       String title,

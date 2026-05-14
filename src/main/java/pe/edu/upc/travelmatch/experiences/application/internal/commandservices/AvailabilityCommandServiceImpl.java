@@ -8,9 +8,7 @@ import pe.edu.upc.travelmatch.experiences.domain.services.AvailabilityCommandSer
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.AvailabilityRepository;
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.ExperienceRepository;
 
-/**
- * Service implementation for managing Availability commands.
- */
+/** Service implementation for managing Availability commands. */
 @Service
 public class AvailabilityCommandServiceImpl implements AvailabilityCommandService {
 
@@ -21,26 +19,27 @@ public class AvailabilityCommandServiceImpl implements AvailabilityCommandServic
    * Constructs the AvailabilityCommandServiceImpl.
    *
    * @param availabilityRepository the availability repository
-   * @param experienceRepository   the experience repository
+   * @param experienceRepository the experience repository
    */
   public AvailabilityCommandServiceImpl(
-      AvailabilityRepository availabilityRepository,
-      ExperienceRepository experienceRepository) {
+      AvailabilityRepository availabilityRepository, ExperienceRepository experienceRepository) {
     this.availabilityRepository = availabilityRepository;
     this.experienceRepository = experienceRepository;
   }
 
   @Override
   public Long handle(CreateAvailabilityCommand command) {
-    var experience = experienceRepository.findById(command.experience().getId())
-        .orElseThrow(() -> new IllegalArgumentException(
-            "Experience with ID " + command.experience().getId() + " does not exist."));
+    var experience =
+        experienceRepository
+            .findById(command.experience().getId())
+            .orElseThrow(
+                () ->
+                    new IllegalArgumentException(
+                        "Experience with ID " + command.experience().getId() + " does not exist."));
 
-    var availability = new Availability(
-        experience,
-        command.startDateTime(),
-        command.endDateTime(),
-        command.capacity());
+    var availability =
+        new Availability(
+            experience, command.startDateTime(), command.endDateTime(), command.capacity());
 
     var saved = availabilityRepository.save(availability);
     return saved.getId();
@@ -48,21 +47,22 @@ public class AvailabilityCommandServiceImpl implements AvailabilityCommandServic
 
   @Override
   public void updateAvailability(UpdateAvailabilityCommand command) {
-    var availability = availabilityRepository.findById(command.availabilityId())
-        .orElseThrow(() -> new RuntimeException("Availability not found"));
+    var availability =
+        availabilityRepository
+            .findById(command.availabilityId())
+            .orElseThrow(() -> new RuntimeException("Availability not found"));
 
-    availability.updateInfo(
-        command.startDateTime(),
-        command.endDateTime(),
-        command.capacity());
+    availability.updateInfo(command.startDateTime(), command.endDateTime(), command.capacity());
 
     availabilityRepository.save(availability);
   }
 
   @Override
   public void deleteAvailability(Long id) {
-    var availability = availabilityRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Availability not found"));
+    var availability =
+        availabilityRepository
+            .findById(id)
+            .orElseThrow(() -> new RuntimeException("Availability not found"));
 
     availability.markAsDeleted();
     availabilityRepository.save(availability);

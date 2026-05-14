@@ -1,11 +1,7 @@
 package pe.edu.upc.travelmatch.experiences.interfaces.acl.dto;
+
 import java.math.BigDecimal;
-/**
- * Record representing AvailabilityTicketTypeInfo.
- */
+
+/** Record representing AvailabilityTicketTypeInfo. */
 public record AvailabilityTicketTypeInfo(
-    Long ticketTypeId,
-    String ticketTypeName,
-    BigDecimal price,
-    int stock
-) {}
+    Long ticketTypeId, String ticketTypeName, BigDecimal price, int stock) {}

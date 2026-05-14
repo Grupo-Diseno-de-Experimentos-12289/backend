@@ -1,10 +1,14 @@
 package pe.edu.upc.travelmatch.iam.infrastructure.tokens.jwt;
 
-import pe.edu.upc.travelmatch.iam.application.internal.outboundservices.tokens.TokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.Authentication;
+import pe.edu.upc.travelmatch.iam.application.internal.outboundservices.tokens.TokenService;
 
+/** BearerTokenService contract. */
 public interface BearerTokenService extends TokenService {
-    String getBearerTokenFrom(HttpServletRequest request);
-    String generateToken(Authentication authentication);
+  /** Get bearer token from. */
+  String getBearerTokenFrom(HttpServletRequest request);
+
+  /** Generate token. */
+  String generateToken(Authentication authentication);
 }

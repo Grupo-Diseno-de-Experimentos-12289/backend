@@ -1,4 +1,4 @@
 package pe.edu.upc.travelmatch.iam.domain.model.queries;
 
-public record GetUserByEmailQuery(String email) {
-}
+/** GetUserByEmailQuery value carrier. */
+public record GetUserByEmailQuery(String email) {}

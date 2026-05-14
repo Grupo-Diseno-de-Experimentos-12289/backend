@@ -1,4 +1,4 @@
 package pe.edu.upc.travelmatch.iam.domain.model.queries;
 
-public record GetAllUsersQuery() {
-}
+/** GetAllUsersQuery value carrier. */
+public record GetAllUsersQuery() {}

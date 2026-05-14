@@ -1,6 +1,10 @@
 package pe.edu.upc.travelmatch.iam.application.internal.outboundservices.hashing;
 
+/** HashingService contract. */
 public interface HashingService {
-    String encode(CharSequence rawPassword);
-    boolean matches(CharSequence rawPassword, String encodedPassword);
+  /** Encode. */
+  String encode(CharSequence rawPassword);
+
+  /** Matches. */
+  boolean matches(CharSequence rawPassword, String encodedPassword);
 }
