@@ -1,5 +1,13 @@
 package pe.edu.upc.travelmatch.profiles.application.internal.queryservices;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,79 +21,72 @@ import pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.ExperienceId;
 import pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.UserId;
 import pe.edu.upc.travelmatch.profiles.infrastructure.persistence.jpa.repositories.FavoriteRepository;
 
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 class FavoriteQueryServiceImplTest {
 
-    @Mock
-    private FavoriteRepository favoriteRepository;
+  @Mock private FavoriteRepository favoriteRepository;
 
-    @InjectMocks
-    private FavoriteQueryServiceImpl favoriteQueryService;
+  @InjectMocks private FavoriteQueryServiceImpl favoriteQueryService;
 
-    @Test
-    void testHandle_GetFavoritesByUserId() {
-        // Arrange
-        UserId userId = new UserId(1L);
-        ExperienceId experienceId = new ExperienceId(10L);
-        GetFavoritesByUserIdQuery query = new GetFavoritesByUserIdQuery(userId);
-        Favorite favorite = new Favorite(userId, experienceId);
-        List<Favorite> expectedFavorites = List.of(favorite);
+  @Test
+  void testHandle_GetFavoritesByUserId() {
+    // Arrange
+    UserId userId = new UserId(1L);
+    ExperienceId experienceId = new ExperienceId(10L);
+    GetFavoritesByUserIdQuery query = new GetFavoritesByUserIdQuery(userId);
+    Favorite favorite = new Favorite(userId, experienceId);
+    List<Favorite> expectedFavorites = List.of(favorite);
 
-        when(favoriteRepository.findAllByUserId(userId)).thenReturn(expectedFavorites);
+    when(favoriteRepository.findAllByUserId(userId)).thenReturn(expectedFavorites);
 
-        // Act
-        List<Favorite> result = favoriteQueryService.handle(query);
+    // Act
+    List<Favorite> result = favoriteQueryService.handle(query);
 
-        // Assert
-        assertEquals(expectedFavorites.size(), result.size());
-        assertEquals(userId, result.get(0).getUserId());
-        verify(favoriteRepository, times(1)).findAllByUserId(userId);
-    }
+    // Assert
+    assertEquals(expectedFavorites.size(), result.size());
+    assertEquals(userId, result.get(0).getUserId());
+    verify(favoriteRepository, times(1)).findAllByUserId(userId);
+  }
 
-    @Test
-    void testHandle_GetFavoritesByExperienceId() {
-        // Arrange
-        UserId userId = new UserId(1L);
-        ExperienceId experienceId = new ExperienceId(10L);
-        GetFavoritesByExperienceIdQuery query = new GetFavoritesByExperienceIdQuery(experienceId);
-        Favorite favorite = new Favorite(userId, experienceId);
-        List<Favorite> expectedFavorites = List.of(favorite);
+  @Test
+  void testHandle_GetFavoritesByExperienceId() {
+    // Arrange
+    UserId userId = new UserId(1L);
+    ExperienceId experienceId = new ExperienceId(10L);
+    GetFavoritesByExperienceIdQuery query = new GetFavoritesByExperienceIdQuery(experienceId);
+    Favorite favorite = new Favorite(userId, experienceId);
+    List<Favorite> expectedFavorites = List.of(favorite);
 
-        when(favoriteRepository.findAllByExperienceId(experienceId)).thenReturn(expectedFavorites);
+    when(favoriteRepository.findAllByExperienceId(experienceId)).thenReturn(expectedFavorites);
 
-        // Act
-        List<Favorite> result = favoriteQueryService.handle(query);
+    // Act
+    List<Favorite> result = favoriteQueryService.handle(query);
 
-        // Assert
-        assertEquals(expectedFavorites.size(), result.size());
-        assertEquals(experienceId, result.get(0).getExperienceId());
-        verify(favoriteRepository, times(1)).findAllByExperienceId(experienceId);
-    }
+    // Assert
+    assertEquals(expectedFavorites.size(), result.size());
+    assertEquals(experienceId, result.get(0).getExperienceId());
+    verify(favoriteRepository, times(1)).findAllByExperienceId(experienceId);
+  }
 
-    @Test
-    void testHandle_GetFavoriteByUserIdAndExperienceId() {
-        // Arrange
-        UserId userId = new UserId(1L);
-        ExperienceId experienceId = new ExperienceId(10L);
-        GetFavoriteByUserIdAndExperienceIdQuery query = new GetFavoriteByUserIdAndExperienceIdQuery(userId, experienceId);
-        Favorite expectedFavorite = new Favorite(userId, experienceId);
+  @Test
+  void testHandle_GetFavoriteByUserIdAndExperienceId() {
+    // Arrange
+    UserId userId = new UserId(1L);
+    ExperienceId experienceId = new ExperienceId(10L);
+    GetFavoriteByUserIdAndExperienceIdQuery query =
+        new GetFavoriteByUserIdAndExperienceIdQuery(userId, experienceId);
+    Favorite expectedFavorite = new Favorite(userId, experienceId);
 
-        when(favoriteRepository.findByUserIdAndExperienceId(userId, experienceId)).thenReturn(Optional.of(expectedFavorite));
+    when(favoriteRepository.findByUserIdAndExperienceId(userId, experienceId))
+        .thenReturn(Optional.of(expectedFavorite));
 
-        // Act
-        Optional<Favorite> result = favoriteQueryService.handle(query);
+    // Act
+    Optional<Favorite> result = favoriteQueryService.handle(query);
 
-        // Assert
-        assertTrue(result.isPresent());
-        assertEquals(userId, result.get().getUserId());
-        assertEquals(experienceId, result.get().getExperienceId());
-        verify(favoriteRepository, times(1)).findByUserIdAndExperienceId(userId, experienceId);
-    }
+    // Assert
+    assertTrue(result.isPresent());
+    assertEquals(userId, result.get().getUserId());
+    assertEquals(experienceId, result.get().getExperienceId());
+    verify(favoriteRepository, times(1)).findByUserIdAndExperienceId(userId, experienceId);
+  }
 }

@@ -1,5 +1,13 @@
 package pe.edu.upc.travelmatch.profiles.application.internal.queryservices;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.math.BigDecimal;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,75 +23,70 @@ import pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.Quantity;
 import pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.UserId;
 import pe.edu.upc.travelmatch.profiles.infrastructure.persistence.jpa.repositories.CartRepository;
 
-import java.math.BigDecimal;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 class CartQueryServiceImplTest {
 
-    @Mock
-    private CartRepository cartRepository;
+  @Mock private CartRepository cartRepository;
 
-    @InjectMocks
-    private CartQueryServiceImpl cartQueryService;
+  @InjectMocks private CartQueryServiceImpl cartQueryService;
 
-    @Test
-    void testHandle_GetCartByUserId() {
-        // Arrange
-        UserId userId = new UserId(1L);
-        GetCartByUserIdQuery query = new GetCartByUserIdQuery(userId);
-        Cart expectedCart = new Cart(userId);
+  @Test
+  void testHandle_GetCartByUserId() {
+    // Arrange
+    UserId userId = new UserId(1L);
+    GetCartByUserIdQuery query = new GetCartByUserIdQuery(userId);
+    Cart expectedCart = new Cart(userId);
 
-        when(cartRepository.findByUserId(userId)).thenReturn(Optional.of(expectedCart));
+    when(cartRepository.findByUserId(userId)).thenReturn(Optional.of(expectedCart));
 
-        // Act
-        Optional<Cart> result = cartQueryService.handle(query);
+    // Act
+    Optional<Cart> result = cartQueryService.handle(query);
 
-        // Assert
-        assertTrue(result.isPresent(), "Debe retornar el carrito si existe");
-        assertEquals(userId, result.get().getUserId());
-        verify(cartRepository, times(1)).findByUserId(userId);
-    }
+    // Assert
+    assertTrue(result.isPresent(), "Debe retornar el carrito si existe");
+    assertEquals(userId, result.get().getUserId());
+    verify(cartRepository, times(1)).findByUserId(userId);
+  }
 
-    @Test
-    void testHandle_GetCartItemByUserIdAndAvailabilityId() {
-        // Arrange
-        UserId userId = new UserId(1L);
-        AvailabilityId availabilityId = new AvailabilityId(10L);
-        GetCartItemByUserIdAndAvailabilityIdQuery query = new GetCartItemByUserIdAndAvailabilityIdQuery(userId, availabilityId);
-        
-        pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.Money price = new pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.Money(new BigDecimal("10.0"), "PEN");
-        CartItem expectedCartItem = new CartItem(availabilityId, new Quantity(1), price);
+  @Test
+  void testHandle_GetCartItemByUserIdAndAvailabilityId() {
+    // Arrange
+    UserId userId = new UserId(1L);
+    AvailabilityId availabilityId = new AvailabilityId(10L);
+    GetCartItemByUserIdAndAvailabilityIdQuery query =
+        new GetCartItemByUserIdAndAvailabilityIdQuery(userId, availabilityId);
 
-        when(cartRepository.findCartItemByUserIdAndAvailabilityId(userId, availabilityId)).thenReturn(Optional.of(expectedCartItem));
+    pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.Money price =
+        new pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.Money(
+            new BigDecimal("10.0"), "PEN");
+    CartItem expectedCartItem = new CartItem(availabilityId, new Quantity(1), price);
 
-        // Act
-        Optional<CartItem> result = cartQueryService.handle(query);
+    when(cartRepository.findCartItemByUserIdAndAvailabilityId(userId, availabilityId))
+        .thenReturn(Optional.of(expectedCartItem));
 
-        // Assert
-        assertTrue(result.isPresent(), "Debe retornar el item del carrito si existe");
-        assertEquals(availabilityId, result.get().getAvailabilityId());
-        verify(cartRepository, times(1)).findCartItemByUserIdAndAvailabilityId(userId, availabilityId);
-    }
+    // Act
+    Optional<CartItem> result = cartQueryService.handle(query);
 
-    @Test
-    void testHandle_GetCartItemCount() {
-        // Arrange
-        UserId userId = new UserId(1L);
-        GetCartItemCountQuery query = new GetCartItemCountQuery(userId);
-        int expectedCount = 5;
+    // Assert
+    assertTrue(result.isPresent(), "Debe retornar el item del carrito si existe");
+    assertEquals(availabilityId, result.get().getAvailabilityId());
+    verify(cartRepository, times(1)).findCartItemByUserIdAndAvailabilityId(userId, availabilityId);
+  }
 
-        when(cartRepository.countCartItemsByUserId(userId)).thenReturn(expectedCount);
+  @Test
+  void testHandle_GetCartItemCount() {
+    // Arrange
+    UserId userId = new UserId(1L);
+    GetCartItemCountQuery query = new GetCartItemCountQuery(userId);
+    int expectedCount = 5;
 
-        // Act
-        int result = cartQueryService.handle(query);
+    when(cartRepository.countCartItemsByUserId(userId)).thenReturn(expectedCount);
 
-        // Assert
-        assertEquals(expectedCount, result);
-        verify(cartRepository, times(1)).countCartItemsByUserId(userId);
-    }
+    // Act
+    int result = cartQueryService.handle(query);
+
+    // Assert
+    assertEquals(expectedCount, result);
+    verify(cartRepository, times(1)).countCartItemsByUserId(userId);
+  }
 }

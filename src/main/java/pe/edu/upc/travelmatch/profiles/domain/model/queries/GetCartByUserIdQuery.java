@@ -2,5 +2,5 @@ package pe.edu.upc.travelmatch.profiles.domain.model.queries;
 
 import pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.UserId;
 
-public record GetCartByUserIdQuery(UserId userId) {
-}
+/** GetCartByUserIdQuery value carrier. */
+public record GetCartByUserIdQuery(UserId userId) {}

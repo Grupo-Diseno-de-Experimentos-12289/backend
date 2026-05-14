@@ -4,16 +4,18 @@ import pe.edu.upc.travelmatch.experiences.domain.model.commands.UpdateExperience
 import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.DestinationId;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.resources.UpdateExperienceResource;
 
+/** UpdateExperienceCommandFromResourceAssembler. */
 public class UpdateExperienceCommandFromResourceAssembler {
-    public static UpdateExperienceCommand toCommandFromResource(UpdateExperienceResource resource, Long id) {
-        return new UpdateExperienceCommand(
-                id,
-                resource.title(),
-                resource.description(),
-                resource.category(),
-                new DestinationId(resource.destinationId()),
-                resource.duration(),
-                resource.meetingPoint()
-        );
-    }
+  /** To command from resource. */
+  public static UpdateExperienceCommand toCommandFromResource(
+      UpdateExperienceResource resource, Long id) {
+    return new UpdateExperienceCommand(
+        id,
+        resource.title(),
+        resource.description(),
+        resource.category(),
+        new DestinationId(resource.destinationId()),
+        resource.duration(),
+        resource.meetingPoint());
+  }
 }

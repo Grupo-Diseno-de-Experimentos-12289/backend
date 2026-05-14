@@ -1,175 +1,161 @@
 package pe.edu.upc.travelmatch.bookings.domain.model.entities;
 
-import pe.edu.upc.travelmatch.bookings.domain.model.valueobjects.Money;
-import org.junit.jupiter.api.BeforeEach;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.math.BigDecimal;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import pe.edu.upc.travelmatch.bookings.domain.model.entities.Payment;
-import pe.edu.upc.travelmatch.bookings.domain.model.entities.Payout;
-import pe.edu.upc.travelmatch.bookings.domain.model.entities.Refund;
-import pe.edu.upc.travelmatch.bookings.domain.model.valueobjects.*;
-
-import java.math.BigDecimal;
-import java.time.Instant;
-
-import static org.junit.jupiter.api.Assertions.*;
-import java.math.BigDecimal;
+import pe.edu.upc.travelmatch.bookings.domain.model.valueobjects.Money;
 
 @Nested
 @DisplayName("Money Value Object")
-public class MoneyTests {
-    private static final Money MONEY = new Money(new BigDecimal("100.00"), "PEN");
-    @Test
-    @DisplayName("Money() with valid amount and currency creates instance correctly")
-    void constructor_validData_createsInstance() {
-        // Arrange
-        BigDecimal amount = new BigDecimal("99.50");
-        String currency = "PEN";
+class MoneyTests {
 
-        // Act
-        Money money = new Money(amount, currency);
+  @Test
+  @DisplayName("Money() with valid amount and currency creates instance correctly")
+  void constructor_validData_createsInstance() {
+    // Arrange
+    BigDecimal amount = new BigDecimal("99.50");
+    String currency = "PEN";
 
-        // Assert
-        assertAll(
-                () -> assertEquals(new BigDecimal("99.50"), money.getAmount()),
-                () -> assertEquals("PEN", money.getCurrency())
-        );
-    }
+    // Act
+    Money money = new Money(amount, currency);
 
-    @Test
-    @DisplayName("Money() throws NullPointerException when amount is null")
-    void constructor_nullAmount_throwsNullPointer() {
-        // Arrange – null amount
+    // Assert
+    assertAll(
+        () -> assertEquals(new BigDecimal("99.50"), money.getAmount()),
+        () -> assertEquals("PEN", money.getCurrency()));
+  }
 
-        // Act & Assert
-        assertThrows(NullPointerException.class,
-                () -> new Money(null, "PEN"));
-    }
+  @Test
+  @DisplayName("Money() throws NullPointerException when amount is null")
+  void constructor_nullAmount_throwsNullPointer() {
+    // Arrange – null amount
 
-    @Test
-    @DisplayName("Money() throws NullPointerException when currency is null")
-    void constructor_nullCurrency_throwsNullPointer() {
-        // Arrange – null currency
+    // Act & Assert
+    assertThrows(NullPointerException.class, () -> new Money(null, "PEN"));
+  }
 
-        // Act & Assert
-        assertThrows(NullPointerException.class,
-                () -> new Money(BigDecimal.TEN, null));
-    }
+  @Test
+  @DisplayName("Money() throws NullPointerException when currency is null")
+  void constructor_nullCurrency_throwsNullPointer() {
+    // Arrange – null currency
 
-    @Test
-    @DisplayName("Money() throws IllegalArgumentException when amount is negative")
-    void constructor_negativeAmount_throwsIllegalArgument() {
-        // Arrange
-        BigDecimal negativeAmount = new BigDecimal("-1.00");
+    // Act & Assert
+    assertThrows(NullPointerException.class, () -> new Money(BigDecimal.TEN, null));
+  }
 
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class,
-                () -> new Money(negativeAmount, "PEN"));
-    }
+  @Test
+  @DisplayName("Money() throws IllegalArgumentException when amount is negative")
+  void constructor_negativeAmount_throwsIllegalArgument() {
+    // Arrange
+    BigDecimal negativeAmount = new BigDecimal("-1.00");
 
-    @Test
-    @DisplayName("Money() throws IllegalArgumentException when currency is not 3 uppercase letters")
-    void constructor_invalidCurrency_throwsIllegalArgument() {
-        // Arrange
-        String invalidCurrency = "pe";
+    // Act & Assert
+    assertThrows(IllegalArgumentException.class, () -> new Money(negativeAmount, "PEN"));
+  }
 
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class,
-                () -> new Money(BigDecimal.TEN, invalidCurrency));
-    }
+  @Test
+  @DisplayName("Money() throws IllegalArgumentException when currency is not 3 uppercase letters")
+  void constructor_invalidCurrency_throwsIllegalArgument() {
+    // Arrange
+    String invalidCurrency = "pe";
 
-    @Test
-    @DisplayName("add() returns sum of two Money objects with same currency")
-    void add_sameCurrency_returnsCorrectSum() {
-        // Arrange
-        Money a = new Money(new BigDecimal("50.00"), "PEN");
-        Money b = new Money(new BigDecimal("30.00"), "PEN");
+    // Act & Assert
+    assertThrows(IllegalArgumentException.class, () -> new Money(BigDecimal.TEN, invalidCurrency));
+  }
 
-        // Act
-        Money result = a.add(b);
+  @Test
+  @DisplayName("add() returns sum of two Money objects with same currency")
+  void add_sameCurrency_returnsCorrectSum() {
+    // Arrange
+    Money a = new Money(new BigDecimal("50.00"), "PEN");
+    Money b = new Money(new BigDecimal("30.00"), "PEN");
 
-        // Assert
-        assertEquals(new BigDecimal("80.00"), result.getAmount());
-    }
+    // Act
+    Money result = a.add(b);
 
-    @Test
-    @DisplayName("add() throws IllegalArgumentException when currencies differ")
-    void add_differentCurrencies_throwsIllegalArgument() {
-        // Arrange
-        Money pen = new Money(new BigDecimal("50.00"), "PEN");
-        Money usd = new Money(new BigDecimal("30.00"), "USD");
+    // Assert
+    assertEquals(new BigDecimal("80.00"), result.getAmount());
+  }
 
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> pen.add(usd));
-    }
+  @Test
+  @DisplayName("add() throws IllegalArgumentException when currencies differ")
+  void add_differentCurrencies_throwsIllegalArgument() {
+    // Arrange
+    Money pen = new Money(new BigDecimal("50.00"), "PEN");
+    Money usd = new Money(new BigDecimal("30.00"), "USD");
 
-    @Test
-    @DisplayName("subtract() returns difference of two Money objects")
-    void subtract_sameCurrency_returnsCorrectDifference() {
-        // Arrange
-        Money a = new Money(new BigDecimal("100.00"), "PEN");
-        Money b = new Money(new BigDecimal("40.00"), "PEN");
+    // Act & Assert
+    assertThrows(IllegalArgumentException.class, () -> pen.add(usd));
+  }
 
-        // Act
-        Money result = a.subtract(b);
+  @Test
+  @DisplayName("subtract() returns difference of two Money objects")
+  void subtract_sameCurrency_returnsCorrectDifference() {
+    // Arrange
+    Money a = new Money(new BigDecimal("100.00"), "PEN");
+    Money b = new Money(new BigDecimal("40.00"), "PEN");
 
-        // Assert
-        assertEquals(new BigDecimal("60.00"), result.getAmount());
-    }
+    // Act
+    Money result = a.subtract(b);
 
-    @Test
-    @DisplayName("multiply() returns correct product")
-    void multiply_validMultiplier_returnsProduct() {
-        // Arrange
-        Money money = new Money(new BigDecimal("25.00"), "PEN");
+    // Assert
+    assertEquals(new BigDecimal("60.00"), result.getAmount());
+  }
 
-        // Act
-        Money result = money.multiply(new BigDecimal("4"));
+  @Test
+  @DisplayName("multiply() returns correct product")
+  void multiply_validMultiplier_returnsProduct() {
+    // Arrange
+    Money money = new Money(new BigDecimal("25.00"), "PEN");
 
-        // Assert
-        assertEquals(new BigDecimal("100.00"), result.getAmount());
-    }
+    // Act
+    Money result = money.multiply(new BigDecimal("4"));
 
-    @Test
-    @DisplayName("isGreaterThan() returns true when amount is larger")
-    void isGreaterThan_largerAmount_returnsTrue() {
-        // Arrange
-        Money bigger = new Money(new BigDecimal("200.00"), "PEN");
-        Money smaller = new Money(new BigDecimal("50.00"), "PEN");
+    // Assert
+    assertEquals(new BigDecimal("100.00"), result.getAmount());
+  }
 
-        // Act
-        boolean result = bigger.isGreaterThan(smaller);
+  @Test
+  @DisplayName("isGreaterThan() returns true when amount is larger")
+  void isGreaterThan_largerAmount_returnsTrue() {
+    // Arrange
+    Money bigger = new Money(new BigDecimal("200.00"), "PEN");
+    Money smaller = new Money(new BigDecimal("50.00"), "PEN");
 
-        // Assert
-        assertTrue(result);
-    }
+    // Act
+    boolean result = bigger.isGreaterThan(smaller);
 
-    @Test
-    @DisplayName("equals() returns true when amount and currency match")
-    void equals_sameAmountAndCurrency_returnsTrue() {
-        // Arrange
-        Money a = new Money(new BigDecimal("100.00"), "PEN");
-        Money b = new Money(new BigDecimal("100.00"), "PEN");
+    // Assert
+    assertTrue(result);
+  }
 
-        // Act & Assert
-        assertEquals(a, b);
-    }
+  @Test
+  @DisplayName("equals() returns true when amount and currency match")
+  void equals_sameAmountAndCurrency_returnsTrue() {
+    // Arrange
+    Money a = new Money(new BigDecimal("100.00"), "PEN");
+    Money b = new Money(new BigDecimal("100.00"), "PEN");
 
-    @Test
-    @DisplayName("toString() includes amount and currency string")
-    void toString_containsAmountAndCurrency() {
-        // Arrange
-        Money money = new Money(new BigDecimal("50.00"), "PEN");
+    // Act & Assert
+    assertEquals(a, b);
+  }
 
-        // Act
-        String result = money.toString();
+  @Test
+  @DisplayName("toString() includes amount and currency string")
+  void toString_containsAmountAndCurrency() {
+    // Arrange
+    Money money = new Money(new BigDecimal("50.00"), "PEN");
 
-        // Assert
-        assertAll(
-                () -> assertTrue(result.contains("50.00")),
-                () -> assertTrue(result.contains("PEN"))
-        );
-    }
+    // Act
+    String result = money.toString();
+
+    // Assert
+    assertAll(() -> assertTrue(result.contains("50.00")), () -> assertTrue(result.contains("PEN")));
+  }
 }
-

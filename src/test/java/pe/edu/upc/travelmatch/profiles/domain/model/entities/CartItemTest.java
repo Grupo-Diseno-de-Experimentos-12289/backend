@@ -1,5 +1,8 @@
 package pe.edu.upc.travelmatch.profiles.domain.model.entities;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -9,51 +12,43 @@ import pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.AvailabilityId;
 import pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.Money;
 import pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.Quantity;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
 @ExtendWith(MockitoExtension.class)
 class CartItemTest {
 
-    @Mock
-    private AvailabilityId availabilityId;
+  @Mock private AvailabilityId availabilityId;
 
-    @Mock
-    private Quantity quantity;
+  @Mock private Quantity quantity;
 
-    @Mock
-    private Quantity newQuantity;
+  @Mock private Quantity newQuantity;
 
-    @Mock
-    private Money price;
+  @Mock private Money price;
 
-    @Mock
-    private Cart newCart;
+  @Mock private Cart newCart;
 
-    @Test
-    void testCartItemConstructorAndGetters() {
-        // Act
-        CartItem cartItem = new CartItem(availabilityId, quantity, price);
+  @Test
+  void testCartItemConstructorAndGetters() {
+    // Act
+    CartItem cartItem = new CartItem(availabilityId, quantity, price);
 
-        // Assert
-        assertEquals(availabilityId, cartItem.getAvailabilityId());
-        assertEquals(quantity, cartItem.getQuantity());
-        assertEquals(price, cartItem.getPrice());
-        assertNull(cartItem.getId()); // Should be null before persisting
-        assertNull(cartItem.getCart()); // Should be null initially
-    }
+    // Assert
+    assertEquals(availabilityId, cartItem.getAvailabilityId());
+    assertEquals(quantity, cartItem.getQuantity());
+    assertEquals(price, cartItem.getPrice());
+    assertNull(cartItem.getId()); // Should be null before persisting
+    assertNull(cartItem.getCart()); // Should be null initially
+  }
 
-    @Test
-    void testCartItemSetters() {
-        // Arrange
-        CartItem cartItem = new CartItem(availabilityId, quantity, price);
+  @Test
+  void testCartItemSetters() {
+    // Arrange
+    CartItem cartItem = new CartItem(availabilityId, quantity, price);
 
-        // Act
-        cartItem.setQuantity(newQuantity);
-        cartItem.setCart(newCart);
+    // Act
+    cartItem.setQuantity(newQuantity);
+    cartItem.setCart(newCart);
 
-        // Assert
-        assertEquals(newQuantity, cartItem.getQuantity());
-        assertEquals(newCart, cartItem.getCart());
-    }
+    // Assert
+    assertEquals(newQuantity, cartItem.getQuantity());
+    assertEquals(newCart, cartItem.getCart());
+  }
 }

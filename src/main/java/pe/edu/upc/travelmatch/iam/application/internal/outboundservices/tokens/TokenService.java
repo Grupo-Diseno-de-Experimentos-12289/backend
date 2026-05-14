@@ -1,7 +1,13 @@
 package pe.edu.upc.travelmatch.iam.application.internal.outboundservices.tokens;
 
+/** TokenService contract. */
 public interface TokenService {
-    String generateToken(String email);
-    String getEmailFromToken(String token);
-    boolean validateToken(String token);
+  /** Generate token. */
+  String generateToken(String email);
+
+  /** Get email from token. */
+  String getEmailFromToken(String token);
+
+  /** Validate token. */
+  boolean validateToken(String token);
 }

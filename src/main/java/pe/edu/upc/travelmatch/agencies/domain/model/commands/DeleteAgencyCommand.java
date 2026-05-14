@@ -1,5 +1,4 @@
 package pe.edu.upc.travelmatch.agencies.domain.model.commands;
 
-public record DeleteAgencyCommand(
-        Long agencyId
-) {}
+/** DeleteAgencyCommand value carrier. */
+public record DeleteAgencyCommand(Long agencyId) {}

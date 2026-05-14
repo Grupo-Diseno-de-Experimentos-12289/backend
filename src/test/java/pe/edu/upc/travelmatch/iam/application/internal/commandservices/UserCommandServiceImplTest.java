@@ -1,6 +1,16 @@
 package pe.edu.upc.travelmatch.iam.application.internal.commandservices;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,143 +27,172 @@ import pe.edu.upc.travelmatch.iam.domain.model.valueobjects.Roles;
 import pe.edu.upc.travelmatch.iam.infrastructure.persistence.jpa.repositories.RoleRepository;
 import pe.edu.upc.travelmatch.iam.infrastructure.persistence.jpa.repositories.UserRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 /**
  * Unit tests for {@link UserCommandServiceImpl}.
  *
- * This class validates the behavior of the UserCommandServiceImpl, including
- * user registration (SignUp) and authentication (SignIn) flows.
+ * <p>This class validates the behavior of the UserCommandServiceImpl, including user registration
+ * (SignUp) and authentication (SignIn) flows.
  */
 @ExtendWith(MockitoExtension.class)
 class UserCommandServiceImplTest {
 
-    @Mock private UserRepository userRepository;
-    @Mock private HashingService hashingService;
-    @Mock private TokenService tokenService;
-    @Mock private RoleRepository roleRepository;
-    @InjectMocks private UserCommandServiceImpl userCommandService;
+  @Mock private UserRepository userRepository;
+  @Mock private HashingService hashingService;
+  @Mock private TokenService tokenService;
+  @Mock private RoleRepository roleRepository;
+  @InjectMocks private UserCommandServiceImpl userCommandService;
 
-    @Test
-    @DisplayName("handle(SignUpCommand) should return User when creation is successful")
-    void handle_SignUpCommand_ShouldReturnUser_WhenCreationIsSuccessful() {
-        // Arrange
-        var command = new SignUpCommand("john.doe@example.com", "password123", "John", "Doe", "123456789", new ArrayList<>());
-        var role = new Role(Roles.ROLE_TOURIST);
-        var expectedUser = new User(command.email(), "encodedPassword", command.firstName(), command.lastName(), command.phone(), List.of(role));
+  @Test
+  @DisplayName("handle(SignUpCommand) should return User when creation is successful")
+  void handle_SignUpCommand_ShouldReturnUser_WhenCreationIsSuccessful() {
+    // Arrange
+    var command =
+        new SignUpCommand(
+            "john.doe@example.com", "password123", "John", "Doe", "123456789", new ArrayList<>());
+    var role = new Role(Roles.ROLE_TOURIST);
+    var expectedUser =
+        new User(
+            command.email(),
+            "encodedPassword",
+            command.firstName(),
+            command.lastName(),
+            command.phone(),
+            List.of(role));
 
-        when(userRepository.existsByEmail(command.email())).thenReturn(false);
-        when(roleRepository.findByName(Roles.ROLE_TOURIST)).thenReturn(Optional.of(role));
-        when(hashingService.encode(command.password())).thenReturn("encodedPassword");
-        when(userRepository.findByEmail(command.email())).thenReturn(Optional.of(expectedUser));
+    when(userRepository.existsByEmail(command.email())).thenReturn(false);
+    when(roleRepository.findByName(Roles.ROLE_TOURIST)).thenReturn(Optional.of(role));
+    when(hashingService.encode(command.password())).thenReturn("encodedPassword");
+    when(userRepository.findByEmail(command.email())).thenReturn(Optional.of(expectedUser));
 
-        // Act
-        var result = userCommandService.handle(command);
+    // Act
+    var result = userCommandService.handle(command);
 
-        // Assert
-        assertTrue(result.isPresent());
-        assertEquals(expectedUser, result.get());
+    // Assert
+    assertTrue(result.isPresent());
+    assertEquals(expectedUser, result.get());
 
-        verify(userRepository).existsByEmail(command.email());
-        verify(roleRepository).findByName(Roles.ROLE_TOURIST);
-        verify(hashingService).encode(command.password());
-        verify(userRepository).save(any(User.class));
-        verify(userRepository).findByEmail(command.email());
-        verifyNoMoreInteractions(userRepository, roleRepository, hashingService, tokenService);
-    }
+    verify(userRepository).existsByEmail(command.email());
+    verify(roleRepository).findByName(Roles.ROLE_TOURIST);
+    verify(hashingService).encode(command.password());
+    verify(userRepository).save(any(User.class));
+    verify(userRepository).findByEmail(command.email());
+    verifyNoMoreInteractions(userRepository, roleRepository, hashingService, tokenService);
+  }
 
-    @Test
-    @DisplayName("handle(SignUpCommand) should throw RuntimeException when email already exists")
-    void handle_SignUpCommand_ShouldThrowRuntimeException_WhenEmailAlreadyExists() {
-        // Arrange
-        var command = new SignUpCommand("john.doe@example.com", "password123", "John", "Doe", "123456789", new ArrayList<>());
-        when(userRepository.existsByEmail(command.email())).thenReturn(true);
+  @Test
+  @DisplayName("handle(SignUpCommand) should throw RuntimeException when email already exists")
+  void handle_SignUpCommand_ShouldThrowRuntimeException_WhenEmailAlreadyExists() {
+    // Arrange
+    var command =
+        new SignUpCommand(
+            "john.doe@example.com", "password123", "John", "Doe", "123456789", new ArrayList<>());
+    when(userRepository.existsByEmail(command.email())).thenReturn(true);
 
-        // Act + Assert
-        assertThrows(RuntimeException.class, () -> userCommandService.handle(command), "Email already exists");
+    // Act + Assert
+    assertThrows(
+        RuntimeException.class, () -> userCommandService.handle(command), "Email already exists");
 
-        verify(userRepository).existsByEmail(command.email());
-        verifyNoMoreInteractions(userRepository, roleRepository, hashingService, tokenService);
-    }
+    verify(userRepository).existsByEmail(command.email());
+    verifyNoMoreInteractions(userRepository, roleRepository, hashingService, tokenService);
+  }
 
-    @Test
-    @DisplayName("handle(SignUpCommand) should throw RuntimeException when role not found")
-    void handle_SignUpCommand_ShouldThrowRuntimeException_WhenRoleNotFound() {
-        // Arrange
-        var command = new SignUpCommand("john.doe@example.com", "password123", "John", "Doe", "123456789", List.of(new Role(Roles.ROLE_ADMIN)));
+  @Test
+  @DisplayName("handle(SignUpCommand) should throw RuntimeException when role not found")
+  void handle_SignUpCommand_ShouldThrowRuntimeException_WhenRoleNotFound() {
+    // Arrange
+    var command =
+        new SignUpCommand(
+            "john.doe@example.com",
+            "password123",
+            "John",
+            "Doe",
+            "123456789",
+            List.of(new Role(Roles.ROLE_ADMIN)));
 
-        when(userRepository.existsByEmail(command.email())).thenReturn(false);
-        when(roleRepository.findByName(Roles.ROLE_ADMIN)).thenReturn(Optional.empty());
+    when(userRepository.existsByEmail(command.email())).thenReturn(false);
+    when(roleRepository.findByName(Roles.ROLE_ADMIN)).thenReturn(Optional.empty());
 
-        // Act + Assert
-        assertThrows(RuntimeException.class, () -> userCommandService.handle(command), "Role not found");
+    // Act + Assert
+    assertThrows(
+        RuntimeException.class, () -> userCommandService.handle(command), "Role not found");
 
-        verify(userRepository).existsByEmail(command.email());
-        verify(roleRepository).findByName(Roles.ROLE_ADMIN);
-        verifyNoMoreInteractions(userRepository, roleRepository, hashingService, tokenService);
-    }
+    verify(userRepository).existsByEmail(command.email());
+    verify(roleRepository).findByName(Roles.ROLE_ADMIN);
+    verifyNoMoreInteractions(userRepository, roleRepository, hashingService, tokenService);
+  }
 
-    @Test
-    @DisplayName("handle(SignInCommand) should return User and Token when sign in is successful")
-    void handle_SignInCommand_ShouldReturnUserAndToken_WhenSignInIsSuccessful() {
-        // Arrange
-        var command = new SignInCommand("john.doe@example.com", "password123");
-        var user = new User("john.doe@example.com", "encodedPassword", "John", "Doe", "123456789", new ArrayList<>());
-        var expectedToken = "jwt-token-123";
+  @Test
+  @DisplayName("handle(SignInCommand) should return User and Token when sign in is successful")
+  void handle_SignInCommand_ShouldReturnUserAndToken_WhenSignInIsSuccessful() {
+    // Arrange
+    var command = new SignInCommand("john.doe@example.com", "password123");
+    var user =
+        new User(
+            "john.doe@example.com",
+            "encodedPassword",
+            "John",
+            "Doe",
+            "123456789",
+            new ArrayList<>());
+    var expectedToken = "jwt-token-123";
 
-        when(userRepository.findByEmail(command.email())).thenReturn(Optional.of(user));
-        when(hashingService.matches(command.password(), "encodedPassword")).thenReturn(true);
-        when(tokenService.generateToken(user.getEmail())).thenReturn(expectedToken);
+    when(userRepository.findByEmail(command.email())).thenReturn(Optional.of(user));
+    when(hashingService.matches(command.password(), "encodedPassword")).thenReturn(true);
+    when(tokenService.generateToken(user.getEmail())).thenReturn(expectedToken);
 
-        // Act
-        var result = userCommandService.handle(command);
+    // Act
+    var result = userCommandService.handle(command);
 
-        // Assert
-        assertTrue(result.isPresent());
-        assertEquals(user, result.get().getLeft());
-        assertEquals(expectedToken, result.get().getRight());
+    // Assert
+    assertTrue(result.isPresent());
+    assertEquals(user, result.get().getLeft());
+    assertEquals(expectedToken, result.get().getRight());
 
-        verify(userRepository).findByEmail(command.email());
-        verify(hashingService).matches(command.password(), "encodedPassword");
-        verify(tokenService).generateToken(user.getEmail());
-        verifyNoMoreInteractions(userRepository, roleRepository, hashingService, tokenService);
-    }
+    verify(userRepository).findByEmail(command.email());
+    verify(hashingService).matches(command.password(), "encodedPassword");
+    verify(tokenService).generateToken(user.getEmail());
+    verifyNoMoreInteractions(userRepository, roleRepository, hashingService, tokenService);
+  }
 
-    @Test
-    @DisplayName("handle(SignInCommand) should throw RuntimeException when user not found")
-    void handle_SignInCommand_ShouldThrowRuntimeException_WhenUserNotFound() {
-        // Arrange
-        var command = new SignInCommand("john.doe@example.com", "password123");
-        
-        when(userRepository.findByEmail(command.email())).thenReturn(Optional.empty());
+  @Test
+  @DisplayName("handle(SignInCommand) should throw RuntimeException when user not found")
+  void handle_SignInCommand_ShouldThrowRuntimeException_WhenUserNotFound() {
+    // Arrange
+    var command = new SignInCommand("john.doe@example.com", "password123");
 
-        // Act + Assert
-        assertThrows(RuntimeException.class, () -> userCommandService.handle(command), "User not found");
+    when(userRepository.findByEmail(command.email())).thenReturn(Optional.empty());
 
-        verify(userRepository).findByEmail(command.email());
-        verifyNoMoreInteractions(userRepository, roleRepository, hashingService, tokenService);
-    }
+    // Act + Assert
+    assertThrows(
+        RuntimeException.class, () -> userCommandService.handle(command), "User not found");
 
-    @Test
-    @DisplayName("handle(SignInCommand) should throw RuntimeException when password is invalid")
-    void handle_SignInCommand_ShouldThrowRuntimeException_WhenPasswordIsInvalid() {
-        // Arrange
-        var command = new SignInCommand("john.doe@example.com", "wrongpassword");
-        var user = new User("john.doe@example.com", "encodedPassword", "John", "Doe", "123456789", new ArrayList<>());
+    verify(userRepository).findByEmail(command.email());
+    verifyNoMoreInteractions(userRepository, roleRepository, hashingService, tokenService);
+  }
 
-        when(userRepository.findByEmail(command.email())).thenReturn(Optional.of(user));
-        when(hashingService.matches(command.password(), "encodedPassword")).thenReturn(false);
+  @Test
+  @DisplayName("handle(SignInCommand) should throw RuntimeException when password is invalid")
+  void handle_SignInCommand_ShouldThrowRuntimeException_WhenPasswordIsInvalid() {
+    // Arrange
+    var command = new SignInCommand("john.doe@example.com", "wrongpassword");
+    var user =
+        new User(
+            "john.doe@example.com",
+            "encodedPassword",
+            "John",
+            "Doe",
+            "123456789",
+            new ArrayList<>());
 
-        // Act + Assert
-        assertThrows(RuntimeException.class, () -> userCommandService.handle(command), "Invalid password");
+    when(userRepository.findByEmail(command.email())).thenReturn(Optional.of(user));
+    when(hashingService.matches(command.password(), "encodedPassword")).thenReturn(false);
 
-        verify(userRepository).findByEmail(command.email());
-        verify(hashingService).matches(command.password(), "encodedPassword");
-        verifyNoMoreInteractions(userRepository, roleRepository, hashingService, tokenService);
-    }
+    // Act + Assert
+    assertThrows(
+        RuntimeException.class, () -> userCommandService.handle(command), "Invalid password");
+
+    verify(userRepository).findByEmail(command.email());
+    verify(hashingService).matches(command.password(), "encodedPassword");
+    verifyNoMoreInteractions(userRepository, roleRepository, hashingService, tokenService);
+  }
 }

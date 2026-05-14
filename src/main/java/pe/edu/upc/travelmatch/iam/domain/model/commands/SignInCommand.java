@@ -1,4 +1,4 @@
 package pe.edu.upc.travelmatch.iam.domain.model.commands;
 
-public record SignInCommand(String email, String password) {
-}
+/** SignInCommand value carrier. */
+public record SignInCommand(String email, String password) {}

@@ -31,6 +31,17 @@
 		<maven.compiler.version>3.11.0</maven.compiler.version>
 		<maven.surefire.version>3.0.0</maven.surefire.version>
 		<karate.version>1.5.0</karate.version>
+		<sonar.projectKey>travelmatch</sonar.projectKey>
+		<sonar.projectName>travelmatch</sonar.projectName>
+		<sonar.host.url>http://localhost:9000</sonar.host.url>
+		<sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+		<sonar.java.binaries>target/classes</sonar.java.binaries>
+		<sonar.exclusions>**/domain/model/**,**/infrastructure/**,**/interfaces/rest/resources/**,**/interfaces/rest/transform/**,**/*Application*</sonar.exclusions>
+		<sonar.issue.ignore.multicriteria>e1,e2</sonar.issue.ignore.multicriteria>
+		<sonar.issue.ignore.multicriteria.e1.ruleKey>java:S3577</sonar.issue.ignore.multicriteria.e1.ruleKey>
+		<sonar.issue.ignore.multicriteria.e1.resourceKey>**/*Runner.java</sonar.issue.ignore.multicriteria.e1.resourceKey>
+		<sonar.issue.ignore.multicriteria.e2.ruleKey>java:S6863</sonar.issue.ignore.multicriteria.e2.ruleKey>
+		<sonar.issue.ignore.multicriteria.e2.resourceKey>**/Agency*Controller.java</sonar.issue.ignore.multicriteria.e2.resourceKey>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -126,12 +137,6 @@
 			<artifactId>stripe-java</artifactId>
 			<version>29.3.0</version>
 		</dependency>
-		<dependency>
-			<groupId>io.karatelabs</groupId>
-			<artifactId>karate-junit5</artifactId>
-			<version>${karate.version}</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 
 	<build>
@@ -169,7 +174,92 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.6.0</version>
+				<dependencies>
+					<dependency>
+						<groupId>com.puppycrawl.tools</groupId>
+						<artifactId>checkstyle</artifactId>
+						<version>10.21.1</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<configLocation>google_checks.xml</configLocation>
+					<suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
+					<inputEncoding>UTF-8</inputEncoding>
+					<consoleOutput>true</consoleOutput>
+					<failsOnError>false</failsOnError>
+					<failOnViolation>false</failOnViolation>
+					<violationSeverity>warning</violationSeverity>
+					<linkXRef>false</linkXRef>
+					<includeTestSourceDirectory>true</includeTestSourceDirectory>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>5.0.0.4389</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.13</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>check</id>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<excludes>
+						<exclude>**/domain/model/**</exclude>
+						<exclude>**/infrastructure/**</exclude>
+						<exclude>**/interfaces/rest/resources/**</exclude>
+						<exclude>**/interfaces/rest/transform/**</exclude>
+						<exclude>**/interfaces/acl/dto/**</exclude>
+						<exclude>**/eventhandlers/**</exclude>
+						<exclude>**/paymentgateway/**</exclude>
+						<exclude>**/*Application*</exclude>
+					</excludes>
+					<rules>
+						<rule>
+							<element>BUNDLE</element>
+							<limits>
+								<limit>
+									<counter>INSTRUCTION</counter>
+									<value>COVEREDRATIO</value>
+									<minimum>0.80</minimum>
+								</limit>
+							</limits>
+						</rule>
+					</rules>
+				</configuration>
+			</plugin>
+
+
 		</plugins>
+
+
+
 	</build>
 
 </project>

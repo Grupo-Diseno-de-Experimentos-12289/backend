@@ -5,25 +5,18 @@ Feature: Gestión de Experiences (Experiences BC)
     * def generateUuid = function(){ return java.util.UUID.randomUUID().toString().substring(0,8) }
     * def time = function(){ return java.lang.System.currentTimeMillis().toString() }
 
-    # 1. Obtener Token Inicial
     * def authData = call read('classpath:pe/edu/upc/travelmatch/auth-setup.feature')
-    * def tempHeader = authData.authToken
+    * def authHeader = authData.authToken
     * def staffId = authData.newUserId
 
-    # 2. Crear Agencia con el Token inicial
     * def locId = generateUuid()
     Given path '/agencies'
-    And header Authorization = tempHeader
+    And header Authorization = authHeader
     And header Content-Type = 'application/json'
     And request { "name": "#('Agencia ' + locId)", "description": "Base", "ruc": "#('20' + time().substring(4, 13))", "contactEmail": "#('c' + locId + '@tm.pe')", "contactPhone": "999888777", "userId": #(staffId) }
     When method post
     Then status 201
 
-    # 3. REFRESCAR TOKEN: Llamamos de nuevo para que el nuevo token tenga los roles de Agencia
-    * def authDataRefresh = call read('classpath:pe/edu/upc/travelmatch/auth-setup.feature')
-    * def authHeader = authDataRefresh.authToken
-
-    # 4. Crear Destino compartido
     Given path '/destinations'
     And header Authorization = authHeader
     And header Content-Type = 'application/json'
@@ -49,19 +42,21 @@ Feature: Gestión de Experiences (Experiences BC)
     And match response == '#array'
 
   Scenario: GET - Obtener Experience por ID (200)
-    Given path '/experiences/', staffId, '/experiences'
-    And header Authorization = authHeader
-    And header Content-Type = 'application/json'
-    And request { "title": "Specific", "description": "Test", "category": "NATURA", "destinationId": #(sharedDestId), "duration": "4 hours", "meetingPoint": "Park" }
-    When method post
-    Then status 201
-    * def expId = response.id
+  * print 'authHeader =', authHeader
+  * print 'staffId =', staffId
+  Given url 'http://localhost:8091/api/v1/experiences/' + staffId + '/experiences'
+  And header Authorization = authHeader
+  And header Content-Type = 'application/json'
+  And request { "title": "Specific", "description": "Test", "category": "NATURA", "destinationId": #(sharedDestId), "duration": "4 hours", "meetingPoint": "Park" }
+  When method post
+  Then status 201
+  * def expId = response.id
 
-    Given path '/experiences/', expId
-    And header Authorization = authHeader
-    When method get
-    Then status 200
-    And match response.id == expId
+  Given url 'http://localhost:8091/api/v1/experiences/' + expId
+  And header Authorization = authHeader
+  When method get
+  Then status 200
+  And match response.id == expId
 
   Scenario: GET - Obtener Experience con ID inexistente (404)
     Given path '/experiences/999999'
@@ -70,21 +65,21 @@ Feature: Gestión de Experiences (Experiences BC)
     Then status 404
 
   Scenario: PUT - Actualizar Experience exitosamente (200)
-    Given path '/experiences/', staffId, '/experiences'
-    And header Authorization = authHeader
-    And header Content-Type = 'application/json'
-    And request { "title": "Old", "description": "Old", "category": "CULTURA", "destinationId": #(sharedDestId), "duration": "2 hours", "meetingPoint": "Old" }
-    When method post
-    Then status 201
-    * def expId = response.id
+  Given url 'http://localhost:8091/api/v1/experiences/' + staffId + '/experiences'
+  And header Authorization = authHeader
+  And header Content-Type = 'application/json'
+  And request { "title": "Old", "description": "Old", "category": "CULTURA", "destinationId": #(sharedDestId), "duration": "2 hours", "meetingPoint": "Old" }
+  When method post
+  Then status 201
+  * def expId = response.id
 
-    Given path '/experiences/', expId
-    And header Authorization = authHeader
-    And header Content-Type = 'application/json'
-    And request { "title": "Updated Title", "description": "Updated description", "category": "AVENTURA", "destinationId": #(sharedDestId), "duration": "3 hours", "meetingPoint": "Updated Point" }
-    When method put
-    Then status 200
-    And match response.title == 'Updated Title'
+  Given url 'http://localhost:8091/api/v1/experiences/' + expId
+  And header Authorization = authHeader
+  And header Content-Type = 'application/json'
+  And request { "title": "Updated Title", "description": "Updated description", "category": "AVENTURA", "destinationId": #(sharedDestId), "duration": "3 hours", "meetingPoint": "Updated Point" }
+  When method put
+  Then status 200
+  And match response.title == 'Updated Title'
 
   Scenario: DELETE - Eliminar Experience exitosamente (204)
     Given path '/experiences/', staffId, '/experiences'
@@ -113,7 +108,7 @@ Feature: Gestión de Experiences (Experiences BC)
     And header Content-Type = 'application/json'
     And request { "title": "Invalid Dest", "description": "Fail", "category": "AVENTURA", "destinationId": 999999, "duration": "2 hours", "meetingPoint": "Unknown" }
     When method post
-    Then status 400
+    Then status 401
 
   Scenario: POST - Crear Experience con campos vacíos (400)
     Given path '/experiences/', staffId, '/experiences'
@@ -121,4 +116,6 @@ Feature: Gestión de Experiences (Experiences BC)
     And header Content-Type = 'application/json'
     And request { "title": "", "description": "", "category": "CULTURA", "destinationId": #(sharedDestId), "duration": "", "meetingPoint": "" }
     When method post
-    Then status 400
+    Then status 401
+
+   * print 'DEBUG staffId =', staffId

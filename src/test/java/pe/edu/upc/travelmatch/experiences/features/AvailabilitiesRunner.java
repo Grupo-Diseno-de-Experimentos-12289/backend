@@ -2,10 +2,10 @@ package pe.edu.upc.travelmatch.experiences.features;
 
 import com.intuit.karate.junit5.Karate;
 
-public class AvailabilitiesRunner {
+class AvailabilitiesRunner {
 
-    @Karate.Test
-    Karate testAvailabilities() {
-        return Karate.run("availabilities").relativeTo(getClass());
-    }
+  @Karate.Test
+  Karate testAvailabilities() {
+    return Karate.run("availabilities").relativeTo(getClass());
+  }
 }

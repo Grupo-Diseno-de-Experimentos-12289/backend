@@ -1,6 +1,17 @@
 package pe.edu.upc.travelmatch.experiences.application.internal.commandservices;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -21,144 +32,126 @@ import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.DestinationI
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.ExperienceMediaRepository;
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.ExperienceRepository;
 
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
 @Nested
 @ExtendWith(MockitoExtension.class)
 @DisplayName("ExperienceMediaCommandServiceImpl Tests")
-public class ExperienceMediaCommandServiceImplTest {
+class ExperienceMediaCommandServiceImplTest {
 
-    @Mock
-    private ExperienceMediaRepository mediaRepository;
+  @Mock private ExperienceMediaRepository mediaRepository;
 
-    @Mock
-    private ExperienceRepository experienceRepository;
+  @Mock private ExperienceRepository experienceRepository;
 
-    @InjectMocks
-    private ExperienceMediaCommandServiceImpl mediaCommandService;
+  @InjectMocks private ExperienceMediaCommandServiceImpl mediaCommandService;
 
-    private Experience existingExperience;
-    private ExperienceMedia existingMedia;
+  private Experience existingExperience;
+  private ExperienceMedia existingMedia;
 
-    @BeforeEach
-    void setUp() {
-        existingExperience = new Experience(
-                "Visita a Machu Picchu",
-                "Experiencia inolvidable en la ciudadela Inca",
-                new AgencyId(1L),
-                new Category(Categories.CULTURA),
-                new DestinationId(100L),
-                "4 horas",
-                "Plaza de Armas"
-        ) {
-            @Override
-            public Long getId() {
-                return 1L;
-            }
+  @BeforeEach
+  void setUp() {
+    existingExperience =
+        new Experience(
+            "Visita a Machu Picchu",
+            "Experiencia inolvidable en la ciudadela Inca",
+            new AgencyId(1L),
+            new Category(Categories.CULTURA),
+            new DestinationId(100L),
+            "4 horas",
+            "Plaza de Armas") {
+          @Override
+          public Long getId() {
+            return 1L;
+          }
         };
 
-        existingMedia = new ExperienceMedia(
-                existingExperience,
-                "http://image.url",
-                "Beautiful landscape"
-        );
-    }
+    existingMedia =
+        new ExperienceMedia(existingExperience, "http://image.url", "Beautiful landscape");
+  }
 
-    // ==========================================
-    // TESTS PARA CREATE MEDIA
-    // ==========================================
+  // ==========================================
+  // TESTS PARA CREATE MEDIA
+  // ==========================================
 
-    @Test
-    @DisplayName("Debe crear una multimedia de experiencia exitosamente cuando la experiencia existe")
-    void handle_createMedia_experienceExists_mediaIsSaved() {
-        // --- Arrange (Preparar) ---
-        CreateExperienceMediaCommand command = new CreateExperienceMediaCommand(
-                existingExperience,
-                "http://new.image.url",
-                "Awesome view"
-        );
+  @Test
+  @DisplayName("Debe crear una multimedia de experiencia exitosamente cuando la experiencia existe")
+  void handle_createMedia_experienceExists_mediaIsSaved() {
+    // --- Arrange (Preparar) ---
+    CreateExperienceMediaCommand command =
+        new CreateExperienceMediaCommand(
+            existingExperience, "http://new.image.url", "Awesome view");
 
-        when(experienceRepository.findById(existingExperience.getId())).thenReturn(Optional.of(existingExperience));
+    when(experienceRepository.findById(existingExperience.getId()))
+        .thenReturn(Optional.of(existingExperience));
 
-        ArgumentCaptor<ExperienceMedia> mediaCaptor = ArgumentCaptor.forClass(ExperienceMedia.class);
-        when(mediaRepository.save(mediaCaptor.capture())).thenAnswer(inv -> inv.getArgument(0));
+    ArgumentCaptor<ExperienceMedia> mediaCaptor = ArgumentCaptor.forClass(ExperienceMedia.class);
+    when(mediaRepository.save(mediaCaptor.capture())).thenAnswer(inv -> inv.getArgument(0));
 
-        // --- Act (Ejecutar) ---
-        mediaCommandService.handle(command);
+    // --- Act (Ejecutar) ---
+    mediaCommandService.handle(command);
 
-        // --- Assert (Verificar) ---
-        verify(experienceRepository, times(1)).findById(any());
-        verify(mediaRepository, times(1)).save(any(ExperienceMedia.class));
+    // --- Assert (Verificar) ---
+    verify(experienceRepository, times(1)).findById(any());
+    verify(mediaRepository, times(1)).save(any(ExperienceMedia.class));
 
-        ExperienceMedia savedMedia = mediaCaptor.getValue();
-        assertEquals("http://new.image.url", savedMedia.getMediaUrl());
-        assertEquals("Awesome view", savedMedia.getCaption());
-    }
+    ExperienceMedia savedMedia = mediaCaptor.getValue();
+    assertEquals("http://new.image.url", savedMedia.getMediaUrl());
+    assertEquals("Awesome view", savedMedia.getCaption());
+  }
 
-    @Test
-    @DisplayName("Debe lanzar excepción al crear multimedia si la experiencia no existe")
-    void handle_createMedia_experienceNotFound_throwsException() {
-        // --- Arrange (Preparar) ---
-        CreateExperienceMediaCommand command = new CreateExperienceMediaCommand(
-                existingExperience,
-                "http://new.image.url",
-                "Awesome view"
-        );
-        when(experienceRepository.findById(any())).thenReturn(Optional.empty());
+  @Test
+  @DisplayName("Debe lanzar excepción al crear multimedia si la experiencia no existe")
+  void handle_createMedia_experienceNotFound_throwsException() {
+    // --- Arrange (Preparar) ---
+    CreateExperienceMediaCommand command =
+        new CreateExperienceMediaCommand(
+            existingExperience, "http://new.image.url", "Awesome view");
+    when(experienceRepository.findById(any())).thenReturn(Optional.empty());
 
-        // --- Act & Assert (Ejecutar y Verificar) ---
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> mediaCommandService.handle(command));
+    // --- Act & Assert (Ejecutar y Verificar) ---
+    IllegalArgumentException exception =
+        assertThrows(IllegalArgumentException.class, () -> mediaCommandService.handle(command));
 
-        assertTrue(exception.getMessage().contains("does not exist"));
-        verify(mediaRepository, never()).save(any());
-    }
+    assertTrue(exception.getMessage().contains("does not exist"));
+    verify(mediaRepository, never()).save(any());
+  }
 
-    // ==========================================
-    // TESTS PARA UPDATE MEDIA
-    // ==========================================
+  // ==========================================
+  // TESTS PARA UPDATE MEDIA
+  // ==========================================
 
-    @Test
-    @DisplayName("Debe actualizar la multimedia exitosamente cuando los datos son válidos")
-    void handle_updateMedia_validData_returnsUpdatedMedia() {
-        // --- Arrange (Preparar) ---
-        UpdateExperienceMediaCommand command = new UpdateExperienceMediaCommand(
-                1L,
-                "http://updated.image.url",
-                "Updated caption"
-        );
-        when(mediaRepository.findById(1L)).thenReturn(Optional.of(existingMedia));
-        when(mediaRepository.save(any(ExperienceMedia.class))).thenReturn(existingMedia);
+  @Test
+  @DisplayName("Debe actualizar la multimedia exitosamente cuando los datos son válidos")
+  void handle_updateMedia_validData_returnsUpdatedMedia() {
+    // --- Arrange (Preparar) ---
+    UpdateExperienceMediaCommand command =
+        new UpdateExperienceMediaCommand(1L, "http://updated.image.url", "Updated caption");
+    when(mediaRepository.findById(1L)).thenReturn(Optional.of(existingMedia));
+    when(mediaRepository.save(any(ExperienceMedia.class))).thenReturn(existingMedia);
 
-        // --- Act (Ejecutar) ---
-        Optional<ExperienceMedia> result = mediaCommandService.handle(command);
+    // --- Act (Ejecutar) ---
+    Optional<ExperienceMedia> result = mediaCommandService.handle(command);
 
-        // --- Assert (Verificar) ---
-        assertTrue(result.isPresent());
-        assertEquals("http://updated.image.url", existingMedia.getMediaUrl());
-        assertEquals("Updated caption", existingMedia.getCaption());
-        verify(mediaRepository, times(1)).save(existingMedia);
-    }
+    // --- Assert (Verificar) ---
+    assertTrue(result.isPresent());
+    assertEquals("http://updated.image.url", existingMedia.getMediaUrl());
+    assertEquals("Updated caption", existingMedia.getCaption());
+    verify(mediaRepository, times(1)).save(existingMedia);
+  }
 
-    // ==========================================
-    // TESTS PARA DELETE MEDIA
-    // ==========================================
+  // ==========================================
+  // TESTS PARA DELETE MEDIA
+  // ==========================================
 
-    @Test
-    @DisplayName("Debe eliminar lógicamente la multimedia si existe")
-    void deleteById_mediaExists_marksAsDeleted() {
-        // --- Arrange (Preparar) ---
-        when(mediaRepository.findById(1L)).thenReturn(Optional.of(existingMedia));
+  @Test
+  @DisplayName("Debe eliminar lógicamente la multimedia si existe")
+  void deleteById_mediaExists_marksAsDeleted() {
+    // --- Arrange (Preparar) ---
+    when(mediaRepository.findById(1L)).thenReturn(Optional.of(existingMedia));
 
-        // --- Act (Ejecutar) ---
-        assertDoesNotThrow(() -> mediaCommandService.deleteById(1L));
+    // --- Act (Ejecutar) ---
+    assertDoesNotThrow(() -> mediaCommandService.deleteById(1L));
 
-        // --- Assert (Verificar) ---
-        assertNotNull(existingMedia.getDeletedAt());
-        verify(mediaRepository, times(1)).findById(1L);
-    }
+    // --- Assert (Verificar) ---
+    assertNotNull(existingMedia.getDeletedAt());
+    verify(mediaRepository, times(1)).findById(1L);
+  }
 }

@@ -1,5 +1,7 @@
 package pe.edu.upc.travelmatch.profiles.application.internal.queryservices;
 
+import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.travelmatch.profiles.domain.model.aggregates.Favorite;
 import pe.edu.upc.travelmatch.profiles.domain.model.queries.GetFavoriteByUserIdAndExperienceIdQuery;
@@ -8,30 +10,30 @@ import pe.edu.upc.travelmatch.profiles.domain.model.queries.GetFavoritesByUserId
 import pe.edu.upc.travelmatch.profiles.domain.services.FavoriteQueryService;
 import pe.edu.upc.travelmatch.profiles.infrastructure.persistence.jpa.repositories.FavoriteRepository;
 
-import java.util.List;
-import java.util.Optional;
-
+/** FavoriteQueryServiceImpl type. */
 @Service
 public class FavoriteQueryServiceImpl implements FavoriteQueryService {
 
-    private final FavoriteRepository favoriteRepository;
+  private final FavoriteRepository favoriteRepository;
 
-    public FavoriteQueryServiceImpl(FavoriteRepository favoriteRepository) {
-        this.favoriteRepository = favoriteRepository;
-    }
+  /** Constructs a new FavoriteQueryServiceImpl. */
+  public FavoriteQueryServiceImpl(FavoriteRepository favoriteRepository) {
+    this.favoriteRepository = favoriteRepository;
+  }
 
-    @Override
-    public List<Favorite> handle(GetFavoritesByUserIdQuery query) {
-        return this.favoriteRepository.findAllByUserId(query.userId());
-    }
+  @Override
+  public List<Favorite> handle(GetFavoritesByUserIdQuery query) {
+    return this.favoriteRepository.findAllByUserId(query.userId());
+  }
 
-    @Override
-    public List<Favorite> handle(GetFavoritesByExperienceIdQuery query) {
-        return this.favoriteRepository.findAllByExperienceId(query.experienceId());
-    }
+  @Override
+  public List<Favorite> handle(GetFavoritesByExperienceIdQuery query) {
+    return this.favoriteRepository.findAllByExperienceId(query.experienceId());
+  }
 
-    @Override
-    public Optional<Favorite> handle(GetFavoriteByUserIdAndExperienceIdQuery query) {
-        return this.favoriteRepository.findByUserIdAndExperienceId(query.userId(), query.experienceId());
-    }
+  @Override
+  public Optional<Favorite> handle(GetFavoriteByUserIdAndExperienceIdQuery query) {
+    return this.favoriteRepository.findByUserIdAndExperienceId(
+        query.userId(), query.experienceId());
+  }
 }
