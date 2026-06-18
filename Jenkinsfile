@@ -2,14 +2,14 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven 3.9.15'
-        jdk 'JDK_21'
+        maven 'MAVEN_3_9_15'
+        jdk 'JAVA_HOME'
     }
 
     stages {
         stage('Compile Project') {
             steps {
-                withMaven(maven: 'Maven 3.9.15') {
+                withMaven(maven: 'MAVEN_3_9_15') {
                     bat 'mvn clean compile'
                 }
             }
