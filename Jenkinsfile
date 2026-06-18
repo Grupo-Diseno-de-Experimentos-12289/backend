@@ -10,7 +10,7 @@ pipeline {
         stage('Compile Project') {
             steps {
                 withMaven(maven: 'MAVEN_3_9_15') {
-                    bat 'mvn clean compile'
+                    sh 'mvn clean compile'
                 }
             }
         }
@@ -18,7 +18,7 @@ pipeline {
         stage('Validate Checkstyle') {
             steps {
                 withMaven(maven: 'MAVEN_3_9_15') {
-                    bat 'mvn checkstyle:check'
+                    sh 'mvn checkstyle:check'
                 }
             }
         }
@@ -26,7 +26,7 @@ pipeline {
         stage('Validate Unit Tests') {
             steps {
                 withMaven(maven: 'MAVEN_3_9_15') {
-                    bat 'mvn test'
+                    sh 'mvn test'
                 }
             }
         }
@@ -34,7 +34,7 @@ pipeline {
         stage('Validate Test Coverage') {
             steps {
                 withMaven(maven: 'MAVEN_3_9_15') {
-                    bat 'mvn jacoco:report'
+                    sh 'mvn jacoco:report'
                 }
             }
         }
@@ -42,7 +42,7 @@ pipeline {
         stage('Package Application') {
             steps {
                 withMaven(maven: 'MAVEN_3_9_15') {
-                    bat 'mvn package'
+                    sh 'mvn package'
                 }
             }
         }
@@ -50,7 +50,7 @@ pipeline {
         stage('SonarQube Analysis'){
             steps{
                 withSonarQubeEnv('TravelSonarServer') {
-                    bat 'mvn clean verify sonar:sonar -Dsonar.projectkey=TravelMatch'
+                    sh 'mvn clean verify sonar:sonar -Dsonar.projectkey=TravelMatch'
                 }
 
                 script {
@@ -71,8 +71,8 @@ pipeline {
                             echo "Iniciando la construcción de la imagen de Docker: ${IMAGE_NAME}:${TAG}"
 
         					echo "Construyendo imagen híbrida/compatible con servidores de producción (AMD64)..."
-        					bat "docker buildx build --platform linux/amd64 -t ${IMAGE_NAME}:${TAG} --load ."
-        					bat "docker buildx build --platform linux/amd64 -t ${IMAGE_NAME}:latest --load ."
+        					sh "docker buildx build --platform linux/amd64 -t ${IMAGE_NAME}:${TAG} --load ."
+        					sh "docker buildx build --platform linux/amd64 -t ${IMAGE_NAME}:latest --load ."
 
                             echo "Imagen construida exitosamente."
                         }
