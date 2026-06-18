@@ -17,7 +17,7 @@ pipeline {
 
         stage('Validate Checkstyle') {
             steps {
-                withMaven(maven: 'Maven 3.9.15') {
+                withMaven(maven: 'MAVEN_3_9_15') {
                     bat 'mvn checkstyle:check'
                 }
             }
@@ -25,7 +25,7 @@ pipeline {
 
         stage('Validate Unit Tests') {
             steps {
-                withMaven(maven: 'Maven 3.9.15') {
+                withMaven(maven: 'MAVEN_3_9_15') {
                     bat 'mvn test'
                 }
             }
@@ -33,7 +33,7 @@ pipeline {
 
         stage('Validate Test Coverage') {
             steps {
-                withMaven(maven: 'Maven 3.9.15') {
+                withMaven(maven: 'MAVEN_3_9_15') {
                     bat 'mvn jacoco:report'
                 }
             }
@@ -41,7 +41,7 @@ pipeline {
 
         stage('Package Application') {
             steps {
-                withMaven(maven: 'Maven 3.9.15') {
+                withMaven(maven: 'MAVEN_3_9_15') {
                     bat 'mvn package'
                 }
             }
