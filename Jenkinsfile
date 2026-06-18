@@ -6,6 +6,12 @@ pipeline {
         jdk 'JAVA_HOME'
     }
 
+    environment {
+
+            IMAGE_NAME = "travel-match"
+            TAG        = "${env.BUILD_NUMBER}"
+        }
+
     stages {
         stage('Compile Project') {
             steps {
