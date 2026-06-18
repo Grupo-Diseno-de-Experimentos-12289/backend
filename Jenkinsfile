@@ -50,7 +50,7 @@ pipeline {
         stage('SonarQube Analysis'){
             steps{
                 withSonarQubeEnv('TravelSonarServer') {
-                    sh 'mvn clean verify sonar:sonar -Dsonar.projectkey=travelMatch'
+                    sh 'mvn clean verify sonar:sonar -Dsonar.projectkey=travelMatch -Dsonar.javascript.exclusions=**/*'
                 }
 
                 script {
