@@ -7,8 +7,13 @@ import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.travelmatch.bookings.domain.model.commands.CreateBookingCommand;
 import pe.edu.upc.travelmatch.bookings.domain.services.BookingCommandService;
 import pe.edu.upc.travelmatch.bookings.domain.model.queries.GetBookingByIdQuery;
+import pe.edu.upc.travelmatch.bookings.domain.model.queries.GetBookingsByUserIdQuery;
+import pe.edu.upc.travelmatch.bookings.domain.model.valueobjects.UserId;
+import pe.edu.upc.travelmatch.bookings.domain.model.commands.ProcessPaymentCommand;
+import pe.edu.upc.travelmatch.bookings.domain.model.valueobjects.TransactionId;
 import pe.edu.upc.travelmatch.bookings.domain.services.BookingQueryService;
 import pe.edu.upc.travelmatch.bookings.interfaces.rest.resources.*;
+import java.util.List;
 import pe.edu.upc.travelmatch.bookings.interfaces.rest.transform.*;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -99,5 +104,24 @@ public class BookingsController {
         var command = FailPaymentCommandFromResourceAssembler.toCommandFromResource(resource);
         var success = bookingCommandService.handle(command);
         return success ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<BookingResource>> getBookingsByUserId(@PathVariable Long userId) {
+        var query = new GetBookingsByUserIdQuery(new UserId(userId));
+        var bookings = bookingQueryService.handle(query);
+        var resources = bookings.stream()
+                .map(BookingResourceFromEntityAssembler::toResourceFromEntity)
+                .toList();
+        return ResponseEntity.ok(resources);
+    }
+
+    @PostMapping("/{bookingId}/confirm-payment")
+    public ResponseEntity<BookingResource> confirmPayment(@PathVariable Long bookingId) {
+        var command = new ProcessPaymentCommand(bookingId, "mock_method", new TransactionId("mock_txn_" + bookingId));
+        bookingCommandService.handle(command);
+        var bookingOpt = bookingQueryService.handle(new GetBookingByIdQuery(bookingId));
+        return bookingOpt.map(booking -> ResponseEntity.ok(BookingResourceFromEntityAssembler.toResourceFromEntity(booking)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
