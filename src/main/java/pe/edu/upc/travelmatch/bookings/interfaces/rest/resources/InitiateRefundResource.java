@@ -1,5 +1,4 @@
 package pe.edu.upc.travelmatch.bookings.interfaces.rest.resources;
 
-public record InitiateRefundResource(
-        String refundReason
-) { }
+/** InitiateRefundResource value carrier. */
+public record InitiateRefundResource(String refundReason) {}

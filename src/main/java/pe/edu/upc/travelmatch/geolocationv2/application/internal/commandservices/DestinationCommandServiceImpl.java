@@ -10,18 +10,12 @@ import pe.edu.upc.travelmatch.geolocationv2.domain.model.valueobjects.Destinatio
 import pe.edu.upc.travelmatch.geolocationv2.domain.services.DestinationCommandService;
 import pe.edu.upc.travelmatch.geolocationv2.infrastructure.persistence.jpa.repositories.DestinationRepository;
 
-/**
- * Destination command service implementation.
- */
+/** DestinationCommandServiceImpl type. */
 @Service
 public class DestinationCommandServiceImpl implements DestinationCommandService {
   private final DestinationRepository destinationRepository;
 
-  /**
-   * Constructor.
-   *
-   * @param destinationRepository destination repository
-   */
+  /** Constructs a new DestinationCommandServiceImpl. */
   public DestinationCommandServiceImpl(DestinationRepository destinationRepository) {
     this.destinationRepository = destinationRepository;
   }
@@ -48,13 +42,20 @@ public class DestinationCommandServiceImpl implements DestinationCommandService 
     if (this.destinationRepository.existsByNameAndIdIsNot(name, destinationId)) {
       throw new IllegalArgumentException("Destination with name " + name + " already exists");
     }
-    if (!this.destinationRepository.existsById(destinationId)) {
-      throw new IllegalArgumentException("Destination with id " + destinationId
-          + " does not exist");
-    }
-    var destinationToUpdate = this.destinationRepository.findById(destinationId).get();
-    destinationToUpdate.updateInformation(command.name(), command.address(), command.district(),
-        command.city(), command.state(), command.country());
+    var destinationToUpdate =
+        this.destinationRepository
+            .findById(destinationId)
+            .orElseThrow(
+                () ->
+                    new IllegalArgumentException(
+                        "Destination with id " + destinationId + " does not exist"));
+    destinationToUpdate.updateInformation(
+        command.name(),
+        command.address(),
+        command.district(),
+        command.city(),
+        command.state(),
+        command.country());
 
     try {
       var updatedDestination = this.destinationRepository.save(destinationToUpdate);
@@ -67,8 +68,8 @@ public class DestinationCommandServiceImpl implements DestinationCommandService 
   @Override
   public void handle(DeleteDestinationCommand command) {
     if (!this.destinationRepository.existsById(command.destinationId())) {
-      throw new IllegalArgumentException("Destination with id " + command.destinationId()
-          + " does not exist");
+      throw new IllegalArgumentException(
+          "Destination with id " + command.destinationId() + " does not exist");
     }
     try {
       this.destinationRepository.deleteById(command.destinationId());

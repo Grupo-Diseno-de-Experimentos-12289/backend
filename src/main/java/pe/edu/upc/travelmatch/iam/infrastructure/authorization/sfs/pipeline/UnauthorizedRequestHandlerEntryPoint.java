@@ -10,30 +10,19 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
-/**
- * Unauthorized Request Handler Entry Point.
- */
+/** UnauthorizedRequestHandlerEntryPoint type. */
 @Component
 public class UnauthorizedRequestHandlerEntryPoint implements AuthenticationEntryPoint {
-  /**
-   * Logger used by the entry point.
-   */
   private static final Logger LOGGER =
       LoggerFactory.getLogger(UnauthorizedRequestHandlerEntryPoint.class);
 
   @Override
   public void commence(
-      final HttpServletRequest request,
-      final HttpServletResponse response,
-      final AuthenticationException authorizationException
-  ) throws IOException, ServletException {
-    LOGGER.error(
-        "Unauthorized request: {}",
-        authorizationException.getMessage()
-    );
-    response.sendError(
-        HttpServletResponse.SC_UNAUTHORIZED,
-        "Unauthorized request detected"
-    );
+      HttpServletRequest request,
+      HttpServletResponse response,
+      AuthenticationException authorizationException)
+      throws IOException, ServletException {
+    LOGGER.error("Unauthorized request: {}", authorizationException.getMessage());
+    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized request detected");
   }
 }

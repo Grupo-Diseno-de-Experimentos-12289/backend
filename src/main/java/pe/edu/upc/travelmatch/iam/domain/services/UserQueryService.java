@@ -7,32 +7,14 @@ import pe.edu.upc.travelmatch.iam.domain.model.queries.GetAllUsersQuery;
 import pe.edu.upc.travelmatch.iam.domain.model.queries.GetUserByEmailQuery;
 import pe.edu.upc.travelmatch.iam.domain.model.queries.GetUserByIdQuery;
 
-/**
- * User query service interface.
- */
+/** UserQueryService contract. */
 public interface UserQueryService {
-
-  /**
-   * Handle get all users query.
-   *
-   * @param query the get all users query
-   * @return the list of users
-   */
+  /** Handle. */
   List<User> handle(GetAllUsersQuery query);
 
-  /**
-   * Handle get user by id query.
-   *
-   * @param query the get user by id query
-   * @return the user if found
-   */
+  /** Handle. */
   Optional<User> handle(GetUserByIdQuery query);
 
-  /**
-   * Handle get user by email query.
-   *
-   * @param query the get user by email query
-   * @return the user if found
-   */
+  /** Handle. */
   Optional<User> handle(GetUserByEmailQuery query);
 }

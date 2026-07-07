@@ -8,7 +8,6 @@ Feature: Gestión de Availabilities (Experiences BC)
     * def generateUuid = function(){ return java.util.UUID.randomUUID().toString().substring(0,8) }
     * def time = function(){ return java.lang.System.currentTimeMillis().toString() }
 
-    # Setup inicial único: Agencia, Destino y Experiencia base
     * def locId = generateUuid()
     Given path '/agencies'
     And header Authorization = authHeader
@@ -68,7 +67,6 @@ Feature: Gestión de Availabilities (Experiences BC)
     And match response == '#array'
 
   Scenario: DELETE - Eliminar Availability exitosamente (204)
-    # Crear una para borrar
     Given path '/experiences/', sharedExpId, '/availabilities'
     And header Authorization = authHeader
     And header Content-Type = 'application/json'

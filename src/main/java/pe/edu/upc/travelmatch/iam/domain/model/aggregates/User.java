@@ -15,9 +15,7 @@ import lombok.Getter;
 import pe.edu.upc.travelmatch.iam.domain.model.entities.Role;
 import pe.edu.upc.travelmatch.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 
-/**
- * User aggregate root.
- */
+/** User type. */
 @Entity
 public class User extends AuditableAbstractAggregateRoot<User> {
 
@@ -46,37 +44,26 @@ public class User extends AuditableAbstractAggregateRoot<User> {
   @Size(max = 20)
   private String phone;
 
-  @Getter
-  private boolean isActive;
+  @Getter private boolean isActive;
 
-  @Getter
-  private boolean emailVerified;
+  @Getter private boolean emailVerified;
 
   @Getter
   @ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable(name = "user_roles",
+  @JoinTable(
+      name = "user_roles",
       joinColumns = @JoinColumn(name = "user_id"),
       inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles;
 
-  /**
-   * Default constructor.
-   */
+  /** Constructs a new User. */
   public User() {
     this.roles = new HashSet<>();
     this.isActive = true;
     this.emailVerified = false;
   }
 
-  /**
-   * Constructor with basic info.
-   *
-   * @param email     the email
-   * @param password  the password
-   * @param firstName the first name
-   * @param lastName  the last name
-   * @param phone     the phone
-   */
+  /** Constructs a new User. */
   public User(String email, String password, String firstName, String lastName, String phone) {
     this();
     this.email = email;
@@ -87,73 +74,47 @@ public class User extends AuditableAbstractAggregateRoot<User> {
     this.roles = new HashSet<>();
   }
 
-  /**
-   * Constructor with roles.
-   *
-   * @param email     the email
-   * @param password  the password
-   * @param firstName the first name
-   * @param lastName  the last name
-   * @param phone     the phone
-   * @param roles     the list of roles
-   */
-  public User(String email, String password, String firstName, String lastName, String phone,
-              List<Role> roles) {
+  /** Constructs a new User. */
+  public User(
+      String email,
+      String password,
+      String firstName,
+      String lastName,
+      String phone,
+      List<Role> roles) {
     this(email, password, firstName, lastName, phone);
     addRoles(roles);
   }
 
-  /**
-   * Adds a role to the user.
-   *
-   * @param role the role to add
-   * @return the user instance
-   */
+  /** Add role. */
   public User addRole(Role role) {
     this.roles.add(role);
     return this;
   }
 
-  /**
-   * Adds multiple roles to the user.
-   *
-   * @param roles the list of roles to add
-   * @return the user instance
-   */
+  /** Add roles. */
   public User addRoles(List<Role> roles) {
     var validatedRoleSet = Role.validateRoleSet(roles);
     this.roles.addAll(validatedRoleSet);
     return this;
   }
 
-  /**
-   * Verifies the user's email.
-   */
+  /** Verify email. */
   public void verifyEmail() {
     this.emailVerified = true;
   }
 
-  /**
-   * Deactivates the user account.
-   */
+  /** Deactivate user. */
   public void deactivateUser() {
     this.isActive = false;
   }
 
-  /**
-   * Activates the user account.
-   */
+  /** Activate user. */
   public void activateUser() {
     this.isActive = true;
   }
 
-  /**
-   * Updates the user's basic information.
-   *
-   * @param firstName the new first name
-   * @param lastName  the new last name
-   * @param phone     the new phone
-   */
+  /** Update user info. */
   public void updateUserInfo(String firstName, String lastName, String phone) {
     this.firstName = firstName;
     this.lastName = lastName;

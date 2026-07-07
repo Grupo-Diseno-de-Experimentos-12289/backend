@@ -17,7 +17,7 @@ Feature: Setup de Autenticación Reutilizable - Profiles BC
       "firstName": "Karate",
       "lastName":  "Bot",
       "phone":     "999000111",
-      "roles":     ["ROLE_TOURIST"]
+      "roles":     ["ROLE_AGENCY_STAFF"]
     }
     """
     When method post

@@ -6,24 +6,11 @@ import pe.edu.upc.travelmatch.iam.domain.model.aggregates.User;
 import pe.edu.upc.travelmatch.iam.domain.model.commands.SignInCommand;
 import pe.edu.upc.travelmatch.iam.domain.model.commands.SignUpCommand;
 
-/**
- * User command service interface.
- */
+/** UserCommandService contract. */
 public interface UserCommandService {
-
-  /**
-   * Handle sign up command.
-   *
-   * @param command the sign up command
-   * @return the user if successful
-   */
+  /** Handle. */
   Optional<User> handle(SignUpCommand command);
 
-  /**
-   * Handle sign in command.
-   *
-   * @param command the sign in command
-   * @return the user and token if successful
-   */
+  /** Handle. */
   Optional<ImmutablePair<User, String>> handle(SignInCommand command);
 }

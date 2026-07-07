@@ -2,25 +2,15 @@ package pe.edu.upc.travelmatch.geolocationv2.domain.model.valueobjects;
 
 import jakarta.persistence.Embeddable;
 
-/**
- * City value object.
- *
- * @param city the city name
- */
+/** City value carrier. */
 @Embeddable
 public record City(String city) {
-  /**
-   * Default constructor.
-   */
+  /** Constructs a new City. */
   public City() {
     this(null);
   }
 
-  /**
-   * Compact constructor.
-   *
-   * @throws IllegalArgumentException if city is null or blank
-   */
+  /** Documentation. */
   public City {
     if (city == null || city.isBlank()) {
       throw new IllegalArgumentException("City cannot be null or blank");

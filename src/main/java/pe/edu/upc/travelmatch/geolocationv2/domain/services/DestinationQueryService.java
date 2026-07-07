@@ -7,32 +7,14 @@ import pe.edu.upc.travelmatch.geolocationv2.domain.model.queries.GetAllDestinati
 import pe.edu.upc.travelmatch.geolocationv2.domain.model.queries.GetDestinationByDestinationNameQuery;
 import pe.edu.upc.travelmatch.geolocationv2.domain.model.queries.GetDestinationByIdQuery;
 
-/**
- * Destination query service.
- */
+/** DestinationQueryService contract. */
 public interface DestinationQueryService {
-
-  /**
-   * Handle get all destinations query.
-   *
-   * @param query the get all query
-   * @return the list of destinations
-   */
+  /** Handle. */
   List<Destination> handle(GetAllDestinationsQuery query);
 
-  /**
-   * Handle get destination by destination name query.
-   *
-   * @param query the get by name query
-   * @return the destination if found
-   */
+  /** Handle. */
   Optional<Destination> handle(GetDestinationByDestinationNameQuery query);
 
-  /**
-   * Handle get destination by id query.
-   *
-   * @param query the get by id query
-   * @return the destination if found
-   */
+  /** Handle. */
   Optional<Destination> handle(GetDestinationByIdQuery query);
 }

@@ -2,25 +2,15 @@ package pe.edu.upc.travelmatch.geolocationv2.domain.model.valueobjects;
 
 import jakarta.persistence.Embeddable;
 
-/**
- * Destination name value object.
- *
- * @param name the destination name
- */
+/** DestinationName value carrier. */
 @Embeddable
 public record DestinationName(String name) {
-  /**
-   * Default constructor.
-   */
+  /** Constructs a new DestinationName. */
   public DestinationName() {
     this(null);
   }
 
-  /**
-   * Compact constructor.
-   *
-   * @throws IllegalArgumentException if name is null or blank
-   */
+  /** Documentation. */
   public DestinationName {
     if (name == null || name.isBlank()) {
       throw new IllegalArgumentException("Destination name cannot be null or blank");

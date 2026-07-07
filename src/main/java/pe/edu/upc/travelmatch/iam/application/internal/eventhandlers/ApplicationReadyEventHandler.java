@@ -9,51 +9,33 @@ import org.springframework.stereotype.Service;
 import pe.edu.upc.travelmatch.iam.domain.model.commands.SeedRolesCommand;
 import pe.edu.upc.travelmatch.iam.domain.services.RoleCommandService;
 
-/**
- * Handles application-ready events and seeds roles when needed.
- */
+/** ApplicationReadyEventHandler type. */
 @Service
-public final class ApplicationReadyEventHandler {
-  private final Logger logger = LoggerFactory.getLogger(ApplicationReadyEventHandler.class);
+public class ApplicationReadyEventHandler {
+  private static final Logger LOGGER =
+      LoggerFactory.getLogger(ApplicationReadyEventHandler.class);
 
   private final RoleCommandService roleCommandService;
 
-  /**
-   * Constructor.
-   *
-   * @param roleCommandServiceDependency role command service dependency
-   */
-  public ApplicationReadyEventHandler(final RoleCommandService roleCommandServiceDependency) {
-    this.roleCommandService = roleCommandServiceDependency;
+  /** Constructs a new ApplicationReadyEventHandler. */
+  public ApplicationReadyEventHandler(RoleCommandService roleCommandService) {
+    this.roleCommandService = roleCommandService;
   }
 
-  /**
-   * Handles the application-ready event.
-   *
-   * @param event application ready event
-   */
+  /** On. */
   @EventListener
-  public void on(final ApplicationReadyEvent event) {
+  public void on(ApplicationReadyEvent event) {
     var applicationName = event.getApplicationContext().getId();
-    logger.info(
+    LOGGER.info(
         "Starting to verify if roles seeding is needed for {} at {}",
         applicationName,
-        getCurrentTimestamp()
-    );
+        getCurrentTimestamp());
     var seedRolesCommand = new SeedRolesCommand();
     roleCommandService.handle(seedRolesCommand);
-    logger.info(
-        "Roles seeding verification finished for {} at {}",
-        applicationName,
-        getCurrentTimestamp()
-    );
+    LOGGER.info(
+        "Roles seeding verification finished for {} at {}", applicationName, getCurrentTimestamp());
   }
 
-  /**
-   * Returns the current timestamp.
-   *
-   * @return current timestamp
-   */
   private Timestamp getCurrentTimestamp() {
     return new Timestamp(System.currentTimeMillis());
   }

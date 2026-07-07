@@ -5,32 +5,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 
-/**
- * Builds Spring Security username/password authentication tokens.
- */
-public final class UsernamePasswordAuthenticationTokenBuilder {
-  private UsernamePasswordAuthenticationTokenBuilder() {
-  }
-
-  /**
-   * Builds an authentication token.
-   *
-   * @param principal the authenticated principal
-   * @param request the current HTTP request
-   * @return authentication token
-   */
+/** UsernamePasswordAuthenticationTokenBuilder type. */
+public class UsernamePasswordAuthenticationTokenBuilder {
+  /** Build. */
   public static UsernamePasswordAuthenticationToken build(
-      final UserDetails principal,
-      final HttpServletRequest request
-  ) {
-    var usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-        principal,
-        null,
-        principal.getAuthorities()
-    );
+      UserDetails principal, HttpServletRequest request) {
+    var usernamePasswordAuthenticationToken =
+        new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
     usernamePasswordAuthenticationToken.setDetails(
-        new WebAuthenticationDetailsSource().buildDetails(request)
-    );
+        new WebAuthenticationDetailsSource().buildDetails(request));
     return usernamePasswordAuthenticationToken;
   }
 }

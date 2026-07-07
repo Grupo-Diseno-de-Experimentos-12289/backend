@@ -6,12 +6,14 @@ import pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.Quantity;
 import pe.edu.upc.travelmatch.profiles.domain.model.valueobjects.UserId;
 import pe.edu.upc.travelmatch.profiles.interfaces.rest.resources.UpdateCartItemQuantityResource;
 
+/** UpdateCartItemQuantityCommandFromResourceAssembler type. */
 public class UpdateCartItemQuantityCommandFromResourceAssembler {
-    public static UpdateCartItemQuantityCommand toCommandFromResource(Long userId, UpdateCartItemQuantityResource resource) {
-        return new UpdateCartItemQuantityCommand(
-                new UserId(userId),
-                new AvailabilityId(resource.availabilityId()),
-                new Quantity(resource.newQuantity())
-        );
-    }
+  /** To command from resource. */
+  public static UpdateCartItemQuantityCommand toCommandFromResource(
+      Long userId, UpdateCartItemQuantityResource resource) {
+    return new UpdateCartItemQuantityCommand(
+        new UserId(userId),
+        new AvailabilityId(resource.availabilityId()),
+        new Quantity(resource.newQuantity()));
+  }
 }

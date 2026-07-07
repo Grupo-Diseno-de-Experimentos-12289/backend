@@ -11,18 +11,12 @@ import pe.edu.upc.travelmatch.geolocationv2.domain.model.valueobjects.Destinatio
 import pe.edu.upc.travelmatch.geolocationv2.domain.services.DestinationQueryService;
 import pe.edu.upc.travelmatch.geolocationv2.infrastructure.persistence.jpa.repositories.DestinationRepository;
 
-/**
- * Destination query service implementation.
- */
+/** DestinationQueryServiceImpl type. */
 @Service
 public class DestinationQueryServiceImpl implements DestinationQueryService {
   private final DestinationRepository destinationRepository;
 
-  /**
-   * Constructor.
-   *
-   * @param destinationRepository destination repository
-   */
+  /** Constructs a new DestinationQueryServiceImpl. */
   public DestinationQueryServiceImpl(DestinationRepository destinationRepository) {
     this.destinationRepository = destinationRepository;
   }

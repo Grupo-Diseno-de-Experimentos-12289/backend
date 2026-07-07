@@ -18,9 +18,7 @@ import pe.edu.upc.travelmatch.geolocationv2.domain.model.valueobjects.District;
 import pe.edu.upc.travelmatch.geolocationv2.domain.model.valueobjects.State;
 import pe.edu.upc.travelmatch.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 
-/**
- * Destination aggregate root.
- */
+/** Destination type. */
 @Entity
 @Table(name = "destinations")
 @EntityListeners(AuditingEntityListener.class)
@@ -29,69 +27,64 @@ public class Destination extends AuditableAbstractAggregateRoot<Destination> {
   @Getter
   @Embedded
   @AttributeOverrides({
-      @AttributeOverride(name = "name",
-          column = @Column(name = "destination_name", length = 100, nullable = false))
+    @AttributeOverride(
+        name = "name",
+        column = @Column(name = "destination_name", length = 100, nullable = false))
   })
   private DestinationName name;
 
   @Getter
   @Embedded
   @AttributeOverrides({
-      @AttributeOverride(name = "address",
-          column = @Column(name = "destination_address", length = 150, nullable = false))
+    @AttributeOverride(
+        name = "address",
+        column = @Column(name = "destination_address", length = 150, nullable = false))
   })
   private DestinationAddress address;
 
   @Getter
   @Embedded
   @AttributeOverrides({
-      @AttributeOverride(name = "district",
-          column = @Column(name = "district", length = 50, nullable = false))
+    @AttributeOverride(
+        name = "district",
+        column = @Column(name = "district", length = 50, nullable = false))
   })
   private District district;
 
   @Getter
   @Embedded
   @AttributeOverrides({
-      @AttributeOverride(name = "city",
-          column = @Column(name = "city", length = 50, nullable = false))
+    @AttributeOverride(
+        name = "city",
+        column = @Column(name = "city", length = 50, nullable = false))
   })
   private City city;
 
   @Getter
   @Embedded
   @AttributeOverrides({
-      @AttributeOverride(name = "state",
-          column = @Column(name = "state", length = 50, nullable = false))
+    @AttributeOverride(
+        name = "state",
+        column = @Column(name = "state", length = 50, nullable = false))
   })
   private State state;
 
   @Getter
   @Embedded
   @AttributeOverrides({
-      @AttributeOverride(name = "country",
-          column = @Column(name = "country", length = 50, nullable = false))
+    @AttributeOverride(
+        name = "country",
+        column = @Column(name = "country", length = 50, nullable = false))
   })
   private Country country;
 
-  /**
-   * Default constructor.
-   */
-  public Destination() {
-  }
+  // Constructores
+  /** Constructs a new Destination. */
+  public Destination() {}
 
-  /**
-   * Constructor with detailed parameters.
-   *
-   * @param name     the name
-   * @param address  the address
-   * @param district the district
-   * @param city     the city
-   * @param state    the state
-   * @param country  the country
-   */
-  public Destination(String name, String address, String district, String city, String state,
-                     String country) {
+  /** Constructs a new Destination. */
+  public Destination(
+      String name, String address, String district, String city, String state, String country) {
     this.name = new DestinationName(name);
     this.address = new DestinationAddress(address);
     this.district = new District(district);
@@ -100,11 +93,8 @@ public class Destination extends AuditableAbstractAggregateRoot<Destination> {
     this.country = new Country(country);
   }
 
-  /**
-   * Constructor from CreateDestinationCommand.
-   *
-   * @param command the create command
-   */
+  // Métodos para actualizar (si quieres agregarlos más adelante)
+  /** Constructs a new Destination. */
   public Destination(CreateDestinationCommand command) {
     this.name = new DestinationName(command.name());
     this.address = new DestinationAddress(command.address());
@@ -114,19 +104,9 @@ public class Destination extends AuditableAbstractAggregateRoot<Destination> {
     this.country = new Country(command.country());
   }
 
-  /**
-   * Updates the destination information.
-   *
-   * @param name     the name
-   * @param address  the address
-   * @param district the district
-   * @param city     the city
-   * @param state    the state
-   * @param country  the country
-   * @return the updated destination
-   */
-  public Destination updateInformation(String name, String address, String district, String city,
-                                       String state, String country) {
+  /** Update information. */
+  public Destination updateInformation(
+      String name, String address, String district, String city, String state, String country) {
     this.name = new DestinationName(name);
     this.address = new DestinationAddress(address);
     this.district = new District(district);

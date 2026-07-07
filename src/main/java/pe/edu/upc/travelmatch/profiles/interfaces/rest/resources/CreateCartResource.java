@@ -1,4 +1,4 @@
 package pe.edu.upc.travelmatch.profiles.interfaces.rest.resources;
 
-public record CreateCartResource(Long userId) {
-}
+/** CreateCartResource value carrier. */
+public record CreateCartResource(Long userId) {}

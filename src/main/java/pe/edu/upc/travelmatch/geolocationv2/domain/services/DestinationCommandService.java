@@ -6,31 +6,14 @@ import pe.edu.upc.travelmatch.geolocationv2.domain.model.commands.CreateDestinat
 import pe.edu.upc.travelmatch.geolocationv2.domain.model.commands.DeleteDestinationCommand;
 import pe.edu.upc.travelmatch.geolocationv2.domain.model.commands.UpdateDestinationCommand;
 
-/**
- * Destination command service.
- */
+/** DestinationCommandService contract. */
 public interface DestinationCommandService {
-
-  /**
-   * Handle create destination command.
-   *
-   * @param command the create command
-   * @return the destination id
-   */
+  /** Handle. */
   Long handle(CreateDestinationCommand command);
 
-  /**
-   * Handle update destination command.
-   *
-   * @param command the update command
-   * @return the destination if successful
-   */
+  /** Handle. */
   Optional<Destination> handle(UpdateDestinationCommand command);
 
-  /**
-   * Handle delete destination command.
-   *
-   * @param command the delete command
-   */
+  /** Handle. */
   void handle(DeleteDestinationCommand command);
 }

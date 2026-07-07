@@ -10,52 +10,28 @@ import pe.edu.upc.travelmatch.iam.domain.model.queries.GetUserByIdQuery;
 import pe.edu.upc.travelmatch.iam.domain.services.UserQueryService;
 import pe.edu.upc.travelmatch.iam.infrastructure.persistence.jpa.repositories.UserRepository;
 
-/**
- * Query service that provides read operations related to users.
- */
+/** UserQueryServiceImpl type. */
 @Service
-public final class UserQueryServiceImpl implements UserQueryService {
+public class UserQueryServiceImpl implements UserQueryService {
   private final UserRepository userRepository;
 
-  /**
-   * Constructor.
-   *
-   * @param userRepositoryDependency repository for users
-   */
-  public UserQueryServiceImpl(final UserRepository userRepositoryDependency) {
-    this.userRepository = userRepositoryDependency;
+  /** Constructs a new UserQueryServiceImpl. */
+  public UserQueryServiceImpl(UserRepository userRepository) {
+    this.userRepository = userRepository;
   }
 
-  /**
-   * Returns all users.
-   *
-   * @param query query object
-   * @return list of users
-   */
   @Override
-  public List<User> handle(final GetAllUsersQuery query) {
+  public List<User> handle(GetAllUsersQuery query) {
     return userRepository.findAll();
   }
 
-  /**
-   * Returns a user by id.
-   *
-   * @param query query object
-   * @return optional user
-   */
   @Override
-  public Optional<User> handle(final GetUserByIdQuery query) {
+  public Optional<User> handle(GetUserByIdQuery query) {
     return userRepository.findById(query.userId());
   }
 
-  /**
-   * Returns a user by email.
-   *
-   * @param query query object
-   * @return optional user
-   */
   @Override
-  public Optional<User> handle(final GetUserByEmailQuery query) {
+  public Optional<User> handle(GetUserByEmailQuery query) {
     return userRepository.findByEmail(query.email());
   }
 }

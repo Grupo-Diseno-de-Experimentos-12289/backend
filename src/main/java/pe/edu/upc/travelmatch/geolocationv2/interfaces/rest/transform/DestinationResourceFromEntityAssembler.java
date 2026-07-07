@@ -3,17 +3,9 @@ package pe.edu.upc.travelmatch.geolocationv2.interfaces.rest.transform;
 import pe.edu.upc.travelmatch.geolocationv2.domain.model.aggregates.Destination;
 import pe.edu.upc.travelmatch.geolocationv2.interfaces.rest.resources.DestinationResource;
 
-/**
- * Assembler to convert Destination entity to DestinationResource.
- */
+/** DestinationResourceFromEntityAssembler type. */
 public class DestinationResourceFromEntityAssembler {
-
-  /**
-   * Convert entity to resource.
-   *
-   * @param entity the entity
-   * @return the resource
-   */
+  /** To resource from entity. */
   public static DestinationResource toResourceFromEntity(Destination entity) {
     return new DestinationResource(
         entity.getId(),

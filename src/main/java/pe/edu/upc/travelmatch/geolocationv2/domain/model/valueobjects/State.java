@@ -2,25 +2,15 @@ package pe.edu.upc.travelmatch.geolocationv2.domain.model.valueobjects;
 
 import jakarta.persistence.Embeddable;
 
-/**
- * State value object.
- *
- * @param state the state name
- */
+/** State value carrier. */
 @Embeddable
 public record State(String state) {
-  /**
-   * Default constructor.
-   */
+  /** Constructs a new State. */
   public State() {
     this(null);
   }
 
-  /**
-   * Compact constructor.
-   *
-   * @throws IllegalArgumentException if state is null or blank
-   */
+  /** Documentation. */
   public State {
     if (state == null || state.isBlank()) {
       throw new IllegalArgumentException("State cannot be null or blank");

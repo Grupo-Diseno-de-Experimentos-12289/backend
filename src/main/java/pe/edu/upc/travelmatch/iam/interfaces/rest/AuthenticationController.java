@@ -18,74 +18,42 @@ import pe.edu.upc.travelmatch.iam.interfaces.rest.transform.SignInCommandFromRes
 import pe.edu.upc.travelmatch.iam.interfaces.rest.transform.SignUpCommandFromResourceAssembler;
 import pe.edu.upc.travelmatch.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
 
-/**
- * REST controller for IAM authentication operations.
- */
+/** AuthenticationController type. */
 @RestController
-@RequestMapping(
-    value = "/api/v1/authentication",
-    produces = MediaType.APPLICATION_JSON_VALUE
-)
+@RequestMapping(value = "/api/v1/authentication", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Authentication", description = "Authentication Endpoints")
-public final class AuthenticationController {
-  /**
-   * User command service dependency.
-   */
+public class AuthenticationController {
   private final UserCommandService userCommandService;
 
-  /**
-   * Constructor.
-   *
-   * @param userCommandServiceDependency user command service dependency
-   */
-  public AuthenticationController(
-      final UserCommandService userCommandServiceDependency
-  ) {
-    this.userCommandService = userCommandServiceDependency;
+  /** Constructs a new AuthenticationController. */
+  public AuthenticationController(UserCommandService userCommandService) {
+    this.userCommandService = userCommandService;
   }
 
-  /**
-   * Signs a user in.
-   *
-   * @param signInResource sign-in data
-   * @return authenticated user resource or 404 when authentication fails
-   */
+  /** Sign in. */
   @PostMapping("/sign-in")
   public ResponseEntity<AuthenticatedUserResource> signIn(
-      @RequestBody final SignInResource signInResource
-  ) {
-    var signInCommand = SignInCommandFromResourceAssembler
-        .toCommandFromResource(signInResource);
+      @RequestBody SignInResource signInResource) {
+    var signInCommand = SignInCommandFromResourceAssembler.toCommandFromResource(signInResource);
     var authenticatedUser = userCommandService.handle(signInCommand);
     if (authenticatedUser.isEmpty()) {
       return ResponseEntity.notFound().build();
     }
-    var authenticatedUserResource = AuthenticatedUserResourceFromEntityAssembler
-        .toResourceFromEntity(
-            authenticatedUser.get().getLeft(),
-            authenticatedUser.get().getRight()
-        );
+    var authenticatedUserResource =
+        AuthenticatedUserResourceFromEntityAssembler.toResourceFromEntity(
+            authenticatedUser.get().getLeft(), authenticatedUser.get().getRight());
     return ResponseEntity.ok(authenticatedUserResource);
   }
 
-  /**
-   * Signs a user up.
-   *
-   * @param signUpResource sign-up data
-   * @return created user resource or 400 when creation fails
-   */
+  /** Sign up. */
   @PostMapping("/sign-up")
-  public ResponseEntity<UserResource> signUp(
-      @RequestBody final SignUpResource signUpResource
-  ) {
-    var signUpCommand = SignUpCommandFromResourceAssembler
-        .toCommandFromResource(signUpResource);
+  public ResponseEntity<UserResource> signUp(@RequestBody SignUpResource signUpResource) {
+    var signUpCommand = SignUpCommandFromResourceAssembler.toCommandFromResource(signUpResource);
     var user = userCommandService.handle(signUpCommand);
     if (user.isEmpty()) {
       return ResponseEntity.badRequest().build();
     }
-    var userResource = UserResourceFromEntityAssembler
-        .toResourceFromEntity(user.get());
+    var userResource = UserResourceFromEntityAssembler.toResourceFromEntity(user.get());
     return new ResponseEntity<>(userResource, HttpStatus.CREATED);
   }
 }

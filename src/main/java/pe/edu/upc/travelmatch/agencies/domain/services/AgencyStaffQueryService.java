@@ -1,14 +1,16 @@
 package pe.edu.upc.travelmatch.agencies.domain.services;
 
-import pe.edu.upc.travelmatch.agencies.domain.model.aggregates.AgencyStaff;
-import pe.edu.upc.travelmatch.agencies.domain.model.queries.GetAllAgencyStaffByAgencyIdQuery;
-import pe.edu.upc.travelmatch.agencies.domain.model.queries.GetAgencyStaffByIdQuery;
-
 import java.util.List;
 import java.util.Optional;
+import pe.edu.upc.travelmatch.agencies.domain.model.aggregates.AgencyStaff;
+import pe.edu.upc.travelmatch.agencies.domain.model.queries.GetAgencyStaffByIdQuery;
+import pe.edu.upc.travelmatch.agencies.domain.model.queries.GetAllAgencyStaffByAgencyIdQuery;
 
+/** AgencyStaffQueryService contract. */
 public interface AgencyStaffQueryService {
-    List<AgencyStaff> handle(GetAllAgencyStaffByAgencyIdQuery query);
+  /** Handle. */
+  List<AgencyStaff> handle(GetAllAgencyStaffByAgencyIdQuery query);
 
-    Optional<AgencyStaff> handle(GetAgencyStaffByIdQuery query);
+  /** Handle. */
+  Optional<AgencyStaff> handle(GetAgencyStaffByIdQuery query);
 }

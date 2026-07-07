@@ -14,62 +14,37 @@ import pe.edu.upc.travelmatch.iam.domain.services.UserQueryService;
 import pe.edu.upc.travelmatch.iam.interfaces.rest.resources.UserResource;
 import pe.edu.upc.travelmatch.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
 
-/**
- * REST controller for IAM users.
- */
+/** UsersController type. */
 @RestController
-@RequestMapping(
-    value = "/api/v1/users",
-    produces = MediaType.APPLICATION_JSON_VALUE
-)
+@RequestMapping(value = "/api/v1/users", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Users", description = "User Management Endpoints")
-public final class UsersController {
-  /**
-   * User query service dependency.
-   */
+public class UsersController {
   private final UserQueryService userQueryService;
 
-  /**
-   * Constructor.
-   *
-   * @param userQueryServiceDependency user query service dependency
-   */
-  public UsersController(final UserQueryService userQueryServiceDependency) {
-    this.userQueryService = userQueryServiceDependency;
+  /** Constructs a new UsersController. */
+  public UsersController(UserQueryService userQueryService) {
+    this.userQueryService = userQueryService;
   }
 
-  /**
-   * Returns all users.
-   *
-   * @return list of user resources
-   */
+  /** Get all users. */
   @GetMapping
   public ResponseEntity<List<UserResource>> getAllUsers() {
     var getAllUsersQuery = new GetAllUsersQuery();
     var users = userQueryService.handle(getAllUsersQuery);
-    var userResources = users.stream()
-        .map(UserResourceFromEntityAssembler::toResourceFromEntity)
-        .toList();
+    var userResources =
+        users.stream().map(UserResourceFromEntityAssembler::toResourceFromEntity).toList();
     return ResponseEntity.ok(userResources);
   }
 
-  /**
-   * Returns a user by id.
-   *
-   * @param userId user id
-   * @return user resource or 404 when not found
-   */
+  /** Get user by id. */
   @GetMapping(value = "/{userId}")
-  public ResponseEntity<UserResource> getUserById(
-      @PathVariable final Long userId
-  ) {
+  public ResponseEntity<UserResource> getUserById(@PathVariable Long userId) {
     var getUserByIdQuery = new GetUserByIdQuery(userId);
     var user = userQueryService.handle(getUserByIdQuery);
     if (user.isEmpty()) {
       return ResponseEntity.notFound().build();
     }
-    var userResource = UserResourceFromEntityAssembler
-        .toResourceFromEntity(user.get());
+    var userResource = UserResourceFromEntityAssembler.toResourceFromEntity(user.get());
     return ResponseEntity.ok(userResource);
   }
 }

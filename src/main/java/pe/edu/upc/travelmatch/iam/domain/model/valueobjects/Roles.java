@@ -1,8 +1,6 @@
 package pe.edu.upc.travelmatch.iam.domain.model.valueobjects;
 
-/**
- * Roles enum.
- */
+/** Roles enumeration. */
 public enum Roles {
   ROLE_ADMIN,
   ROLE_AGENCY_STAFF,

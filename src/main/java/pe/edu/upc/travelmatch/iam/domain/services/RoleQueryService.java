@@ -6,24 +6,11 @@ import pe.edu.upc.travelmatch.iam.domain.model.entities.Role;
 import pe.edu.upc.travelmatch.iam.domain.model.queries.GetAllRolesQuery;
 import pe.edu.upc.travelmatch.iam.domain.model.queries.GetRoleByIdQuery;
 
-/**
- * Role query service interface.
- */
+/** RoleQueryService contract. */
 public interface RoleQueryService {
-
-  /**
-   * Handle get all roles query.
-   *
-   * @param query the get all roles query
-   * @return the list of roles
-   */
+  /** Handle. */
   List<Role> handle(GetAllRolesQuery query);
 
-  /**
-   * Handle get role by id query.
-   *
-   * @param query the get role by id query
-   * @return the role if found
-   */
+  /** Handle. */
   Optional<Role> handle(GetRoleByIdQuery query);
 }

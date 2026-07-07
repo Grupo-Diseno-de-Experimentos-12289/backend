@@ -13,9 +13,7 @@ import pe.edu.upc.travelmatch.iam.domain.services.UserCommandService;
 import pe.edu.upc.travelmatch.iam.infrastructure.persistence.jpa.repositories.RoleRepository;
 import pe.edu.upc.travelmatch.iam.infrastructure.persistence.jpa.repositories.UserRepository;
 
-/**
- * Implementation of UserCommandService.
- */
+/** UserCommandServiceImpl type. */
 @Service
 public class UserCommandServiceImpl implements UserCommandService {
   private final UserRepository userRepository;
@@ -23,20 +21,12 @@ public class UserCommandServiceImpl implements UserCommandService {
   private final TokenService tokenService;
   private final RoleRepository roleRepository;
 
-  /**
-   * Constructor for UserCommandServiceImpl.
-   *
-   * @param userRepository the user repository
-   * @param hashingService the hashing service
-   * @param tokenService   the token service
-   * @param roleRepository the role repository
-   */
+  /** Constructs a new UserCommandServiceImpl. */
   public UserCommandServiceImpl(
       UserRepository userRepository,
       HashingService hashingService,
       TokenService tokenService,
-      RoleRepository roleRepository
-  ) {
+      RoleRepository roleRepository) {
     this.userRepository = userRepository;
     this.hashingService = hashingService;
     this.tokenService = tokenService;
@@ -46,7 +36,7 @@ public class UserCommandServiceImpl implements UserCommandService {
   @Override
   public Optional<User> handle(SignUpCommand command) {
     if (userRepository.existsByEmail(command.email())) {
-      throw new RuntimeException("Email already exists");
+      throw new IllegalArgumentException("Email already exists");
     }
 
     var roles = command.roles();
@@ -56,27 +46,35 @@ public class UserCommandServiceImpl implements UserCommandService {
         roles.add(role.get());
       }
     } else {
-      roles = roles.stream().map(role -> roleRepository.findByName(role.getName())
-          .orElseThrow(() -> new RuntimeException("Role not found"))).toList();
+      roles =
+          roles.stream()
+              .map(
+                  role ->
+                      roleRepository
+                          .findByName(role.getName())
+                          .orElseThrow(() -> new IllegalArgumentException("Role not found")))
+              .toList();
     }
-    var user = new User(
-        command.email(),
-        hashingService.encode(command.password()),
-        command.firstName(),
-        command.lastName(),
-        command.phone(),
-        roles
-    );
+    var user =
+        new User(
+            command.email(),
+            hashingService.encode(command.password()),
+            command.firstName(),
+            command.lastName(),
+            command.phone(),
+            roles);
     userRepository.save(user);
     return userRepository.findByEmail(command.email());
   }
 
   @Override
   public Optional<ImmutablePair<User, String>> handle(SignInCommand command) {
-    var user = userRepository.findByEmail(command.email())
-        .orElseThrow(() -> new RuntimeException("User not found"));
+    var user =
+        userRepository
+            .findByEmail(command.email())
+            .orElseThrow(() -> new IllegalArgumentException("User not found"));
     if (!hashingService.matches(command.password(), user.getPassword())) {
-      throw new RuntimeException("Invalid password");
+      throw new IllegalArgumentException("Invalid password");
     }
     var token = tokenService.generateToken(user.getEmail());
     return Optional.of(new ImmutablePair<>(user, token));

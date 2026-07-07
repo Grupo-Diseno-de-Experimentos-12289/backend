@@ -15,48 +15,28 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import pe.edu.upc.travelmatch.iam.infrastructure.authorization.sfs.model.UsernamePasswordAuthenticationTokenBuilder;
 import pe.edu.upc.travelmatch.iam.infrastructure.tokens.jwt.BearerTokenService;
 
-/**
- * Filter that resolves bearer tokens and populates the security context.
- */
+/** BearerAuthorizationRequestFilter type. */
 public class BearerAuthorizationRequestFilter extends OncePerRequestFilter {
-  /**
-   * Logger used by the filter.
-   */
   private static final Logger LOGGER =
       LoggerFactory.getLogger(BearerAuthorizationRequestFilter.class);
-  /**
-   * Token service dependency.
-   */
   private final BearerTokenService tokenService;
-  /**
-   * User details service dependency.
-   */
+
   @Qualifier("defaultUserDetailsService")
   private final UserDetailsService userDetailsService;
 
-  /**
-   * Constructor.
-   *
-   * @param tokenServiceDependency       token service dependency
-   * @param userDetailsServiceDependency user details service dependency
-   */
+  /** Constructs a new BearerAuthorizationRequestFilter. */
   public BearerAuthorizationRequestFilter(
-      final BearerTokenService tokenServiceDependency,
-      final UserDetailsService userDetailsServiceDependency
-  ) {
-    this.tokenService = tokenServiceDependency;
-    this.userDetailsService = userDetailsServiceDependency;
+      BearerTokenService tokenService, UserDetailsService userDetailsService) {
+    this.tokenService = tokenService;
+    this.userDetailsService = userDetailsService;
   }
 
-  /**
-   * Filters the request and populates authentication when a valid bearer token is present.
-   */
   @Override
   protected void doFilterInternal(
-      @NonNull final HttpServletRequest request,
-      @NonNull final HttpServletResponse response,
-      @NonNull final FilterChain filterChain
-  ) throws ServletException, IOException {
+      @NonNull HttpServletRequest request,
+      @NonNull HttpServletResponse response,
+      @NonNull FilterChain filterChain)
+      throws ServletException, IOException {
     try {
       String token = tokenService.getBearerTokenFrom(request);
       LOGGER.info("Token: {}", token);
@@ -66,11 +46,7 @@ public class BearerAuthorizationRequestFilter extends OncePerRequestFilter {
         var userDetails = userDetailsService.loadUserByUsername(email);
         SecurityContextHolder.getContext()
             .setAuthentication(
-                UsernamePasswordAuthenticationTokenBuilder.build(
-                    userDetails,
-                    request
-                )
-            );
+                UsernamePasswordAuthenticationTokenBuilder.build(userDetails, request));
       } else {
         LOGGER.info("Token is not valid");
       }

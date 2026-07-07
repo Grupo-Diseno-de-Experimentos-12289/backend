@@ -2,15 +2,8 @@ package pe.edu.upc.travelmatch.iam.domain.services;
 
 import pe.edu.upc.travelmatch.iam.domain.model.commands.SeedRolesCommand;
 
-/**
- * Role command service interface.
- */
+/** RoleCommandService contract. */
 public interface RoleCommandService {
-
-  /**
-   * Handle seed roles command.
-   *
-   * @param command the seed roles command
-   */
+  /** Handle. */
   void handle(SeedRolesCommand command);
 }
