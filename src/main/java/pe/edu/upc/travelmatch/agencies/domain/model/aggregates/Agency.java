@@ -37,6 +37,9 @@ public class Agency extends AuditableAbstractAggregateRoot<Agency> {
   @Column(nullable = false)
   private Long userId;
 
+  @Column(nullable = false, columnDefinition = "boolean default false")
+  private boolean verified = false;
+
   /** Constructs a new Agency. */
   public Agency(
       AgencyName name,
@@ -51,6 +54,7 @@ public class Agency extends AuditableAbstractAggregateRoot<Agency> {
     this.contactEmail = contactEmail;
     this.contactPhone = contactPhone;
     this.userId = userId;
+    this.verified = false;
   }
 
   /** Update details. */

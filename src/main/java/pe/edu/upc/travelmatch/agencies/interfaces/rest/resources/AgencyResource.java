@@ -7,4 +7,5 @@ public record AgencyResource(
     String description,
     String ruc,
     String contactEmail,
-    String contactPhone) {}
+    String contactPhone,
+    boolean verified) {}

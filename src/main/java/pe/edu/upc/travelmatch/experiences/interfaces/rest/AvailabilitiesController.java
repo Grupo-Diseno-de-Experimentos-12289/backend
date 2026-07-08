@@ -22,6 +22,7 @@ import pe.edu.upc.travelmatch.experiences.domain.model.commands.UpdateAvailabili
 import pe.edu.upc.travelmatch.experiences.domain.services.AvailabilityCommandService;
 import pe.edu.upc.travelmatch.experiences.domain.services.AvailabilityQueryService;
 import pe.edu.upc.travelmatch.experiences.domain.services.AvailabilityTicketTypeCommandService;
+import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetAvailabilitiesByExperienceIdQuery;
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.AvailabilityRepository;
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.ExperienceRepository;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.resources.AvailabilityResource;
@@ -124,6 +125,23 @@ public class AvailabilitiesController {
   @GetMapping("/availabilities")
   public ResponseEntity<List<AvailabilityResource>> getAllAvailabilities() {
     List<Availability> list = availabilityQueryService.getAllAvailabilities();
+    var result =
+        list.stream().map(AvailabilityResourceFromEntityAssembler::toResourceFromEntity).toList();
+    return ResponseEntity.ok(result);
+  }
+
+  /** Documentation. */
+  @Operation(
+      summary = "Get availabilities by experience ID",
+      description = "Retrieves all active availabilities for a specific experience",
+      responses = {
+        @ApiResponse(responseCode = "200", description = "List of availabilities returned")
+      })
+  @GetMapping("/availabilities/experience/{experienceId}")
+  public ResponseEntity<List<AvailabilityResource>> getAvailabilitiesByExperienceId(
+      @PathVariable Long experienceId) {
+    var query = new GetAvailabilitiesByExperienceIdQuery(experienceId);
+    List<Availability> list = availabilityQueryService.handle(query);
     var result =
         list.stream().map(AvailabilityResourceFromEntityAssembler::toResourceFromEntity).toList();
     return ResponseEntity.ok(result);

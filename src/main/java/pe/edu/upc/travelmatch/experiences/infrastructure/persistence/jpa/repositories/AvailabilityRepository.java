@@ -14,4 +14,12 @@ public interface AvailabilityRepository extends JpaRepository<Availability, Long
    * @return list of availabilities
    */
   List<Availability> findAllByDeletedAtIsNull();
+
+  /**
+   * Finds all non-deleted availabilities by experience ID.
+   *
+   * @param experienceId the experience ID
+   * @return list of availabilities
+   */
+  List<Availability> findByExperienceIdAndDeletedAtIsNull(Long experienceId);
 }

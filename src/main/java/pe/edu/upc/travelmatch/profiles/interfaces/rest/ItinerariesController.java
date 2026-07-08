@@ -14,30 +14,39 @@ import pe.edu.upc.travelmatch.profiles.interfaces.rest.resources.ItineraryResour
 import pe.edu.upc.travelmatch.profiles.interfaces.rest.transform.GenerateItineraryQueryFromResourceAssembler;
 import pe.edu.upc.travelmatch.profiles.interfaces.rest.transform.ItineraryResourceFromEntityAssembler;
 
-/** ItinerariesController type. */
+/** REST controller for personalized itinerary generation endpoints. */
 @RestController
 @RequestMapping(value = "/api/v1/itineraries", produces = APPLICATION_JSON_VALUE)
 @Tag(name = "Itineraries", description = "Personalized Itinerary Generation Endpoints")
 public class ItinerariesController {
 
-    private final ItineraryQueryService itineraryQueryService;
+  private final ItineraryQueryService itineraryQueryService;
 
-    /** Constructs a new ItinerariesController. */
-    public ItinerariesController(ItineraryQueryService itineraryQueryService) {
-        this.itineraryQueryService = itineraryQueryService;
-    }
+  /**
+   * Constructs a new ItinerariesController.
+   *
+   * @param itineraryQueryService the service to generate itineraries
+   */
+  public ItinerariesController(ItineraryQueryService itineraryQueryService) {
+    this.itineraryQueryService = itineraryQueryService;
+  }
 
-    /** Generate itinerary. */
-    @PostMapping("/generate")
-    public ResponseEntity<ItineraryResource> generateItinerary(
-            @RequestBody GenerateItineraryResource resource) {
-        try {
-            var query = GenerateItineraryQueryFromResourceAssembler.toQueryFromResource(resource);
-            var itinerary = itineraryQueryService.handle(query);
-            var itineraryResource = ItineraryResourceFromEntityAssembler.toResourceFromEntity(itinerary);
-            return ResponseEntity.ok(itineraryResource);
-        } catch (IllegalArgumentException | IllegalStateException e) {
-            return ResponseEntity.badRequest().body(null);
-        }
+  /**
+   * Generates a personalized itinerary based on destination, categories and number of days.
+   *
+   * @param resource the request body containing destination, categories and days
+   * @return the generated itinerary resource or 400 if data is insufficient
+   */
+  @PostMapping("/generate")
+  public ResponseEntity<ItineraryResource> generateItinerary(
+      @RequestBody GenerateItineraryResource resource) {
+    try {
+      var query = GenerateItineraryQueryFromResourceAssembler.toQueryFromResource(resource);
+      var itinerary = itineraryQueryService.handle(query);
+      var itineraryResource = ItineraryResourceFromEntityAssembler.toResourceFromEntity(itinerary);
+      return ResponseEntity.ok(itineraryResource);
+    } catch (IllegalArgumentException | IllegalStateException e) {
+      return ResponseEntity.badRequest().body(null);
     }
+  }
 }

@@ -3,31 +3,20 @@ package pe.edu.upc.travelmatch.bookings.interfaces.rest;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.travelmatch.bookings.domain.model.commands.CreateBookingCommand;
+import pe.edu.upc.travelmatch.bookings.domain.model.commands.ProcessPaymentCommand;
 import pe.edu.upc.travelmatch.bookings.domain.model.queries.GetBookingByIdQuery;
+import pe.edu.upc.travelmatch.bookings.domain.model.queries.GetBookingsByUserIdQuery;
+import pe.edu.upc.travelmatch.bookings.domain.model.valueobjects.TransactionId;
+import pe.edu.upc.travelmatch.bookings.domain.model.valueobjects.UserId;
 import pe.edu.upc.travelmatch.bookings.domain.services.BookingCommandService;
 import pe.edu.upc.travelmatch.bookings.domain.services.BookingQueryService;
-import pe.edu.upc.travelmatch.bookings.interfaces.rest.resources.BookingResource;
-import pe.edu.upc.travelmatch.bookings.interfaces.rest.resources.CancelBookingResource;
-import pe.edu.upc.travelmatch.bookings.interfaces.rest.resources.CreateBookingResource;
-import pe.edu.upc.travelmatch.bookings.interfaces.rest.resources.FailPaymentResource;
-import pe.edu.upc.travelmatch.bookings.interfaces.rest.resources.InitiatePaymentResource;
-import pe.edu.upc.travelmatch.bookings.interfaces.rest.resources.InitiateRefundResource;
-import pe.edu.upc.travelmatch.bookings.interfaces.rest.resources.RefundResource;
-import pe.edu.upc.travelmatch.bookings.interfaces.rest.transform.BookingResourceFromEntityAssembler;
-import pe.edu.upc.travelmatch.bookings.interfaces.rest.transform.CancelBookingCommandFromResourceAssembler;
-import pe.edu.upc.travelmatch.bookings.interfaces.rest.transform.CreateBookingCommandFromResourceAssembler;
-import pe.edu.upc.travelmatch.bookings.interfaces.rest.transform.FailPaymentCommandFromResourceAssembler;
-import pe.edu.upc.travelmatch.bookings.interfaces.rest.transform.InitiatePaymentCommandFromResourceAssembler;
-import pe.edu.upc.travelmatch.bookings.interfaces.rest.transform.InitiateRefundCommandFromResourceAssembler;
-import pe.edu.upc.travelmatch.bookings.interfaces.rest.transform.RefundResourceFromEntityAssembler;
+import pe.edu.upc.travelmatch.bookings.interfaces.rest.resources.*;
+import pe.edu.upc.travelmatch.bookings.interfaces.rest.transform.*;
 
 /** BookingsController type. */
 @RestController
@@ -38,7 +27,12 @@ public class BookingsController {
   private final BookingCommandService bookingCommandService;
   private final BookingQueryService bookingQueryService;
 
-  /** Constructs a new BookingsController. */
+  /**
+   * Constructor.
+   *
+   * @param bookingCommandService the booking command service
+   * @param bookingQueryService the booking query service
+   */
   public BookingsController(
       BookingCommandService bookingCommandService, BookingQueryService bookingQueryService) {
     this.bookingCommandService = bookingCommandService;
@@ -47,8 +41,7 @@ public class BookingsController {
 
   /** Create booking. */
   @PostMapping
-  public ResponseEntity<BookingResource> createBooking(
-      @RequestBody CreateBookingResource resource) {
+  public ResponseEntity<BookingResource> createBooking(@RequestBody CreateBookingResource resource) {
     try {
       CreateBookingCommand command =
           CreateBookingCommandFromResourceAssembler.toCommandFromResource(resource);
@@ -62,7 +55,6 @@ public class BookingsController {
           BookingResourceFromEntityAssembler.toResourceFromEntity(bookingOpt.get());
       return new ResponseEntity<>(bookingResource, HttpStatus.CREATED);
     } catch (IllegalArgumentException | IllegalStateException e) {
-
       return ResponseEntity.badRequest().body(null);
     }
   }
@@ -94,7 +86,7 @@ public class BookingsController {
     try {
       var command =
           InitiateRefundCommandFromResourceAssembler.toCommandFromResource(bookingId, resource);
-      bookingCommandService.handle(command);
+      var refundId = bookingCommandService.handle(command);
       var booking = bookingQueryService.handle(new GetBookingByIdQuery(bookingId));
       if (booking.isEmpty() || booking.get().getRefund() == null) {
         return ResponseEntity.notFound().build();
@@ -128,5 +120,26 @@ public class BookingsController {
     var command = FailPaymentCommandFromResourceAssembler.toCommandFromResource(resource);
     var success = bookingCommandService.handle(command);
     return success ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+  }
+
+  /** Get bookings by user ID. */
+  @GetMapping("/user/{userId}")
+  public ResponseEntity<List<BookingResource>> getBookingsByUserId(@PathVariable Long userId) {
+    var query = new GetBookingsByUserIdQuery(new UserId(userId));
+    var bookings = bookingQueryService.handle(query);
+    var resources = bookings.stream()
+        .map(BookingResourceFromEntityAssembler::toResourceFromEntity)
+        .toList();
+    return ResponseEntity.ok(resources);
+  }
+
+  /** Mock confirm payment. */
+  @PostMapping("/{bookingId}/confirm-payment")
+  public ResponseEntity<BookingResource> confirmPayment(@PathVariable Long bookingId) {
+    var command = new ProcessPaymentCommand(bookingId, "mock_method", new TransactionId("mock_txn_" + bookingId));
+    bookingCommandService.handle(command);
+    var bookingOpt = bookingQueryService.handle(new GetBookingByIdQuery(bookingId));
+    return bookingOpt.map(booking -> ResponseEntity.ok(BookingResourceFromEntityAssembler.toResourceFromEntity(booking)))
+        .orElseGet(() -> ResponseEntity.notFound().build());
   }
 }
