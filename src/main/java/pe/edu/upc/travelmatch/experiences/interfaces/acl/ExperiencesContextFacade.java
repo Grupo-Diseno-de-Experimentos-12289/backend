@@ -13,7 +13,9 @@ import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.reposit
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.TicketTypeRepository;
 import pe.edu.upc.travelmatch.experiences.interfaces.acl.dto.AvailabilityInfo;
 import pe.edu.upc.travelmatch.experiences.interfaces.acl.dto.AvailabilityTicketTypeInfo;
-
+import java.util.List;
+import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetAllExperiencesQuery;
+import pe.edu.upc.travelmatch.experiences.interfaces.acl.dto.ExperienceSummary;
 /** Facade for the Experiences Bounded Context. */
 @Service
 public class ExperiencesContextFacade {
@@ -120,5 +122,31 @@ public class ExperiencesContextFacade {
                     .filter(at -> at.getTicketType().getId().equals(ticketTypeId))
                     .anyMatch(at -> at.getStock() >= requestedQuantity))
         .orElse(false);
+  }
+
+  public List<ExperienceSummary> fetchExperiencesByDestinationAndCategories(
+          Long destinationId, List<String> categories) {
+    var allExperiences = experienceQueryService.handle(new GetAllExperiencesQuery());
+
+    return allExperiences.stream()
+            .filter(
+                    experience ->
+                            destinationId == null
+                                    || destinationId.equals(experience.getDestinationId().value()))
+            .filter(
+                    experience ->
+                            categories == null
+                                    || categories.isEmpty()
+                                    || categories.contains(experience.getCategory().getCategoryName()))
+            .map(
+                    experience ->
+                            new ExperienceSummary(
+                                    experience.getId(),
+                                    experience.getTitle(),
+                                    experience.getCategory().getCategoryName(),
+                                    experience.getMeetingPoint(),
+                                    experience.getDuration(),
+                                    experience.getDestinationId().value()))
+            .toList();
   }
 }
