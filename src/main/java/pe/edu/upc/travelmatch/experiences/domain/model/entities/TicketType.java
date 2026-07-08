@@ -1,16 +1,11 @@
 package pe.edu.upc.travelmatch.experiences.domain.model.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import java.util.List;
+import jakarta.persistence.*;
 import lombok.Getter;
 import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.TicketTypes;
 import pe.edu.upc.travelmatch.shared.domain.model.entities.AuditableModel;
+
+import java.util.List;
 
 /** Entity class for TicketType. */
 @Entity

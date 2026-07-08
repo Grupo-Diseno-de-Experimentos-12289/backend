@@ -1,5 +1,6 @@
 package pe.edu.upc.travelmatch.experiences.domain.model.commands;
 
+import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.CancellationPolicyType;
 import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.DestinationId;
 
 /**
@@ -12,6 +13,8 @@ import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.DestinationI
  * @param destinationId the destination ID
  * @param duration the duration
  * @param meetingPoint the meeting point
+ * @param cancellationPolicyType the cancellation policy type
+ * @param cancellationPolicyDescription the human-readable cancellation policy details
  */
 public record UpdateExperienceCommand(
     Long id,
@@ -20,4 +23,6 @@ public record UpdateExperienceCommand(
     String category,
     DestinationId destinationId,
     String duration,
-    String meetingPoint) {}
+    String meetingPoint,
+    CancellationPolicyType cancellationPolicyType,
+    String cancellationPolicyDescription) {}

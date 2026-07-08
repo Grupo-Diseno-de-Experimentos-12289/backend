@@ -3,18 +3,8 @@ package pe.edu.upc.travelmatch.experiences.interfaces.rest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.travelmatch.experiences.domain.model.aggregates.Availability;
 import pe.edu.upc.travelmatch.experiences.domain.model.commands.CreateAvailabilityCommand;
 import pe.edu.upc.travelmatch.experiences.domain.model.commands.CreateAvailabilityTicketTypeCommand;
@@ -31,6 +21,8 @@ import pe.edu.upc.travelmatch.experiences.interfaces.rest.resources.CreateAvaila
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.resources.UpdateAvailabilityResource;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.transform.AvailabilityResourceFromEntityAssembler;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.transform.CreateAvailabilityTicketTypeCommandFromResourceAssembler;
+
+import java.util.List;
 
 /** AvailabilitiesController. */
 @RestController

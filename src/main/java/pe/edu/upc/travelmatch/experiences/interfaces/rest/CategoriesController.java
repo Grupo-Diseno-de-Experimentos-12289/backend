@@ -1,7 +1,6 @@
 package pe.edu.upc.travelmatch.experiences.interfaces.rest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +10,8 @@ import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetAllCategoriesQ
 import pe.edu.upc.travelmatch.experiences.domain.services.CategoryQueryService;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.resources.CategoryResource;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.transform.CategoryResourceFromEntityAssembler;
+
+import java.util.List;
 
 /** CategoriesController. */
 @RestController

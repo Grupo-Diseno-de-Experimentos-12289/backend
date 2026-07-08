@@ -1,13 +1,14 @@
 package pe.edu.upc.travelmatch.experiences.application.internal.queryservices;
 
-import java.util.List;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.travelmatch.experiences.domain.model.entities.ExperienceMedia;
 import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetAllExperiencesQuery;
 import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetExperienceByIdQuery;
 import pe.edu.upc.travelmatch.experiences.domain.services.ExperienceMediaQueryService;
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.ExperienceMediaRepository;
+
+import java.util.List;
+import java.util.Optional;
 
 /** Service implementation for managing ExperienceMedia queries. */
 @Service

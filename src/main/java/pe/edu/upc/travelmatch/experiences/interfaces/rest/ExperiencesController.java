@@ -3,29 +3,25 @@ package pe.edu.upc.travelmatch.experiences.interfaces.rest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetAllExperiencesQuery;
+import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetAvailabilitiesByExperienceIdQuery;
 import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetExperienceByIdQuery;
+import pe.edu.upc.travelmatch.experiences.domain.services.AvailabilityQueryService;
 import pe.edu.upc.travelmatch.experiences.domain.services.ExperienceCommandService;
 import pe.edu.upc.travelmatch.experiences.domain.services.ExperienceQueryService;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.resources.CreateExperienceResource;
+import pe.edu.upc.travelmatch.experiences.interfaces.rest.resources.ExperienceBookingInfoResource;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.resources.ExperienceResource;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.resources.UpdateExperienceResource;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.transform.CreateExperienceCommandFromResourceAssembler;
+import pe.edu.upc.travelmatch.experiences.interfaces.rest.transform.ExperienceBookingInfoResourceAssembler;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.transform.ExperienceResourceFromEntityAssembler;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.transform.UpdateExperienceCommandFromResourceAssembler;
+
+import java.util.List;
 
 /** ExperiencesController. */
 @RestController
@@ -38,12 +34,16 @@ public class ExperiencesController {
 
   private final ExperienceCommandService commandService;
   private final ExperienceQueryService queryService;
+  private final AvailabilityQueryService availabilityQueryService;
 
   /** Constructs a new ExperiencesController. */
   public ExperiencesController(
-      ExperienceCommandService commandService, ExperienceQueryService queryService) {
+      ExperienceCommandService commandService,
+      ExperienceQueryService queryService,
+      AvailabilityQueryService availabilityQueryService) {
     this.commandService = commandService;
     this.queryService = queryService;
+    this.availabilityQueryService = availabilityQueryService;
   }
 
   /** Documentation. */
@@ -139,5 +139,30 @@ public class ExperiencesController {
             .map(ExperienceResourceFromEntityAssembler::toResourceFromEntity);
 
     return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  /** Documentation. */
+  @Operation(
+      summary = "Get booking info for an experience",
+      description =
+          "Retrieves the availability slots (with remaining seats) and the cancellation policy"
+              + " for an experience, so a tourist can make an informed decision before booking",
+      responses = {
+        @ApiResponse(responseCode = "200", description = "Booking info returned"),
+        @ApiResponse(responseCode = "404", description = "Experience not found")
+      })
+  @GetMapping("/{experienceId}/booking-info")
+  public ResponseEntity<ExperienceBookingInfoResource> getBookingInfo(
+      @PathVariable Long experienceId) {
+    var experience = queryService.handle(new GetExperienceByIdQuery(experienceId));
+    if (experience.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+
+    var availabilities =
+        availabilityQueryService.handle(new GetAvailabilitiesByExperienceIdQuery(experienceId));
+
+    var resource = ExperienceBookingInfoResourceAssembler.toResource(experience.get(), availabilities);
+    return ResponseEntity.ok(resource);
   }
 }

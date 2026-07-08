@@ -7,4 +7,6 @@ public record CreateExperienceResource(
     String category,
     Long destinationId,
     String duration,
-    String meetingPoint) {}
+    String meetingPoint,
+    String cancellationPolicyType,
+    String cancellationPolicyDescription) {}

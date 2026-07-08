@@ -1,6 +1,5 @@
 package pe.edu.upc.travelmatch.experiences.application.internal.eventhandlers;
 
-import java.sql.Timestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -10,6 +9,8 @@ import pe.edu.upc.travelmatch.experiences.domain.model.commands.SeedCategoriesCo
 import pe.edu.upc.travelmatch.experiences.domain.model.commands.SeedTicketTypesCommand;
 import pe.edu.upc.travelmatch.experiences.domain.services.CategoryCommandService;
 import pe.edu.upc.travelmatch.experiences.domain.services.TicketTypeCommandService;
+
+import java.sql.Timestamp;
 
 /** Event handler for executing experience seeders upon application ready. */
 @Service

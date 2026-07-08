@@ -7,4 +7,6 @@ public record UpdateExperienceResource(
     String category, // antes: Long categoryId
     Long destinationId,
     String duration,
-    String meetingPoint) {}
+    String meetingPoint,
+    String cancellationPolicyType,
+    String cancellationPolicyDescription) {}

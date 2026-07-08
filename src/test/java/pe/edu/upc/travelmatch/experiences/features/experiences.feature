@@ -30,10 +30,43 @@ Feature: Gestión de Experiences (Experiences BC)
   Scenario: POST - Crear Experience exitosamente (201)
     Given path 'experiences', staffId, 'experiences'
     And header Authorization = authHeader
-    And request { "title": "City Tour Lima", "description": "Amazing tour", "category": "CULTURA", "destinationId": #(sharedDestId), "duration": "3 hours", "meetingPoint": "Plaza de Armas" }
+    And request { "title": "City Tour Lima", "description": "Amazing tour", "category": "CULTURA", "destinationId": #(sharedDestId), "duration": "3 hours", "meetingPoint": "Plaza de Armas", "cancellationPolicyType": "MODERATE", "cancellationPolicyDescription": "50% refund up to 5 days before the tour." }
     When method post
     Then status 201
     And match response.id == '#number'
+    And match response.cancellationPolicyType == 'MODERATE'
+    And match response.cancellationPolicyDescription == '50% refund up to 5 days before the tour.'
+
+  Scenario: POST - Crear Experience sin politica de cancelacion usa FLEXIBLE por defecto (201)
+    Given path 'experiences', staffId, 'experiences'
+    And header Authorization = authHeader
+    And request { "title": "Free Walking Tour", "description": "No cancellation policy provided", "category": "CULTURA", "destinationId": #(sharedDestId), "duration": "2 hours", "meetingPoint": "Plaza de Armas" }
+    When method post
+    Then status 201
+    And match response.cancellationPolicyType == 'FLEXIBLE'
+
+  Scenario: GET - Ver disponibilidad y politica de cancelacion antes de reservar (200)
+    Given path 'experiences', staffId, 'experiences'
+    And header Authorization = authHeader
+    And request { "title": "Booking Info Tour", "description": "Tour used to check booking info", "category": "CULTURA", "destinationId": #(sharedDestId), "duration": "2 hours", "meetingPoint": "Plaza de Armas", "cancellationPolicyType": "STRICT", "cancellationPolicyDescription": "No refunds within 7 days of the tour." }
+    When method post
+    Then status 201
+    * def bookingInfoExpId = response.id
+
+    Given path 'experiences', bookingInfoExpId, 'booking-info'
+    And header Authorization = authHeader
+    When method get
+    Then status 200
+    And match response.experienceId == bookingInfoExpId
+    And match response.cancellationPolicyType == 'STRICT'
+    And match response.cancellationPolicyDescription == 'No refunds within 7 days of the tour.'
+    And match response.availabilities == '#array'
+
+  Scenario: GET - Booking info de una Experience inexistente (404)
+    Given path 'experiences', 999999, 'booking-info'
+    And header Authorization = authHeader
+    When method get
+    Then status 404
 
   Scenario: GET - Listar todas las Experiences (200)
     Given path 'experiences'

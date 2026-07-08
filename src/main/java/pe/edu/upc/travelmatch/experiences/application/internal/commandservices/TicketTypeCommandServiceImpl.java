@@ -1,12 +1,13 @@
 package pe.edu.upc.travelmatch.experiences.application.internal.commandservices;
 
-import java.util.Arrays;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.travelmatch.experiences.domain.model.commands.SeedTicketTypesCommand;
 import pe.edu.upc.travelmatch.experiences.domain.model.entities.TicketType;
 import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.TicketTypes;
 import pe.edu.upc.travelmatch.experiences.domain.services.TicketTypeCommandService;
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.TicketTypeRepository;
+
+import java.util.Arrays;
 
 /** Service implementation for managing TicketType commands. */
 @Service

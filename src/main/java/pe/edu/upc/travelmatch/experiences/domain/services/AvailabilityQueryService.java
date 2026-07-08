@@ -1,10 +1,11 @@
 package pe.edu.upc.travelmatch.experiences.domain.services;
 
+import pe.edu.upc.travelmatch.experiences.domain.model.aggregates.Availability;
+import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetAvailabilitiesByExperienceIdQuery;
+import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetAvailabilityByIdQuery;
+
 import java.util.List;
 import java.util.Optional;
-import pe.edu.upc.travelmatch.experiences.domain.model.aggregates.Availability;
-import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetAvailabilityByIdQuery;
-import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetAvailabilitiesByExperienceIdQuery;
 
 /** Service to manage Availability queries. */
 public interface AvailabilityQueryService {
@@ -27,7 +28,7 @@ public interface AvailabilityQueryService {
    * Handles the get availabilities by experience id query.
    *
    * @param query the query object
-   * @return the matching list of availabilities
+   * @return the list of availabilities for the experience, ordered by start date
    */
   List<Availability> handle(GetAvailabilitiesByExperienceIdQuery query);
 }

@@ -1,13 +1,5 @@
 package pe.edu.upc.travelmatch.experiences.application.internal.commandservices;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -15,6 +7,9 @@ import pe.edu.upc.travelmatch.experiences.domain.model.commands.SeedTicketTypesC
 import pe.edu.upc.travelmatch.experiences.domain.model.entities.TicketType;
 import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.TicketTypes;
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.TicketTypeRepository;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 class TicketTypeCommandServiceImplTest {
 

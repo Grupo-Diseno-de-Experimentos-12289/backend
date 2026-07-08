@@ -1,7 +1,6 @@
 package pe.edu.upc.travelmatch.experiences.interfaces.rest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +10,8 @@ import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetAllTicketTypes
 import pe.edu.upc.travelmatch.experiences.domain.services.TicketTypeQueryService;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.resources.TicketTypeResource;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.transform.TicketTypeResourceFromEntityAssembler;
+
+import java.util.List;
 
 /** TicketTypesController. */
 @RestController

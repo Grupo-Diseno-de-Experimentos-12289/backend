@@ -1,16 +1,5 @@
 package pe.edu.upc.travelmatch.experiences.application.internal.commandservices;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -26,10 +15,17 @@ import pe.edu.upc.travelmatch.experiences.domain.model.commands.CreateExperience
 import pe.edu.upc.travelmatch.experiences.domain.model.commands.UpdateExperienceCommand;
 import pe.edu.upc.travelmatch.experiences.domain.model.entities.Category;
 import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.AgencyId;
+import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.CancellationPolicyType;
 import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.Categories;
 import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.DestinationId;
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.CategoryRepository;
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.ExperienceRepository;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @Nested
 @ExtendWith(MockitoExtension.class)
@@ -58,7 +54,9 @@ class ExperienceCommandServiceImplTest {
             existingCategory,
             new DestinationId(100L),
             "4 horas",
-            "Plaza de Armas");
+            "Plaza de Armas",
+            CancellationPolicyType.FLEXIBLE,
+            "Cancelacion gratuita hasta 24 horas antes.");
   }
 
   // ==========================================
@@ -77,7 +75,9 @@ class ExperienceCommandServiceImplTest {
             "CULTURA",
             new DestinationId(100L),
             "4 horas",
-            "Plaza de Armas");
+            "Plaza de Armas",
+            CancellationPolicyType.FLEXIBLE,
+            "Cancelacion gratuita hasta 24 horas antes.");
     doNothing().when(externalIamService).validateAgencyExists(1L);
     when(categoryRepository.findByName(Categories.CULTURA))
         .thenReturn(Optional.of(existingCategory));
@@ -109,7 +109,9 @@ class ExperienceCommandServiceImplTest {
             "CULTURA",
             new DestinationId(100L),
             "4 horas",
-            "Plaza de Armas");
+            "Plaza de Armas",
+            CancellationPolicyType.FLEXIBLE,
+            "Cancelacion gratuita hasta 24 horas antes.");
     doNothing().when(externalIamService).validateAgencyExists(1L);
     when(categoryRepository.findByName(Categories.CULTURA)).thenReturn(Optional.empty());
 
@@ -138,7 +140,9 @@ class ExperienceCommandServiceImplTest {
             "CULTURA",
             new DestinationId(100L),
             "5 horas",
-            "Plaza");
+            "Plaza",
+            CancellationPolicyType.MODERATE,
+            "Reembolso parcial hasta 5 dias antes.");
     when(experienceRepository.findById(1L)).thenReturn(Optional.of(existingExperience));
     when(categoryRepository.findByName(Categories.CULTURA))
         .thenReturn(Optional.of(existingCategory));
@@ -159,7 +163,15 @@ class ExperienceCommandServiceImplTest {
     // --- Arrange (Preparar) ---
     UpdateExperienceCommand command =
         new UpdateExperienceCommand(
-            999L, "Title", "desc", "CULTURA", new DestinationId(100L), "2 horas", "Local");
+            999L,
+            "Title",
+            "desc",
+            "CULTURA",
+            new DestinationId(100L),
+            "2 horas",
+            "Local",
+            CancellationPolicyType.FLEXIBLE,
+            "Cancelacion gratuita hasta 24 horas antes.");
     when(experienceRepository.findById(999L)).thenReturn(Optional.empty());
 
     // --- Act & Assert (Ejecutar y Verificar) ---

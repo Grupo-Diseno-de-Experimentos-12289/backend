@@ -1,15 +1,15 @@
 package pe.edu.upc.travelmatch.experiences.interfaces.rest.transform;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import pe.edu.upc.travelmatch.experiences.domain.model.aggregates.Experience;
 import pe.edu.upc.travelmatch.experiences.domain.model.commands.CreateExperienceMediaCommand;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.resources.CreateExperienceMediaResource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class CreateExperienceMediaCommandFromResourceAssemblerTest {
 

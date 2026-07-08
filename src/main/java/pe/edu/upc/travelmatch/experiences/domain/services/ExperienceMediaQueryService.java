@@ -1,10 +1,11 @@
 package pe.edu.upc.travelmatch.experiences.domain.services;
 
-import java.util.List;
-import java.util.Optional;
 import pe.edu.upc.travelmatch.experiences.domain.model.entities.ExperienceMedia;
 import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetAllExperiencesQuery;
 import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetExperienceByIdQuery;
+
+import java.util.List;
+import java.util.Optional;
 
 /** Service to manage ExperienceMedia queries. */
 public interface ExperienceMediaQueryService {

@@ -1,10 +1,11 @@
 package pe.edu.upc.travelmatch.experiences.domain.services;
 
-import java.util.List;
-import java.util.Optional;
 import pe.edu.upc.travelmatch.experiences.domain.model.entities.Category;
 import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetAllCategoriesQuery;
 import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetCategoryByIdQuery;
+
+import java.util.List;
+import java.util.Optional;
 
 /** Service to manage Category queries. */
 public interface CategoryQueryService {
