@@ -1,14 +1,9 @@
 package pe.edu.upc.travelmatch.iam.interfaces.rest.resources;
 
-import java.util.List;
-
-/** UserResource value carrier. */
-public record UserResource(
-    Long id,
-    String email,
+/** Request body for updating a user's profile. */
+public record UpdateUserProfileResource(
     String firstName,
     String lastName,
     String phone,
-    List<String> roles,
     String profileType,
     String avatarUrl) {}

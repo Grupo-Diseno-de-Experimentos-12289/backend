@@ -8,6 +8,7 @@ import pe.edu.upc.travelmatch.iam.application.internal.outboundservices.tokens.T
 import pe.edu.upc.travelmatch.iam.domain.model.aggregates.User;
 import pe.edu.upc.travelmatch.iam.domain.model.commands.SignInCommand;
 import pe.edu.upc.travelmatch.iam.domain.model.commands.SignUpCommand;
+import pe.edu.upc.travelmatch.iam.domain.model.commands.UpdateUserProfileCommand;
 import pe.edu.upc.travelmatch.iam.domain.model.valueobjects.Roles;
 import pe.edu.upc.travelmatch.iam.domain.services.UserCommandService;
 import pe.edu.upc.travelmatch.iam.infrastructure.persistence.jpa.repositories.RoleRepository;
@@ -78,5 +79,21 @@ public class UserCommandServiceImpl implements UserCommandService {
     }
     var token = tokenService.generateToken(user.getEmail());
     return Optional.of(new ImmutablePair<>(user, token));
+  }
+
+  @Override
+  public Optional<User> handle(UpdateUserProfileCommand command) {
+    var user =
+        userRepository
+            .findById(command.userId())
+            .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    user.updateUserInfo(
+        command.firstName(),
+        command.lastName(),
+        command.phone(),
+        command.profileType(),
+        command.avatarUrl());
+    userRepository.save(user);
+    return userRepository.findById(command.userId());
   }
 }

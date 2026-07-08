@@ -15,6 +15,8 @@ public class UserResourceFromEntityAssembler {
         entity.getFirstName(),
         entity.getLastName(),
         entity.getPhone(),
-        roles);
+        roles,
+        entity.getProfileType(),
+        entity.getAvatarUrl());
   }
 }

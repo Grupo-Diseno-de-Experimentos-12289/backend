@@ -44,6 +44,16 @@ public class User extends AuditableAbstractAggregateRoot<User> {
   @Size(max = 20)
   private String phone;
 
+  @Getter
+  @Size(max = 20)
+  @Column(nullable = true)
+  private String profileType;
+
+  @Getter
+  @Size(max = 1024)
+  @Column(nullable = true)
+  private String avatarUrl;
+
   @Getter private boolean isActive;
 
   @Getter private boolean emailVerified;
@@ -61,6 +71,7 @@ public class User extends AuditableAbstractAggregateRoot<User> {
     this.roles = new HashSet<>();
     this.isActive = true;
     this.emailVerified = false;
+    this.profileType = "UNDEFINED";
   }
 
   /** Constructs a new User. */
@@ -115,9 +126,16 @@ public class User extends AuditableAbstractAggregateRoot<User> {
   }
 
   /** Update user info. */
-  public void updateUserInfo(String firstName, String lastName, String phone) {
+  public void updateUserInfo(
+      String firstName, String lastName, String phone, String profileType, String avatarUrl) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.phone = phone;
+    if (profileType != null) {
+      this.profileType = profileType;
+    }
+    if (avatarUrl != null) {
+      this.avatarUrl = avatarUrl;
+    }
   }
 }
