@@ -96,6 +96,18 @@ public class Experience extends AuditableAbstractAggregateRoot<Experience> {
     this.cancellationPolicyDescription = cancellationPolicyDescription;
   }
 
+  /** Legacy 7-parameter constructor for compatibility with older code/tests. */
+  public Experience(
+      String title,
+      String description,
+      AgencyId agencyId,
+      Category category,
+      DestinationId destinationId,
+      String duration,
+      String meetingPoint) {
+    this(title, description, agencyId, category, destinationId, duration, meetingPoint, CancellationPolicyType.FLEXIBLE, "Flexible cancellation policy.");
+  }
+
   /** Marks the experience as logically deleted. */
   public void markAsDeleted() {
     this.deletedAt = new Date();
@@ -131,5 +143,16 @@ public class Experience extends AuditableAbstractAggregateRoot<Experience> {
     this.cancellationPolicyType =
         cancellationPolicyType == null ? this.cancellationPolicyType : cancellationPolicyType;
     this.cancellationPolicyDescription = cancellationPolicyDescription;
+  }
+
+  /** Legacy 6-parameter updateInfo method for compatibility with older code/tests. */
+  public void updateInfo(
+      String title,
+      String description,
+      Category category,
+      DestinationId destinationId,
+      String duration,
+      String meetingPoint) {
+    this.updateInfo(title, description, category, destinationId, duration, meetingPoint, this.cancellationPolicyType, this.cancellationPolicyDescription);
   }
 }
