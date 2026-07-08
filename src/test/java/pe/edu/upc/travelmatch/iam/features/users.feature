@@ -43,7 +43,9 @@ Feature: Users API Tests
       "firstName": "Geo",
       "lastName": "User",
       "phone": "123456789",
-      "roles": ["ROLE_TOURIST"]
+      "roles": ["ROLE_TOURIST"],
+      "profileType": "##string",
+      "avatarUrl": "##string"
     }
     """
 
@@ -87,6 +89,38 @@ Feature: Users API Tests
       "firstName": "#string",
       "lastName": "#string",
       "phone": "#string",
-      "roles": "#array"
+      "roles": "#array",
+      "profileType": "##string",
+      "avatarUrl": "##string"
+    }
+    """
+
+  # Endpoint: PUT /users/{id}
+  Scenario: Update user profile successfully
+    Given path '/users', currentUserId
+    And header Authorization = authHeader
+    And request
+    """
+    {
+      "firstName": "UpdatedGeo",
+      "lastName": "UpdatedUser",
+      "phone": "987654321",
+      "profileType": "STANDARD",
+      "avatarUrl": "https://example.com/avatar.jpg"
+    }
+    """
+    When method put
+    Then status 200
+    And match response == 
+    """
+    {
+      "id": "#(currentUserId)",
+      "email": "#(uniqueEmail)",
+      "firstName": "UpdatedGeo",
+      "lastName": "UpdatedUser",
+      "phone": "987654321",
+      "roles": ["ROLE_TOURIST"],
+      "profileType": "STANDARD",
+      "avatarUrl": "https://example.com/avatar.jpg"
     }
     """

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -22,6 +23,7 @@ import pe.edu.upc.travelmatch.iam.application.internal.outboundservices.tokens.T
 import pe.edu.upc.travelmatch.iam.domain.model.aggregates.User;
 import pe.edu.upc.travelmatch.iam.domain.model.commands.SignInCommand;
 import pe.edu.upc.travelmatch.iam.domain.model.commands.SignUpCommand;
+import pe.edu.upc.travelmatch.iam.domain.model.commands.UpdateUserProfileCommand;
 import pe.edu.upc.travelmatch.iam.domain.model.entities.Role;
 import pe.edu.upc.travelmatch.iam.domain.model.valueobjects.Roles;
 import pe.edu.upc.travelmatch.iam.infrastructure.persistence.jpa.repositories.RoleRepository;
@@ -193,6 +195,52 @@ class UserCommandServiceImplTest {
 
     verify(userRepository).findByEmail(command.email());
     verify(hashingService).matches(command.password(), "encodedPassword");
+    verifyNoMoreInteractions(userRepository, roleRepository, hashingService, tokenService);
+  }
+
+  @Test
+  @DisplayName("handle(UpdateUserProfileCommand) should return updated user when successful")
+  void handle_UpdateUserProfileCommand_ShouldReturnUpdatedUser_WhenSuccessful() {
+    // Arrange
+    var userId = 1L;
+    var command = new UpdateUserProfileCommand(
+        userId, "UpdatedFirstName", "UpdatedLastName", "987654321", "CORPORATE", "http://example.com/avatar.png");
+    var user = new User("john.doe@example.com", "encodedPassword", "John", "Doe", "123456789", new ArrayList<>());
+
+    when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+    when(userRepository.findById(userId)).thenReturn(Optional.of(user)); // for the return statement
+
+    // Act
+    var result = userCommandService.handle(command);
+
+    // Assert
+    assertTrue(result.isPresent());
+    assertEquals("UpdatedFirstName", result.get().getFirstName());
+    assertEquals("UpdatedLastName", result.get().getLastName());
+    assertEquals("987654321", result.get().getPhone());
+    assertEquals("CORPORATE", result.get().getProfileType());
+    assertEquals("http://example.com/avatar.png", result.get().getAvatarUrl());
+
+    verify(userRepository, times(2)).findById(userId);
+    verify(userRepository).save(user);
+    verifyNoMoreInteractions(userRepository, roleRepository, hashingService, tokenService);
+  }
+
+  @Test
+  @DisplayName("handle(UpdateUserProfileCommand) should throw IllegalArgumentException when user not found")
+  void handle_UpdateUserProfileCommand_ShouldThrowIllegalArgumentException_WhenUserNotFound() {
+    // Arrange
+    var userId = 999L;
+    var command = new UpdateUserProfileCommand(
+        userId, "UpdatedFirstName", "UpdatedLastName", "987654321", "CORPORATE", "http://example.com/avatar.png");
+
+    when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+    // Act + Assert
+    assertThrows(
+        IllegalArgumentException.class, () -> userCommandService.handle(command), "User not found");
+
+    verify(userRepository).findById(userId);
     verifyNoMoreInteractions(userRepository, roleRepository, hashingService, tokenService);
   }
 }
