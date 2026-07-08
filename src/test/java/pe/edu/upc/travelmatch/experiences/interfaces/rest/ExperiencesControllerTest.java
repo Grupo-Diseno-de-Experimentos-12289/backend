@@ -1,15 +1,5 @@
 package pe.edu.upc.travelmatch.experiences.interfaces.rest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,20 +8,33 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import pe.edu.upc.travelmatch.experiences.domain.model.aggregates.Availability;
 import pe.edu.upc.travelmatch.experiences.domain.model.aggregates.Experience;
 import pe.edu.upc.travelmatch.experiences.domain.model.commands.CreateExperienceCommand;
 import pe.edu.upc.travelmatch.experiences.domain.model.commands.UpdateExperienceCommand;
 import pe.edu.upc.travelmatch.experiences.domain.model.entities.Category;
 import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetAllExperiencesQuery;
+import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetAvailabilitiesByExperienceIdQuery;
 import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetExperienceByIdQuery;
 import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.AgencyId;
+import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.CancellationPolicyType;
 import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.Categories;
 import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.DestinationId;
+import pe.edu.upc.travelmatch.experiences.domain.services.AvailabilityQueryService;
 import pe.edu.upc.travelmatch.experiences.domain.services.ExperienceCommandService;
 import pe.edu.upc.travelmatch.experiences.domain.services.ExperienceQueryService;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.resources.CreateExperienceResource;
+import pe.edu.upc.travelmatch.experiences.interfaces.rest.resources.ExperienceBookingInfoResource;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.resources.ExperienceResource;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.resources.UpdateExperienceResource;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ExperiencesControllerTest {
@@ -39,6 +42,8 @@ class ExperiencesControllerTest {
   @Mock private ExperienceCommandService commandService;
 
   @Mock private ExperienceQueryService queryService;
+
+  @Mock private AvailabilityQueryService availabilityQueryService;
 
   @InjectMocks private ExperiencesController experiencesController;
 
@@ -59,7 +64,9 @@ class ExperiencesControllerTest {
             category,
             destinationId,
             "12h",
-            "Main Square");
+            "Main Square",
+            CancellationPolicyType.FLEXIBLE,
+            "Free cancellation up to 24 hours before.");
   }
 
   @Test
@@ -68,7 +75,14 @@ class ExperiencesControllerTest {
     Long agencyId = 1L;
     CreateExperienceResource resource =
         new CreateExperienceResource(
-            "Machu Picchu Full Day", "Description", "CULTURA", 1L, "12h", "Square");
+            "Machu Picchu Full Day",
+            "Description",
+            "CULTURA",
+            1L,
+            "12h",
+            "Square",
+            "FLEXIBLE",
+            "Free cancellation up to 24 hours before.");
 
     when(commandService.handle(any(CreateExperienceCommand.class))).thenReturn(10L);
     when(queryService.handle(any(GetExperienceByIdQuery.class)))
@@ -89,7 +103,8 @@ class ExperiencesControllerTest {
     // Arrange
     Long agencyId = 1L;
     CreateExperienceResource resource =
-        new CreateExperienceResource("Title", "Desc", "CULTURA", 1L, "1h", "Point");
+        new CreateExperienceResource(
+            "Title", "Desc", "CULTURA", 1L, "1h", "Point", "FLEXIBLE", "Free cancellation.");
 
     when(commandService.handle(any(CreateExperienceCommand.class))).thenReturn(10L);
     when(queryService.handle(any(GetExperienceByIdQuery.class))).thenReturn(Optional.empty());
@@ -123,7 +138,14 @@ class ExperiencesControllerTest {
     Long experienceId = 10L;
     UpdateExperienceResource resource =
         new UpdateExperienceResource(
-            "Updated Title", "Updated Desc", "CULTURA", 1L, "5h", "New Point");
+            "Updated Title",
+            "Updated Desc",
+            "CULTURA",
+            1L,
+            "5h",
+            "New Point",
+            "MODERATE",
+            "Partial refund up to 5 days before.");
 
     doNothing().when(commandService).updateExperience(any(UpdateExperienceCommand.class));
     when(queryService.handle(any(GetExperienceByIdQuery.class)))
@@ -143,7 +165,8 @@ class ExperiencesControllerTest {
     // Arrange
     Long experienceId = 10L;
     UpdateExperienceResource resource =
-        new UpdateExperienceResource("Title", "Desc", "CULTURA", 1L, "5h", "Point");
+        new UpdateExperienceResource(
+            "Title", "Desc", "CULTURA", 1L, "5h", "Point", "MODERATE", "Partial refund.");
 
     doNothing().when(commandService).updateExperience(any(UpdateExperienceCommand.class));
     when(queryService.handle(any(GetExperienceByIdQuery.class))).thenReturn(Optional.empty());
@@ -196,6 +219,41 @@ class ExperiencesControllerTest {
     // Act
     ResponseEntity<ExperienceResource> response =
         experiencesController.getExperienceById(experienceId);
+
+    // Assert
+    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+  }
+
+  @Test
+  void testGetBookingInfo_Ok() {
+    // Arrange
+    Long experienceId = 10L;
+    when(queryService.handle(any(GetExperienceByIdQuery.class)))
+        .thenReturn(Optional.of(experience));
+    when(availabilityQueryService.handle(any(GetAvailabilitiesByExperienceIdQuery.class)))
+        .thenReturn(List.<Availability>of());
+
+    // Act
+    ResponseEntity<ExperienceBookingInfoResource> response =
+        experiencesController.getBookingInfo(experienceId);
+
+    // Assert
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertNotNull(response.getBody());
+    assertEquals("Machu Picchu Full Day", response.getBody().title());
+    assertEquals("FLEXIBLE", response.getBody().cancellationPolicyType());
+    assertNotNull(response.getBody().availabilities());
+  }
+
+  @Test
+  void testGetBookingInfo_NotFound() {
+    // Arrange
+    Long experienceId = 10L;
+    when(queryService.handle(any(GetExperienceByIdQuery.class))).thenReturn(Optional.empty());
+
+    // Act
+    ResponseEntity<ExperienceBookingInfoResource> response =
+        experiencesController.getBookingInfo(experienceId);
 
     // Assert
     assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());

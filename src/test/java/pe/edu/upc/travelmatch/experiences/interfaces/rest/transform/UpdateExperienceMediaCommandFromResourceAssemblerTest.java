@@ -1,12 +1,12 @@
 package pe.edu.upc.travelmatch.experiences.interfaces.rest.transform;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import pe.edu.upc.travelmatch.experiences.domain.model.commands.UpdateExperienceMediaCommand;
 import pe.edu.upc.travelmatch.experiences.interfaces.rest.resources.UpdateExperienceMediaResource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class UpdateExperienceMediaCommandFromResourceAssemblerTest {
 
