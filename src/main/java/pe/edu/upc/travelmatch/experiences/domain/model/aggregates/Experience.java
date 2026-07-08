@@ -47,7 +47,7 @@ public class Experience extends AuditableAbstractAggregateRoot<Experience> {
   private String meetingPoint;
 
   @Enumerated(EnumType.STRING)
-  @Column(nullable = false, length = 30)
+  @Column(nullable = true, length = 30)
   private CancellationPolicyType cancellationPolicyType;
 
   @Column(columnDefinition = "TEXT")
