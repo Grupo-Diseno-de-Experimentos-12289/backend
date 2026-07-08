@@ -3,8 +3,11 @@ package pe.edu.upc.travelmatch.bookings.interfaces.rest.transform;
 import pe.edu.upc.travelmatch.bookings.domain.model.commands.CancelBookingCommand;
 import pe.edu.upc.travelmatch.bookings.interfaces.rest.resources.CancelBookingResource;
 
+/** CancelBookingCommandFromResourceAssembler type. */
 public class CancelBookingCommandFromResourceAssembler {
-    public static CancelBookingCommand toCommandFromResource(Long bookingId, CancelBookingResource resource) {
-        return new CancelBookingCommand(bookingId, resource.userId(), resource.reason());
-    }
+  /** To command from resource. */
+  public static CancelBookingCommand toCommandFromResource(
+      Long bookingId, CancelBookingResource resource) {
+    return new CancelBookingCommand(bookingId, resource.userId(), resource.reason());
+  }
 }

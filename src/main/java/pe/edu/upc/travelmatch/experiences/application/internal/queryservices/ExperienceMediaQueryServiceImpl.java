@@ -1,5 +1,7 @@
 package pe.edu.upc.travelmatch.experiences.application.internal.queryservices;
 
+import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.travelmatch.experiences.domain.model.entities.ExperienceMedia;
 import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetAllExperiencesQuery;
@@ -7,40 +9,43 @@ import pe.edu.upc.travelmatch.experiences.domain.model.queries.GetExperienceById
 import pe.edu.upc.travelmatch.experiences.domain.services.ExperienceMediaQueryService;
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.ExperienceMediaRepository;
 
-import java.util.List;
-import java.util.Optional;
-
+/** Service implementation for managing ExperienceMedia queries. */
 @Service
 public class ExperienceMediaQueryServiceImpl implements ExperienceMediaQueryService {
-    private final ExperienceMediaRepository repository;
 
-    public ExperienceMediaQueryServiceImpl(ExperienceMediaRepository repository) {
-        this.repository = repository;
-    }
+  private final ExperienceMediaRepository repository;
 
-    @Override
-    public List<ExperienceMedia> getAll() {
-        return repository.findAll();
-    }
+  /**
+   * Constructs an ExperienceMediaQueryServiceImpl.
+   *
+   * @param repository the media repository
+   */
+  public ExperienceMediaQueryServiceImpl(ExperienceMediaRepository repository) {
+    this.repository = repository;
+  }
 
-    @Override
-    public List<ExperienceMedia> findByExperienceId(Long experienceId) {
-        return repository.findByExperienceId(experienceId);
-    }
+  @Override
+  public List<ExperienceMedia> getAll() {
+    return repository.findAll();
+  }
 
-    @Override
-    public Optional<ExperienceMedia> findById(Long id) {
-        return repository.findById(id);
-    }
+  @Override
+  public List<ExperienceMedia> findByExperienceId(Long experienceId) {
+    return repository.findByExperienceId(experienceId);
+  }
 
-    @Override
-    public List<ExperienceMedia> handle(GetAllExperiencesQuery query) {
-        return repository.findAll();
-    }
+  @Override
+  public Optional<ExperienceMedia> findById(Long id) {
+    return repository.findById(id);
+  }
 
-    @Override
-    public Optional<ExperienceMedia> handle(GetExperienceByIdQuery query)
-    {
-        return repository.findById(query.experienceId());
-    }
+  @Override
+  public List<ExperienceMedia> handle(GetAllExperiencesQuery query) {
+    return repository.findAll();
+  }
+
+  @Override
+  public Optional<ExperienceMedia> handle(GetExperienceByIdQuery query) {
+    return repository.findById(query.experienceId()).stream().findFirst();
+  }
 }

@@ -1,0 +1,47 @@
+package pe.edu.upc.travelmatch.iam.interfaces.rest.transform;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.util.Set;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import pe.edu.upc.travelmatch.iam.domain.model.aggregates.User;
+import pe.edu.upc.travelmatch.iam.domain.model.entities.Role;
+
+/**
+ * Unit tests for {@link AuthenticatedUserResourceFromEntityAssembler}.
+ *
+ * <p>This class validates the proper mapping from a User entity and a token to an
+ * AuthenticatedUserResource.
+ */
+class AuthenticatedUserResourceFromEntityAssemblerTest {
+
+  @Test
+  @DisplayName("toResourceFromEntity should map User and token to AuthenticatedUserResource")
+  void toResourceFromEntity_ShouldMapCorrectly() {
+    // Arrange
+    var user = mock(User.class);
+    var role = mock(Role.class);
+    when(user.getId()).thenReturn(1L);
+    when(user.getEmail()).thenReturn("user@example.com");
+    when(user.getRoles()).thenReturn(Set.of(role));
+    when(role.getStringName()).thenReturn("ROLE_TOURIST");
+
+    var token = "jwt-token-123";
+
+    // Act
+    var resource = AuthenticatedUserResourceFromEntityAssembler.toResourceFromEntity(user, token);
+
+    // Assert
+    assertNotNull(resource);
+    assertEquals(1L, resource.id());
+    assertEquals("user@example.com", resource.email());
+    assertEquals("jwt-token-123", resource.token());
+    assertEquals(1, resource.roles().size());
+    assertTrue(resource.roles().contains("ROLE_TOURIST"));
+  }
+}

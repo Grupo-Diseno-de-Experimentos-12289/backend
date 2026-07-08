@@ -2,6 +2,6 @@ package pe.edu.upc.travelmatch.bookings.application.internal.outboundservices.ac
 
 import org.springframework.stereotype.Service;
 
+/** ExternalAgencyService type. */
 @Service("bookingExternalAgencyService")
-public class ExternalAgencyService {
-}
+public class ExternalAgencyService {}

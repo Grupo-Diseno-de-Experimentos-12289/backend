@@ -1,4 +1,4 @@
 package pe.edu.upc.travelmatch.experiences.domain.model.queries;
 
-public record GetAllCategoriesQuery() {
-}
+/** Query to get all categories. */
+public record GetAllCategoriesQuery() {}

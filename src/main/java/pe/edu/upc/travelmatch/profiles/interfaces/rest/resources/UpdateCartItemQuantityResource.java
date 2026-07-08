@@ -1,4 +1,4 @@
 package pe.edu.upc.travelmatch.profiles.interfaces.rest.resources;
 
-public record UpdateCartItemQuantityResource(Long availabilityId, Integer newQuantity) {
-}
+/** UpdateCartItemQuantityResource value carrier. */
+public record UpdateCartItemQuantityResource(Long availabilityId, Integer newQuantity) {}

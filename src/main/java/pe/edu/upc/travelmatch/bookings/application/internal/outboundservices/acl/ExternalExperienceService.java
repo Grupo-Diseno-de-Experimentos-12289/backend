@@ -1,34 +1,39 @@
 package pe.edu.upc.travelmatch.bookings.application.internal.outboundservices.acl;
 
+import java.math.BigDecimal;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.travelmatch.experiences.interfaces.acl.ExperiencesContextFacade;
 
-import java.math.BigDecimal;
-
+/** ExternalExperienceService type. */
 @Service("bookingExternalExperienceService")
 public class ExternalExperienceService {
 
-    private final ExperiencesContextFacade experiencesContextFacade;
+  private final ExperiencesContextFacade experiencesContextFacade;
 
-    public ExternalExperienceService(ExperiencesContextFacade experiencesContextFacade) {
-        this.experiencesContextFacade = experiencesContextFacade;
-    }
+  /** Constructs a new ExternalExperienceService. */
+  public ExternalExperienceService(ExperiencesContextFacade experiencesContextFacade) {
+    this.experiencesContextFacade = experiencesContextFacade;
+  }
 
-    public boolean existsAvailabilityById(Long availabilityId) {
-        return experiencesContextFacade.fetchAvailabilityInfo(availabilityId).isPresent();
-    }
+  /** Exists availability by id. */
+  public boolean existsAvailabilityById(Long availabilityId) {
+    return experiencesContextFacade.fetchAvailabilityInfo(availabilityId).isPresent();
+  }
 
-    public boolean hasSufficientStock(Long availabilityId, Long ticketTypeId, int quantity) {
-        return experiencesContextFacade.isStockAvailable(availabilityId, ticketTypeId, quantity);
-    }
+  /** Has sufficient stock. */
+  public boolean hasSufficientStock(Long availabilityId, Long ticketTypeId, int quantity) {
+    return experiencesContextFacade.isStockAvailable(availabilityId, ticketTypeId, quantity);
+  }
 
-    public BigDecimal getPriceForTicketType(Long availabilityId, Long ticketTypeId) {
-        return experiencesContextFacade
-                .fetchTicketPrice(availabilityId, ticketTypeId)
-                .orElseThrow(() -> new IllegalArgumentException("TicketType price not found"));
-    }
+  /** Get price for ticket type. */
+  public BigDecimal getPriceForTicketType(Long availabilityId, Long ticketTypeId) {
+    return experiencesContextFacade
+        .fetchTicketPrice(availabilityId, ticketTypeId)
+        .orElseThrow(() -> new IllegalArgumentException("TicketType price not found"));
+  }
 
-    public void decrementStock(Long availabilityId, Long ticketTypeId, int quantity) {
-        experiencesContextFacade.decrementStock(availabilityId, ticketTypeId, quantity);
-    }
+  /** Decrement stock. */
+  public void decrementStock(Long availabilityId, Long ticketTypeId, int quantity) {
+    experiencesContextFacade.decrementStock(availabilityId, ticketTypeId, quantity);
+  }
 }
