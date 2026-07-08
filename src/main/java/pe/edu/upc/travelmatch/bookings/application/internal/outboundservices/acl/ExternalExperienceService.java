@@ -3,6 +3,8 @@ package pe.edu.upc.travelmatch.bookings.application.internal.outboundservices.ac
 import java.math.BigDecimal;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.travelmatch.experiences.interfaces.acl.ExperiencesContextFacade;
+import java.util.List;
+import pe.edu.upc.travelmatch.experiences.interfaces.acl.dto.ExperienceSummary;
 
 /** ExternalExperienceService type. */
 @Service("bookingExternalExperienceService")
@@ -35,5 +37,11 @@ public class ExternalExperienceService {
   /** Decrement stock. */
   public void decrementStock(Long availabilityId, Long ticketTypeId, int quantity) {
     experiencesContextFacade.decrementStock(availabilityId, ticketTypeId, quantity);
+  }
+  /** Fetches experience summaries filtered by destination and categories. */
+  public List<ExperienceSummary> fetchExperiencesByDestinationAndCategories(
+          Long destinationId, List<String> categories) {
+    return experiencesContextFacade.fetchExperiencesByDestinationAndCategories(
+            destinationId, categories);
   }
 }
