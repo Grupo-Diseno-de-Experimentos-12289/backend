@@ -13,6 +13,7 @@ public class AgencyResourceFromAgencyAssembler {
         entity.getDescription(),
         entity.getRuc(),
         entity.getContactEmail(),
-        entity.getContactPhone());
+        entity.getContactPhone(),
+        entity.isVerified());
   }
 }

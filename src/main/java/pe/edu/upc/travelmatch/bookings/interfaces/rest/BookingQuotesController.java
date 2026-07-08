@@ -11,32 +11,43 @@ import pe.edu.upc.travelmatch.bookings.domain.services.BookingQuoteService;
 import pe.edu.upc.travelmatch.bookings.interfaces.rest.resources.BookingQuoteResource;
 import pe.edu.upc.travelmatch.bookings.interfaces.rest.transform.BookingQuoteResourceFromEntityAssembler;
 
-/** BookingQuotesController type. */
+/** REST controller for booking quote endpoints. */
 @RestController
 @RequestMapping(value = "/api/v1/bookings/quote")
 @Tag(name = "Bookings", description = "Bookings Management Endpoints")
 public class BookingQuotesController {
 
-    private final BookingQuoteService bookingQuoteService;
+  private final BookingQuoteService bookingQuoteService;
 
-    /** Constructs a new BookingQuotesController. */
-    public BookingQuotesController(BookingQuoteService bookingQuoteService) {
-        this.bookingQuoteService = bookingQuoteService;
-    }
+  /**
+   * Constructs a new BookingQuotesController.
+   *
+   * @param bookingQuoteService the service to handle booking quotes
+   */
+  public BookingQuotesController(BookingQuoteService bookingQuoteService) {
+    this.bookingQuoteService = bookingQuoteService;
+  }
 
-    /** Get booking quote. */
-    @GetMapping
-    public ResponseEntity<BookingQuoteResource> getBookingQuote(
-            @RequestParam Long availabilityId,
-            @RequestParam Long ticketTypeId,
-            @RequestParam int quantity) {
-        try {
-            var query = new GetBookingQuoteQuery(availabilityId, ticketTypeId, quantity);
-            var quote = bookingQuoteService.handle(query);
-            var resource = BookingQuoteResourceFromEntityAssembler.toResourceFromEntity(quote);
-            return ResponseEntity.ok(resource);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+  /**
+   * Returns a real-time booking quote for a given availability, ticket type and quantity.
+   *
+   * @param availabilityId the availability identifier
+   * @param ticketTypeId the ticket type identifier
+   * @param quantity the number of tickets requested
+   * @return the booking quote resource or 400 if arguments are invalid
+   */
+  @GetMapping
+  public ResponseEntity<BookingQuoteResource> getBookingQuote(
+      @RequestParam Long availabilityId,
+      @RequestParam Long ticketTypeId,
+      @RequestParam int quantity) {
+    try {
+      var query = new GetBookingQuoteQuery(availabilityId, ticketTypeId, quantity);
+      var quote = bookingQuoteService.handle(query);
+      var resource = BookingQuoteResourceFromEntityAssembler.toResourceFromEntity(quote);
+      return ResponseEntity.ok(resource);
+    } catch (IllegalArgumentException e) {
+      return ResponseEntity.badRequest().build();
     }
+  }
 }
