@@ -1,12 +1,13 @@
 package pe.edu.upc.travelmatch.experiences.application.internal.commandservices;
 
-import java.util.Arrays;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.travelmatch.experiences.domain.model.commands.SeedCategoriesCommand;
 import pe.edu.upc.travelmatch.experiences.domain.model.entities.Category;
 import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.Categories;
 import pe.edu.upc.travelmatch.experiences.domain.services.CategoryCommandService;
 import pe.edu.upc.travelmatch.experiences.infrastructure.persistence.jpa.repositories.CategoryRepository;
+
+import java.util.Arrays;
 
 /** Service implementation for managing Category commands. */
 @Service

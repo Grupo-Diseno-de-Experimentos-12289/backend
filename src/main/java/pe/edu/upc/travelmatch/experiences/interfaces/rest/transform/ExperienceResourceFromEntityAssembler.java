@@ -15,6 +15,10 @@ public class ExperienceResourceFromEntityAssembler {
         entity.getCategory(),
         entity.getDestinationId().value(),
         entity.getDuration(),
-        entity.getMeetingPoint());
+        entity.getMeetingPoint(),
+        entity.getCancellationPolicyType() == null
+            ? null
+            : entity.getCancellationPolicyType().name(),
+        entity.getCancellationPolicyDescription());
   }
 }

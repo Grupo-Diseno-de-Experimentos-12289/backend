@@ -1,20 +1,16 @@
 package pe.edu.upc.travelmatch.experiences.domain.model.aggregates;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+import lombok.Getter;
+import pe.edu.upc.travelmatch.experiences.domain.model.entities.AvailabilityTicketType;
+import pe.edu.upc.travelmatch.experiences.domain.model.entities.TicketType;
+import pe.edu.upc.travelmatch.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import lombok.Getter;
-import pe.edu.upc.travelmatch.experiences.domain.model.entities.AvailabilityTicketType;
-import pe.edu.upc.travelmatch.experiences.domain.model.entities.TicketType;
-import pe.edu.upc.travelmatch.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 
 /** Represents an Availability for an Experience. */
 @Entity

@@ -1,26 +1,20 @@
 package pe.edu.upc.travelmatch.experiences.domain.model.aggregates;
 
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import pe.edu.upc.travelmatch.experiences.domain.model.entities.Category;
 import pe.edu.upc.travelmatch.experiences.domain.model.entities.ExperienceMedia;
 import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.AgencyId;
+import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.CancellationPolicyType;
 import pe.edu.upc.travelmatch.experiences.domain.model.valueobjects.DestinationId;
 import pe.edu.upc.travelmatch.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /** Represents an Experience entity. */
 @Entity
@@ -52,6 +46,13 @@ public class Experience extends AuditableAbstractAggregateRoot<Experience> {
 
   private String meetingPoint;
 
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false, length = 30)
+  private CancellationPolicyType cancellationPolicyType;
+
+  @Column(columnDefinition = "TEXT")
+  private String cancellationPolicyDescription;
+
   private Date deletedAt;
 
   @OneToMany(mappedBy = "experience", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -70,6 +71,8 @@ public class Experience extends AuditableAbstractAggregateRoot<Experience> {
    * @param destinationId the destination ID
    * @param duration the typical duration
    * @param meetingPoint the meeting point for the experience
+   * @param cancellationPolicyType the cancellation policy type
+   * @param cancellationPolicyDescription the human-readable cancellation policy details
    */
   public Experience(
       String title,
@@ -78,7 +81,9 @@ public class Experience extends AuditableAbstractAggregateRoot<Experience> {
       Category category,
       DestinationId destinationId,
       String duration,
-      String meetingPoint) {
+      String meetingPoint,
+      CancellationPolicyType cancellationPolicyType,
+      String cancellationPolicyDescription) {
     this.title = title;
     this.description = description;
     this.agencyId = agencyId;
@@ -86,6 +91,9 @@ public class Experience extends AuditableAbstractAggregateRoot<Experience> {
     this.destinationId = destinationId;
     this.duration = duration;
     this.meetingPoint = meetingPoint;
+    this.cancellationPolicyType =
+        cancellationPolicyType == null ? CancellationPolicyType.FLEXIBLE : cancellationPolicyType;
+    this.cancellationPolicyDescription = cancellationPolicyDescription;
   }
 
   /** Marks the experience as logically deleted. */
@@ -102,6 +110,8 @@ public class Experience extends AuditableAbstractAggregateRoot<Experience> {
    * @param destinationId the new destination ID
    * @param duration the new duration
    * @param meetingPoint the new meeting point
+   * @param cancellationPolicyType the new cancellation policy type
+   * @param cancellationPolicyDescription the new cancellation policy details
    */
   public void updateInfo(
       String title,
@@ -109,12 +119,17 @@ public class Experience extends AuditableAbstractAggregateRoot<Experience> {
       Category category,
       DestinationId destinationId,
       String duration,
-      String meetingPoint) {
+      String meetingPoint,
+      CancellationPolicyType cancellationPolicyType,
+      String cancellationPolicyDescription) {
     this.title = title;
     this.description = description;
     this.category = category;
     this.destinationId = destinationId;
     this.duration = duration;
     this.meetingPoint = meetingPoint;
+    this.cancellationPolicyType =
+        cancellationPolicyType == null ? this.cancellationPolicyType : cancellationPolicyType;
+    this.cancellationPolicyDescription = cancellationPolicyDescription;
   }
 }

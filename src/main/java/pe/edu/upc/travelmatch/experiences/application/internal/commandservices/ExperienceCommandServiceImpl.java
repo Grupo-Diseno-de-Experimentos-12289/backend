@@ -54,7 +54,9 @@ public class ExperienceCommandServiceImpl implements ExperienceCommandService {
             category,
             command.destinationId(),
             command.duration(),
-            command.meetingPoint());
+            command.meetingPoint(),
+            command.cancellationPolicyType(),
+            command.cancellationPolicyDescription());
     var createdExperience = experienceRepository.save(experience);
     return createdExperience.getId();
   }
@@ -80,7 +82,9 @@ public class ExperienceCommandServiceImpl implements ExperienceCommandService {
         category,
         command.destinationId(),
         command.duration(),
-        command.meetingPoint());
+        command.meetingPoint(),
+        command.cancellationPolicyType(),
+        command.cancellationPolicyDescription());
     experienceRepository.save(experience);
   }
 
