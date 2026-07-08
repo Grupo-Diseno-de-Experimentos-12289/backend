@@ -31,8 +31,8 @@
 		<maven.compiler.version>3.11.0</maven.compiler.version>
 		<maven.surefire.version>3.0.0</maven.surefire.version>
 		<karate.version>1.5.0</karate.version>
-		<sonar.projectKey>travelmatch</sonar.projectKey>
-		<sonar.projectName>travelmatch</sonar.projectName>
+		<sonar.projectKey>travelMatch</sonar.projectKey>
+		<sonar.projectName>travelMatch</sonar.projectName>
 		<sonar.host.url>http://localhost:9000</sonar.host.url>
 		<sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 		<sonar.java.binaries>target/classes</sonar.java.binaries>
