@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,13 +27,17 @@ import pe.edu.upc.travelmatch.profiles.infrastructure.persistence.jpa.repositori
 @ExtendWith(MockitoExtension.class)
 class FavoriteCommandServiceImplTest {
 
-  @Mock private FavoriteRepository favoriteRepository;
+  @Mock
+  private FavoriteRepository favoriteRepository;
 
-  @Mock private ExternalIamService externalIamService;
+  @Mock
+  private ExternalIamService externalIamService;
 
-  @Mock private ExternalExperienceService externalExperienceService;
+  @Mock
+  private ExternalExperienceService externalExperienceService;
 
-  @InjectMocks private FavoriteCommandServiceImpl favoriteCommandService;
+  @InjectMocks
+  private FavoriteCommandServiceImpl favoriteCommandService;
 
   @Test
   void testHandle_CreateFavoriteSuccessfully() {

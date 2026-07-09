@@ -19,9 +19,11 @@ import java.util.List;
 @ExtendWith(MockitoExtension.class)
 class ExternalExperienceServiceTest {
 
-  @Mock private ExperiencesContextFacade experiencesContextFacade;
+  @Mock
+  private ExperiencesContextFacade experiencesContextFacade;
 
-  @InjectMocks private ExternalExperienceService externalExperienceService;
+  @InjectMocks
+  private ExternalExperienceService externalExperienceService;
 
   @Test
   void testExistsExperienceById_True() {
@@ -52,6 +54,7 @@ class ExternalExperienceServiceTest {
     assertFalse(result);
     verify(experiencesContextFacade, times(1)).existsExperienceById(experienceId.experienceId());
   }
+
   @Test
   void testFetchExperiencesByDestinationAndCategories_DelegatesToFacade() {
     // Arrange
@@ -59,18 +62,18 @@ class ExternalExperienceServiceTest {
     List<String> categories = List.of("CULTURA");
     var summary = new ExperienceSummary(10L, "Tour Centro", "CULTURA", "Plaza Mayor", "3h", 1L);
     when(experiencesContextFacade.fetchExperiencesByDestinationAndCategories(
-            destinationId, categories))
-            .thenReturn(List.of(summary));
+        destinationId, categories))
+        .thenReturn(List.of(summary));
 
     // Act
     List<ExperienceSummary> result =
-            externalExperienceService.fetchExperiencesByDestinationAndCategories(
-                    destinationId, categories);
+        externalExperienceService.fetchExperiencesByDestinationAndCategories(
+            destinationId, categories);
 
     // Assert
     assertEquals(1, result.size());
     assertEquals(10L, result.get(0).experienceId());
     verify(experiencesContextFacade, times(1))
-            .fetchExperiencesByDestinationAndCategories(destinationId, categories);
+        .fetchExperiencesByDestinationAndCategories(destinationId, categories);
   }
 }

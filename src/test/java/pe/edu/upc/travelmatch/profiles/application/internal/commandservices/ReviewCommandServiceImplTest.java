@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,13 +30,17 @@ import pe.edu.upc.travelmatch.profiles.infrastructure.persistence.jpa.repositori
 @ExtendWith(MockitoExtension.class)
 class ReviewCommandServiceImplTest {
 
-  @Mock private ReviewRepository reviewRepository;
+  @Mock
+  private ReviewRepository reviewRepository;
 
-  @Mock private ExternalIamService externalIamService;
+  @Mock
+  private ExternalIamService externalIamService;
 
-  @Mock private ExternalExperienceService externalExperienceService;
+  @Mock
+  private ExternalExperienceService externalExperienceService;
 
-  @InjectMocks private ReviewCommandServiceImpl reviewCommandService;
+  @InjectMocks
+  private ReviewCommandServiceImpl reviewCommandService;
 
   @Test
   void testHandle_CreateReviewSuccessfully() {

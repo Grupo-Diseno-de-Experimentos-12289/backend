@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,54 +26,56 @@ import pe.edu.upc.travelmatch.profiles.interfaces.rest.resources.ItineraryResour
 @ExtendWith(MockitoExtension.class)
 class ItinerariesControllerTest {
 
-    @Mock private ItineraryQueryService itineraryQueryService;
+  @Mock
+  private ItineraryQueryService itineraryQueryService;
 
-    @InjectMocks private ItinerariesController controller;
+  @InjectMocks
+  private ItinerariesController controller;
 
-    @Test
-    void generateItinerary_returnsOk_whenSuccess() {
-        // Arrange
-        var resource = new GenerateItineraryResource(1L, List.of("CULTURA"), 1);
-        var activity = new ItineraryActivity(1L, "Tour Centro", "CULTURA", "Plaza Mayor", "3h");
-        var itinerary = new Itinerary(1L, 1, List.of(new ItineraryDay(1, List.of(activity))));
-        when(itineraryQueryService.handle(any(GenerateItineraryQuery.class))).thenReturn(itinerary);
+  @Test
+  void generateItinerary_returnsOk_whenSuccess() {
+    // Arrange
+    var resource = new GenerateItineraryResource(1L, List.of("CULTURA"), 1);
+    var activity = new ItineraryActivity(1L, "Tour Centro", "CULTURA", "Plaza Mayor", "3h");
+    var itinerary = new Itinerary(1L, 1, List.of(new ItineraryDay(1, List.of(activity))));
+    when(itineraryQueryService.handle(any(GenerateItineraryQuery.class))).thenReturn(itinerary);
 
-        // Act
-        ResponseEntity<ItineraryResource> response = controller.generateItinerary(resource);
+    // Act
+    ResponseEntity<ItineraryResource> response = controller.generateItinerary(resource);
 
-        // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(1L, response.getBody().destinationId());
-        assertEquals(1, response.getBody().days().size());
-    }
+    // Assert
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertNotNull(response.getBody());
+    assertEquals(1L, response.getBody().destinationId());
+    assertEquals(1, response.getBody().days().size());
+  }
 
-    @Test
-    void generateItinerary_returnsBadRequest_whenNoExperiencesFound() {
-        // Arrange
-        var resource = new GenerateItineraryResource(99L, List.of("AVENTURA"), 2);
-        when(itineraryQueryService.handle(any(GenerateItineraryQuery.class)))
-                .thenThrow(new IllegalStateException("No experiences were found"));
+  @Test
+  void generateItinerary_returnsBadRequest_whenNoExperiencesFound() {
+    // Arrange
+    var resource = new GenerateItineraryResource(99L, List.of("AVENTURA"), 2);
+    when(itineraryQueryService.handle(any(GenerateItineraryQuery.class)))
+        .thenThrow(new IllegalStateException("No experiences were found"));
 
-        // Act
-        ResponseEntity<ItineraryResource> response = controller.generateItinerary(resource);
+    // Act
+    ResponseEntity<ItineraryResource> response = controller.generateItinerary(resource);
 
-        // Assert
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertNull(response.getBody());
-    }
+    // Assert
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    assertNull(response.getBody());
+  }
 
-    @Test
-    void generateItinerary_returnsBadRequest_whenIllegalArgumentThrown() {
-        // Arrange
-        var resource = new GenerateItineraryResource(1L, List.of("CULTURA"), 1);
-        when(itineraryQueryService.handle(any(GenerateItineraryQuery.class)))
-                .thenThrow(new IllegalArgumentException("Number of days must be greater than zero"));
+  @Test
+  void generateItinerary_returnsBadRequest_whenIllegalArgumentThrown() {
+    // Arrange
+    var resource = new GenerateItineraryResource(1L, List.of("CULTURA"), 1);
+    when(itineraryQueryService.handle(any(GenerateItineraryQuery.class)))
+        .thenThrow(new IllegalArgumentException("Number of days must be greater than zero"));
 
-        // Act
-        ResponseEntity<ItineraryResource> response = controller.generateItinerary(resource);
+    // Act
+    ResponseEntity<ItineraryResource> response = controller.generateItinerary(resource);
 
-        // Assert
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-    }
+    // Assert
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+  }
 }
