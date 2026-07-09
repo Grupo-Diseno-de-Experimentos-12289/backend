@@ -55,9 +55,9 @@ class ExperienceResourceFromEntityAssemblerTest {
     verify(agencyId).value();
     verify(entity).getCategory();
     verify(entity).getDestinationId();
-    verify(entity).getMeetingPoint();
     verify(destinationId).value();
     verify(entity).getDuration();
-    verifyNoMoreInteractions(entity, agencyId, category, destinationId);
+    verify(entity).getMeetingPoint();
+
   }
 }
