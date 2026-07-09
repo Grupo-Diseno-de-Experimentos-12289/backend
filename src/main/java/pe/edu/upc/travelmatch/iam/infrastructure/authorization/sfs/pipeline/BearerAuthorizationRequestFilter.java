@@ -37,6 +37,13 @@ public class BearerAuthorizationRequestFilter extends OncePerRequestFilter {
       @NonNull HttpServletResponse response,
       @NonNull FilterChain filterChain)
       throws ServletException, IOException {
+
+    String requestURI = request.getRequestURI();
+    if (requestURI.startsWith("/actuator")) {
+      filterChain.doFilter(request, response);
+      return;
+    }
+
     try {
       String token = tokenService.getBearerTokenFrom(request);
       LOGGER.info("Token: {}", token);
